@@ -1,0 +1,20 @@
+{
+  "required_fields": [
+    {
+      "field": "consignee_name",
+      "aliases": ["Consignee", "Importer", "Buyer", "Notify Party"]
+    },
+    {
+      "field": "port",
+      "aliases": ["Port", "Destination Port", "Discharge Port", "POD"]
+    }
+  ],
+  "optional_fields": [
+    {
+      "field": "shipping_company",
+      "aliases": ["Shipping Line", "Carrier", "Vessel Operator"]
+    }
+  ],
+  "remove_columns": []
+}
+

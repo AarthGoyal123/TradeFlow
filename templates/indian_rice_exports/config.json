@@ -1,0 +1,20 @@
+{
+  "id": "indian_rice_exports",
+  "name": "Indian Rice Export Shipments",
+  "version": "0.1.0",
+  "description": "Starter template for Indian rice export shipment data.",
+  "workbook": {
+    "sheet_strategy": "first_sheet"
+  },
+  "enabled_modules": [
+    "validation",
+    "column_removal",
+    "normalization",
+    "keyword_rules",
+    "regex_rules",
+    "fuzzy_matching",
+    "confidence_scoring",
+    "output_generation"
+  ]
+}
+

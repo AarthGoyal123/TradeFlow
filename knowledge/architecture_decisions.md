@@ -1,0 +1,210 @@
+# Architecture Decisions
+
+This file records major technical decisions, rationale, rejected alternatives, trade-offs, and future improvements.
+
+## ADR-001 - Build TradeFlow as a Template-Driven Processing Platform
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+TradeFlow will be built as a reusable, template-driven Excel processing platform.
+Dataset-specific behavior belongs in templates and rule packs rather than hardcoded application logic.
+
+### Rationale
+
+- The long-term goal is to support new Excel formats by adding templates.
+- This avoids creating a brittle one-off script for the first client.
+- Templates can be versioned, reviewed, tested, and reused.
+
+### Rejected Alternatives
+
+- One Python script per client format.
+- Hardcoded if/else branches for specific source columns or business rules.
+
+### Trade-Offs
+
+- More upfront structure is required.
+- Template validation becomes important.
+- The initial MVP may take slightly longer, but future dataset support becomes cheaper and safer.
+
+### Future Improvements
+
+- Add a template editor UI.
+- Add template schema validation with detailed diagnostics.
+- Add a template test runner with fixture workbooks.
+
+## ADR-002 - Keep AI Optional and Avoid Paid APIs in MVP
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+The MVP will use deterministic rules, regex, and RapidFuzz matching.
+Paid APIs will not be used.
+LLMs and embeddings are optional future enhancements only.
+
+### Rationale
+
+- The client requires fast, local processing.
+- Deterministic rules are easier to audit.
+- Avoiding paid APIs keeps costs predictable.
+
+### Rejected Alternatives
+
+- Calling paid LLM APIs during processing.
+- Making embeddings mandatory for importer identification.
+
+### Trade-Offs
+
+- Some ambiguous cases will go to manual review.
+- Rule packs need careful maintenance.
+
+### Future Improvements
+
+- Optional local embeddings for similarity search.
+- Human feedback loop for learned decisions.
+- Configurable ML module enabled per template.
+
+## ADR-003 - Use a Knowledge Base as Project Memory
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+The project will maintain a `knowledge/` folder containing long-term client requirements, business rules, Excel format knowledge, and architecture decisions.
+
+### Rationale
+
+- Future implementation sessions must preserve context.
+- Requirements and decisions need chronological traceability.
+- Conflicts should be surfaced before architecture changes.
+
+### Rejected Alternatives
+
+- Keeping project memory only in chat history.
+- Keeping requirements scattered across code comments and tickets.
+
+### Trade-Offs
+
+- Documentation must be updated as part of normal development.
+- The team must review knowledge files before feature work.
+
+### Future Improvements
+
+- Add decision IDs referenced from code and tests where useful.
+- Add a lightweight release checklist that includes knowledge-base review.
+
+## ADR-004 - Use a Monorepo with Separate Backend and Frontend Apps
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+TradeFlow will use a single Git repository with separate `backend/` and `frontend/` application roots.
+Top-level `templates/`, `rules/`, `engine/`, and `config/` folders will be kept for product-level configuration and future packaging decisions.
+
+### Rationale
+
+- The MVP needs tight coordination between API contracts, templates, and UI workflow.
+- A monorepo keeps documentation, fixtures, templates, and application code versioned together.
+- Separate app roots keep Python and TypeScript tooling clean.
+
+### Rejected Alternatives
+
+- Separate repositories for backend and frontend during MVP.
+- A single mixed application folder containing both Python and TypeScript code.
+
+### Trade-Offs
+
+- CI must understand both Python and Node workflows.
+- Shared contracts need discipline until generated types are introduced.
+
+### Future Improvements
+
+- Add OpenAPI-based TypeScript client generation.
+- Add workspace-level CI that runs backend and frontend checks independently.
+
+## ADR-005 - Use Pragmatic Clean Architecture Backend Boundaries
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+The backend will be organized around explicit boundaries:
+
+- `api` for HTTP routes, request/response schemas, and API dependencies.
+- `application` for use-case orchestration.
+- `domain` for framework-independent business models and contracts.
+- `engine` for reusable processing pipeline infrastructure.
+- `infrastructure` for filesystem, template loading, persistence, and other external systems.
+- `core` for settings, logging, and shared error handling.
+
+### Rationale
+
+- TradeFlow must remain a reusable processing engine, not a FastAPI-bound script.
+- Clear dependency direction keeps future CLI, background worker, and SaaS paths open.
+- Domain and engine code should be testable without HTTP, SQLite, or frontend concerns.
+
+### Rejected Alternatives
+
+- Keeping broad folders such as `services`, `models`, and `database` as primary boundaries.
+- Letting FastAPI route handlers call processing code directly.
+- Implementing a heavy enterprise architecture with excessive abstractions before the MVP.
+
+### Trade-Offs
+
+- Slightly more files and ceremony in the initial scaffold.
+- Developers must respect import direction.
+- The payoff is better long-term maintainability and easier testing.
+
+### Future Improvements
+
+- Add import-lint rules if boundaries begin to drift.
+- Generate TypeScript API clients from OpenAPI once API contracts stabilize.
+
+## ADR-006 - Use Plugin-Based Pipeline Steps with a Shared Processing Context
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+Processing will be implemented as dynamically registered pipeline stages.
+Each stage receives and returns a shared `ProcessingContext`.
+A `PipelineRegistry` maps configured stage names to stage implementations.
+The pipeline executor records metrics for every stage.
+
+### Rationale
+
+- Templates need to control which processing stages run and in what order.
+- New modules should plug into the engine without rewriting orchestration logic.
+- Stage metrics are required to prove the under-30-second MVP goal and diagnose failures.
+
+### Rejected Alternatives
+
+- Hardcoded sequential function calls in a single processor.
+- One processor class per client template.
+- Runtime package discovery for external plugins before the MVP needs it.
+
+### Trade-Offs
+
+- Stage contracts must be stable.
+- Template validation must reject unknown stage names.
+- Dynamic registration adds a little indirection, but keeps extension points clean.
+
+### Future Improvements
+
+- Add external plugin discovery through Python entry points if TradeFlow becomes a broader platform.
+- Add per-stage retry or skip policies for non-critical future modules.

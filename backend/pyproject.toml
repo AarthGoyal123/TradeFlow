@@ -1,0 +1,40 @@
+[project]
+name = "tradeflow-backend"
+version = "0.1.0"
+description = "FastAPI backend and processing engine for TradeFlow."
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.30.0",
+    "pandas>=2.2.0",
+    "openpyxl>=3.1.0",
+    "rapidfuzz>=3.9.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.3.0",
+    "sqlalchemy>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "httpx>=0.27.0",
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = ["-p", "no:cacheprovider"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["app"]

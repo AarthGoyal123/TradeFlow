@@ -1,0 +1,10 @@
+{
+  "files": {
+    "clean_data": "Clean_Data.xlsx",
+    "removed_rows": "Removed_Rows.xlsx",
+    "needs_review": "Needs_Review.xlsx",
+    "processing_report": "Processing_Report.xlsx"
+  },
+  "review_threshold": 0.75
+}
+

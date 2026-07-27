@@ -1,0 +1,2 @@
+"""Template domain models."""
+

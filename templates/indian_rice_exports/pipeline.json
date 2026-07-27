@@ -1,0 +1,13 @@
+{
+  "steps": [
+    "validation",
+    "column_removal",
+    "normalization",
+    "keyword_rules",
+    "regex_rules",
+    "fuzzy_matching",
+    "confidence_scoring",
+    "output_generation"
+  ]
+}
+
