@@ -78,6 +78,20 @@ Each stage receives a shared `ProcessingContext` and returns the updated context
 
 The current built-in stages are no-op placeholders. They establish extension points only and do not implement importer detection, Excel cleaning, or classification.
 
+## Workbook Foundation
+
+Workbook access follows the same boundary model:
+
+```text
+application/workbooks/      Workbook validation and template column mapping.
+domain/workbooks/           Workbook rows, headers, mapped columns, validation results, and ports.
+infrastructure/excel/       OpenPyXL-backed workbook loading and worksheet reading.
+```
+
+OpenPyXL is intentionally isolated in infrastructure.
+Application services work with project-owned workbook abstractions.
+The current workbook foundation validates structure only; it does not clean data, execute rules, classify importers, or generate outputs.
+
 ## Current Implementation
 
 - Backend has a minimal FastAPI application factory in `backend/app/main.py`.
@@ -85,5 +99,6 @@ The current built-in stages are no-op placeholders. They establish extension poi
 - Backend includes typed settings, structured logging, and a project error hierarchy.
 - Backend includes typed template models and a filesystem template repository.
 - Backend includes plugin-based pipeline registration, processing context, and stage metrics.
+- Backend includes workbook loading, worksheet reading, template column mapping, and structured workbook validation results.
 - Frontend has a minimal Vite/React/Tailwind shell.
 - `templates/indian_rice_exports/` contains starter configuration files.

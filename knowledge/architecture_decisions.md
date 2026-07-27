@@ -242,3 +242,37 @@ Job persistence will be implemented behind a repository interface and accessed t
 - Add Alembic migrations when schema evolution accelerates.
 - Add job event history and output tracking tables.
 - Move to PostgreSQL if SaaS concurrency requires it.
+
+## ADR-008 - Keep Excel-Specific Workbook Access in Infrastructure
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+OpenPyXL access will live in infrastructure adapters.
+Application and domain code will depend on workbook abstractions and ports rather than OpenPyXL objects.
+
+### Rationale
+
+- The processing engine should not be coupled directly to one Excel library.
+- Workbook validation and column mapping should be testable with in-memory workbook abstractions.
+- Future support for alternate readers or streaming strategies should not require API or domain rewrites.
+
+### Rejected Alternatives
+
+- Passing OpenPyXL worksheets into application services.
+- Reading all Excel data directly inside API routes.
+- Implementing Pandas-based loading before structural workbook validation exists.
+
+### Trade-Offs
+
+- A small abstraction layer is added before full processing exists.
+- The adapter must preserve enough worksheet behavior for efficient future processing.
+
+### Future Improvements
+
+- Add streaming row readers for very large workbooks.
+- Add `.xls` conversion or reader support if client files require legacy Excel parsing.
+- Add fixture-based performance tests once representative files are available.

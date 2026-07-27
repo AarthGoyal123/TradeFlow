@@ -122,8 +122,8 @@ class RulePack(BaseModel):
 
     model_config = ConfigDict(extra="allow")
 
-    rules: list[dict] = Field(default_factory=list)
-    match_sets: list[dict] = Field(default_factory=list)
+    rules: list[dict[str, object]] = Field(default_factory=list)
+    match_sets: list[dict[str, object]] = Field(default_factory=list)
 
 
 class TemplateDefinition(BaseModel):

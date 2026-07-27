@@ -1,0 +1,2 @@
+"""Excel workbook infrastructure adapters."""
+

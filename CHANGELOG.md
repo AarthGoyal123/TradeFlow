@@ -21,3 +21,4 @@ All notable project changes will be documented here.
 - Added upload-only `POST /jobs` API endpoint with extension and size validation.
 - Added `GET /jobs/{job_id}` API endpoint returning persisted job metadata.
 - Added lightweight SQLite job repository and local upload storage.
+- Added workbook processing foundation with OpenPyXL-backed loading, sheet reading, template column mapping, and structured validation results.

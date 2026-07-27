@@ -27,8 +27,11 @@ TradeFlow testing should focus on correctness, auditability, and regression safe
 - `backend/tests/test_pipeline_foundation.py` verifies registry behavior and per-stage pipeline metrics.
 - `backend/tests/test_job_api.py` verifies upload-only job creation, extension errors, missing template errors, upload directory creation, max size errors, and job retrieval.
 - `backend/tests/test_sqlite_job_repository.py` verifies SQLite job persistence and missing-job errors.
+- `backend/tests/test_openpyxl_workbook_loader.py` verifies OpenPyXL-backed workbook loading, header extraction, row numbers, and empty cell handling.
+- `backend/tests/test_workbook_validation_service.py` verifies template-based sheet selection, column mapping, missing required columns, and unreadable workbook validation results.
 
 ## Current Verification Note
 
 The backend test suite passes with pytest cache disabled, which is configured in `backend/pyproject.toml`.
 This avoids local cache/bytecode permission issues observed in the current Windows workspace.
+Mypy should be run with a writable cache directory in this environment, for example under `$env:TEMP`.

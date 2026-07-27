@@ -26,7 +26,10 @@
 - [x] Add shared processing context.
 - [x] Add plugin-based pipeline registry.
 - [x] Add per-stage execution metrics.
-- [ ] Add Excel validation.
+- [x] Add workbook loading foundation.
+- [x] Add sheet reader foundation.
+- [x] Add template column mapping foundation.
+- [x] Add Excel structure validation foundation.
 - [ ] Add column mapping and removal.
 - [ ] Add normalization pipeline.
 - [ ] Add output generation.

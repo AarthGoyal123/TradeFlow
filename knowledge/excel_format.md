@@ -38,6 +38,9 @@ The template should allow optional columns and pass-through columns.
 - Required conceptual fields must be mapped before processing.
 - Missing required columns should produce a validation error before transformation.
 - Unknown extra columns should be allowed unless the template says otherwise.
+- Header extraction should preserve worksheet row numbers.
+- Empty cells should be represented consistently as `None`.
+- Template worksheet selection currently supports the first sheet and named sheets.
 
 ### Template-Specific Processing Behavior
 

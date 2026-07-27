@@ -120,3 +120,33 @@ Do not remove requirements unless the project owner explicitly asks.
 - Implement `GET /jobs/{job_id}`.
 - Return job metadata and current status.
 - Return 404 through the existing error hierarchy when a job does not exist.
+
+## 2026-07-28 - Workbook Processing Foundation Requirements
+
+### Workbook Loader
+
+- Read `.xlsx` workbooks with OpenPyXL.
+- Support configurable worksheet selection from the selected template.
+- Return a project workbook abstraction rather than exposing OpenPyXL across the codebase.
+
+### Sheet Reader
+
+- Read worksheet rows efficiently.
+- Preserve original worksheet row numbers.
+- Handle empty cells consistently.
+- Support header extraction.
+
+### Template Mapping
+
+- Map template column definitions to worksheet columns.
+- Detect missing required columns.
+- Produce descriptive validation errors.
+
+### Validation Pipeline
+
+- Validate workbook structure.
+- Validate required sheets.
+- Validate required columns.
+- Return structured validation results.
+- Do not implement workbook parsing beyond structural reading.
+- Do not implement business cleaning, rule execution, classification, or output generation yet.

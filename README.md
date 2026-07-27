@@ -29,6 +29,7 @@ Review it before implementing new features.
 - Backend shell exists with `GET /health`.
 - Backend architecture boundaries are established.
 - Processing engine foundation exists with plugin-registered no-op stages, shared context, typed template validation, structured logging, and stage metrics.
+- Workbook processing foundation exists with OpenPyXL-backed loading, sheet reading, template column mapping, and structured validation results.
 - Template listing and template details APIs are implemented.
 - Upload-only job APIs are implemented with SQLite job tracking.
 - Frontend shell exists with Vite, React, TypeScript, and Tailwind configuration.
