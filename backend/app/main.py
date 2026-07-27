@@ -4,6 +4,7 @@ from fastapi import FastAPI
 
 from app.api.errors import register_exception_handlers
 from app.api.routes.system import router as system_router
+from app.api.routes.templates import router as templates_router
 from app.core.logging import configure_logging
 from app.core.settings import get_settings
 
@@ -21,6 +22,7 @@ def create_app() -> FastAPI:
 
     register_exception_handlers(app)
     app.include_router(system_router)
+    app.include_router(templates_router)
 
     return app
 

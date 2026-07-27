@@ -22,9 +22,15 @@ class Settings(BaseSettings):
     allowed_extensions: tuple[str, ...] = (".xlsx",)
     log_level: str = "INFO"
 
+    @property
+    def resolved_template_root(self) -> Path:
+        """Return template root as an absolute path."""
+        if self.template_root.is_absolute():
+            return self.template_root
+        return (Path.cwd() / self.template_root).resolve()
+
 
 @lru_cache
 def get_settings() -> Settings:
     """Return cached application settings."""
     return Settings()
-
