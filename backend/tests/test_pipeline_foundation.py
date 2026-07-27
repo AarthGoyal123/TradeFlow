@@ -10,7 +10,8 @@ from app.infrastructure.template_store.filesystem import FileSystemTemplateRepos
 
 
 def test_pipeline_records_metrics_for_each_configured_stage() -> None:
-    template = FileSystemTemplateRepository(Path("../templates")).get_template("indian_rice_exports")
+    repository = FileSystemTemplateRepository(Path("../templates"))
+    template = repository.get_template("indian_rice_exports")
     registry = build_default_pipeline_registry()
     registry.validate_template(template)
     context = ProcessingContext(template=template, job_id="test-job")

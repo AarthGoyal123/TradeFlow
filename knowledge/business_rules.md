@@ -33,3 +33,19 @@ Each rule should explain why it exists, relevant assumptions, edge cases, and wh
 - Initial processing can be local and synchronous if it meets the target runtime.
 - The MVP should prefer review routing over aggressive automated classification.
 
+## 2026-07-28 - Upload and Job Tracking Rules
+
+### Hard Requirements
+
+| Rule ID | Rule | Why It Exists | Assumptions | Edge Cases |
+| --- | --- | --- | --- | --- |
+| BR-005 | Uploaded workbook files must use an allowed Excel extension. | Prevent unsupported input formats from entering the system. | MVP upload support is limited to Excel workbooks. | Extension validation is not full workbook validation; parsing validation comes later. |
+| BR-006 | Uploaded files must be saved with server-generated names and must never overwrite existing files. | Prevent path traversal, accidental overwrite, and filename collisions. | Original filename is metadata only. | UUID collision is extremely unlikely but storage should still check existence. |
+| BR-007 | A job must be persisted when an upload is accepted. | Later APIs need stable job status and metadata. | Accepted upload means the file has been saved and the job row recorded. | If persistence fails after save, cleanup can be added later. |
+
+### Configurable Rules
+
+| Rule ID | Rule Category | Initial Purpose | Configuration Location |
+| --- | --- | --- | --- |
+| CR-008 | Allowed upload extensions | Control accepted workbook formats. | Application settings. |
+| CR-009 | Maximum upload size | Prevent oversized uploads from exhausting local resources. | Application settings. |

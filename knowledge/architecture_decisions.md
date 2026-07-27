@@ -208,3 +208,37 @@ The pipeline executor records metrics for every stage.
 
 - Add external plugin discovery through Python entry points if TradeFlow becomes a broader platform.
 - Add per-stage retry or skip policies for non-critical future modules.
+
+## ADR-007 - Use Lightweight SQLite Job Tracking Before Processing Execution
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+The API foundation will persist upload jobs in SQLite before workbook processing exists.
+Job persistence will be implemented behind a repository interface and accessed through application services.
+
+### Rationale
+
+- Upload, retrieval, and future processing status APIs need stable job identifiers.
+- SQLite is required for the MVP and is sufficient for local client workflows.
+- Keeping persistence behind a repository preserves the existing architecture boundary.
+
+### Rejected Alternatives
+
+- In-memory job tracking, because job state would be lost on restart.
+- Direct SQL calls from API routes, because that violates the established dependency direction.
+- A full migration framework immediately, because the current schema is intentionally small.
+
+### Trade-Offs
+
+- Manual table initialization is acceptable for MVP foundation but may need migrations later.
+- SQLite write concurrency is limited, but acceptable before background processing and SaaS scale.
+
+### Future Improvements
+
+- Add Alembic migrations when schema evolution accelerates.
+- Add job event history and output tracking tables.
+- Move to PostgreSQL if SaaS concurrency requires it.

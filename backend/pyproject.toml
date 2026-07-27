@@ -5,6 +5,7 @@ description = "FastAPI backend and processing engine for TradeFlow."
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.111.0",
+    "python-multipart>=0.0.9",
     "uvicorn[standard]>=0.30.0",
     "pandas>=2.2.0",
     "openpyxl>=3.1.0",

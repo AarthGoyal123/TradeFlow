@@ -20,8 +20,13 @@ TradeFlow testing should focus on correctness, auditability, and regression safe
 ## Current Tests
 
 - `backend/tests/test_health.py` verifies the FastAPI health endpoint.
+- `backend/tests/test_template_api.py` verifies `GET /templates` response shape.
+- `backend/tests/test_template_details_api.py` verifies `GET /templates/{template_id}` and missing-template behavior.
+- `backend/tests/test_template_service.py` verifies application-level template listing.
 - `backend/tests/test_template_loading.py` verifies starter template loading and missing-template errors.
 - `backend/tests/test_pipeline_foundation.py` verifies registry behavior and per-stage pipeline metrics.
+- `backend/tests/test_job_api.py` verifies upload-only job creation, extension errors, missing template errors, upload directory creation, max size errors, and job retrieval.
+- `backend/tests/test_sqlite_job_repository.py` verifies SQLite job persistence and missing-job errors.
 
 ## Current Verification Note
 

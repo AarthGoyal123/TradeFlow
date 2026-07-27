@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 
 from app.api.errors import register_exception_handlers
+from app.api.routes.jobs import router as jobs_router
 from app.api.routes.system import router as system_router
 from app.api.routes.templates import router as templates_router
 from app.core.logging import configure_logging
@@ -23,6 +24,7 @@ def create_app() -> FastAPI:
     register_exception_handlers(app)
     app.include_router(system_router)
     app.include_router(templates_router)
+    app.include_router(jobs_router)
 
     return app
 

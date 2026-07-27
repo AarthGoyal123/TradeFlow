@@ -21,6 +21,12 @@ class TemplateNotFoundError(TradeFlowError):
     code = "template_not_found"
 
 
+class JobNotFoundError(TradeFlowError):
+    """Raised when a requested job does not exist."""
+
+    code = "job_not_found"
+
+
 class TemplateValidationError(TradeFlowError):
     """Raised when template files fail structural validation."""
 
@@ -50,3 +56,8 @@ class StorageError(TradeFlowError):
 
     code = "storage_error"
 
+
+class UploadValidationError(TradeFlowError):
+    """Raised when an uploaded file is rejected before processing."""
+
+    code = "upload_validation_error"

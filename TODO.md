@@ -13,8 +13,10 @@
 - [x] Add FastAPI application shell.
 - [x] Add health endpoint.
 - [x] Add structured API error mapping.
-- [ ] Add template listing endpoint.
-- [ ] Add job upload endpoint.
+- [x] Add template listing endpoint.
+- [x] Add template detail endpoint.
+- [x] Add job upload endpoint.
+- [x] Add job retrieval endpoint.
 
 ## Phase 3 - Processing Engine
 
@@ -28,6 +30,13 @@
 - [ ] Add column mapping and removal.
 - [ ] Add normalization pipeline.
 - [ ] Add output generation.
+
+## Persistence
+
+- [x] Add lightweight SQLite job tracking.
+- [ ] Add processing output tracking.
+- [ ] Add processing event tracking.
+- [ ] Add review item tracking.
 
 ## Phase 4 - Rule Engine
 

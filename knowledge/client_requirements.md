@@ -87,3 +87,36 @@ Do not remove requirements unless the project owner explicitly asks.
 - Automatically update the appropriate knowledge file whenever an important decision is made.
 - If new information conflicts with previous decisions, ask the project owner before changing documented architecture.
 
+## 2026-07-28 - API Foundation Batch Requirements
+
+### Template Details API
+
+- Implement `GET /templates/{template_id}`.
+- Return template `id`, `name`, `version`, `description`, `columns`, `pipeline`, and `outputs`.
+- Return 404 through the existing error hierarchy when a template does not exist.
+
+### File Upload API
+
+- Implement `POST /jobs`.
+- Accept `multipart/form-data`.
+- Accept an Excel workbook file and `template_id`.
+- Accept `.xlsx` and `.xls` workbook extensions.
+- Validate uploaded file extension.
+- Enforce configurable maximum upload size.
+- Generate a UUID `job_id`.
+- Save uploaded workbook into the configured upload directory.
+- Never overwrite existing files.
+- Return `job_id`, `status`, `template_id`, and original `filename`.
+- Do not parse or process the workbook yet.
+
+### Job Tracking
+
+- Add lightweight SQLite job persistence.
+- Track `job_id`, `template_id`, `original_filename`, `stored_filename`, `status`, `created_at`, and `updated_at`.
+- Supported job statuses are `uploaded`, `processing`, `completed`, and `failed`.
+
+### Job Retrieval API
+
+- Implement `GET /jobs/{job_id}`.
+- Return job metadata and current status.
+- Return 404 through the existing error hierarchy when a job does not exist.

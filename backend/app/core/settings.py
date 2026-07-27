@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     output_dir: Path = Path("./data/outputs")
     template_root: Path = Path("../templates")
     max_upload_size_mb: int = Field(default=50, gt=0)
-    allowed_extensions: tuple[str, ...] = (".xlsx",)
+    allowed_extensions: tuple[str, ...] = (".xlsx", ".xls")
     log_level: str = "INFO"
 
     @property
@@ -28,6 +28,24 @@ class Settings(BaseSettings):
         if self.template_root.is_absolute():
             return self.template_root
         return (Path.cwd() / self.template_root).resolve()
+
+    @property
+    def resolved_upload_dir(self) -> Path:
+        """Return upload directory as an absolute path."""
+        if self.upload_dir.is_absolute():
+            return self.upload_dir
+        return (Path.cwd() / self.upload_dir).resolve()
+
+    @property
+    def resolved_database_path(self) -> Path:
+        """Return SQLite database path for local file-backed URLs."""
+        prefix = "sqlite:///"
+        if not self.database_url.startswith(prefix):
+            raise ValueError("Only sqlite:/// database URLs are supported")
+        database_path = Path(self.database_url.removeprefix(prefix))
+        if database_path.is_absolute():
+            return database_path
+        return (Path.cwd() / database_path).resolve()
 
 
 @lru_cache

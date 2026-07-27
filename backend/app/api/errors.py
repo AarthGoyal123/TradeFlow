@@ -3,7 +3,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.core.errors import TemplateNotFoundError, TradeFlowError
+from app.core.errors import JobNotFoundError, TemplateNotFoundError, TradeFlowError
 
 
 def register_exception_handlers(app: FastAPI) -> None:
@@ -11,7 +11,7 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(TradeFlowError)
     async def handle_tradeflow_error(_: Request, exc: TradeFlowError) -> JSONResponse:
-        status_code = 404 if isinstance(exc, TemplateNotFoundError) else 400
+        status_code = 404 if isinstance(exc, TemplateNotFoundError | JobNotFoundError) else 400
         return JSONResponse(
             status_code=status_code,
             content={

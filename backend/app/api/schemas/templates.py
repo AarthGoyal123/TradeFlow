@@ -13,3 +13,25 @@ class TemplateSummaryResponse(BaseModel):
     version: str
     description: str
 
+
+class TemplateColumnResponse(BaseModel):
+    """Column mapping returned by the template details API."""
+
+    field: str
+    aliases: list[str]
+    required: bool
+
+
+class TemplateOutputResponse(BaseModel):
+    """Output workbook returned by the template details API."""
+
+    type: str
+    filename: str
+
+
+class TemplateDetailsResponse(TemplateSummaryResponse):
+    """Detailed template response returned by the API."""
+
+    columns: list[TemplateColumnResponse]
+    pipeline: list[str]
+    outputs: list[TemplateOutputResponse]

@@ -16,3 +16,8 @@ All notable project changes will be documented here.
 - Added typed template models and filesystem template repository.
 - Added plugin-based pipeline registry, shared `ProcessingContext`, pipeline executor, and per-stage metrics.
 - Added foundation tests for template loading and pipeline execution.
+- Added `GET /templates` API endpoint returning filesystem template summaries.
+- Added `GET /templates/{template_id}` API endpoint returning template details.
+- Added upload-only `POST /jobs` API endpoint with extension and size validation.
+- Added `GET /jobs/{job_id}` API endpoint returning persisted job metadata.
+- Added lightweight SQLite job repository and local upload storage.
