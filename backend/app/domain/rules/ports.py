@@ -11,4 +11,3 @@ class RulePackRepository(Protocol):
     def list_rule_packs(self, template_id: str) -> tuple[RulePackDefinition, ...]:
         """Return all rule packs available for a template."""
         ...
-

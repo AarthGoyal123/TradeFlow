@@ -36,4 +36,3 @@ class ProcessingSummary:
     rule_matches: int
     validation_findings: int
     outputs: tuple[OutputArtifact, ...]
-

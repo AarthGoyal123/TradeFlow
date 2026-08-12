@@ -6,66 +6,50 @@ A Workbook Intelligence Platform for global trade data. Process any trade Excel 
 
 ## Current Phase
 
-Phase 1 — Workbook Intelligence Engine (COMPLETE)
+Phase 1 — Architecture Hardening (IN PROGRESS)
 
 ## Architecture
 
 Clean Architecture (api → application → domain ← infrastructure).
 
-The Intelligence Engine sits at the core:
-1. **WorkbookAnalyzer** — detects sheets, header row, counts columns/rows
-2. **SemanticDetector** — identifies countries, HS codes, ports by value patterns
-3. **TemplateColumnMapper** — 4-stage matching: exact → normalized → synonym → fuzzy
-4. **Confidence Engine** — per-field + overall confidence scoring
+The Intelligence Engine sits at the core. Job execution is currently synchronous but prepared for async. SQLite is used for persistence. Local filesystem for outputs.
 
 ## Key Files
 
 | File | Purpose |
 |---|---|
+| `docs/README.md` | Primary documentation index |
 | `domain/workbooks/intelligence.py` | All intelligence domain models |
-| `domain/workbooks/synonyms.py` | Global trade synonym dictionary (20+ fields) |
-| `domain/workbooks/analyzer.py` | Structure analysis (sheets, header, sampling) |
-| `domain/workbooks/semantic_detector.py` | Value-based field type detection |
-| `domain/workbooks/alias_store.py` | User-confirmed mapping learning |
-| `application/workbooks/intelligence_service.py` | Orchestrates full intelligence report |
-| `application/workbooks/column_mapper.py` | Layered header → business field matching |
-| `application/workbooks/validation.py` | Validation with intelligence enrichment |
-| `application/processing/service.py` | Processing pipeline (non-fatal validation) |
-| `api/routes/jobs.py` | Intelligence API endpoint |
-| `frontend/src/features/jobs/components/intelligence-report.tsx` | Intelligence UI component |
+| `application/processing/service.py` | Processing pipeline orchestrator |
+| `domain/jobs/models.py` | Job state machine |
 | `templates/indian_rice_exports/columns.json` | Reference template (20 business fields) |
 
 ## Benchmark
 
 The benchmark workbook is at `backend/samples/1006 ALL EXPORT JULY 25.xlsx`.
-- 19 columns, 19,967 data rows
-- 20 business fields defined in template (3 required, 17 optional)
-- 19/20 mapped (all except shipping_company which isn't in the workbook)
-- Overall confidence: 99.75%
-- Structure confidence: 95%
+- Input rows: 19,967
+- Clean_Data.xlsx: 8,701
+- Removed_Rows.xlsx: 11,266
+- Needs_Review.xlsx: 0
+- TO ORDER removals: 10,565
+- Bank removals: 701
 
 ## Test Suite
 
-26 tests total (18 pre-existing + 8 benchmark regression tests).
-Run with: `cd backend && python -m pytest tests/ -v`
-
-The 4 `PermissionError` failures on temp directory are pre-existing environment issues, not code bugs.
+Run with: `python -m pytest`
+Ensure the golden regression test (`tests/test_benchmark_regression.py`) always passes.
 
 ## Rules
 
-1. NEVER break backward compatibility
-2. ALL existing tests must pass
-3. Benchmark workbook must never be modified — fix the code instead
-4. Keep architecture generic — don't overfit to rice exports
-5. The intelligence report must always be explainable to business users
-6. Validation is advisory, not blocking (except for truly fatal errors)
+1. NEVER break backward compatibility.
+2. ALL existing tests must pass.
+3. Benchmark workbook must never be modified — fix the code instead.
+4. Golden benchmark row counts MUST remain strictly identical.
+5. All documentation MUST be kept up to date (`/docs/`).
 
 ## What NOT To Build Yet
 
-- Multi-tenant architecture
-- PostgreSQL migration
-- Celery/Redis/async processing
-- Authentication/Auth
-- Plugin marketplace
-- LLM/AI integrations
-- Multiple industries beyond the reference template
+- Multi-tenant architecture (planned Phase 6)
+- PostgreSQL migration (planned Phase 3)
+- Celery/Redis/async processing (planned Phase 4)
+- S3 integration (planned Phase 5)

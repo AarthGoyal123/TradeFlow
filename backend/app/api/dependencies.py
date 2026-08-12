@@ -85,7 +85,8 @@ def get_workbook_validation_service() -> WorkbookValidationService:
     settings = get_settings()
     template_repository = FileSystemTemplateRepository(settings.resolved_template_root)
     return _build_workbook_validation_service(
-        template_repository, OpenPyXLWorkbookLoader(),
+        template_repository,
+        OpenPyXLWorkbookLoader(),
     )
 
 
@@ -118,7 +119,8 @@ def get_processing_service() -> ProcessingService:
         ),
         workbook_loader=workbook_loader,
         workbook_validation_service=_build_workbook_validation_service(
-            template_repository, workbook_loader,
+            template_repository,
+            workbook_loader,
         ),
         cleaning_service=DataCleaningService(),
         dataset_builder=IntermediateDatasetBuilder(),

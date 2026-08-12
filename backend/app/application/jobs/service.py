@@ -39,19 +39,25 @@ class JobService:
     ) -> Job:
         """Validate and store an uploaded workbook, then persist its job record."""
         self._template_repository.get_template(template_id)
-        self._validate_extension(original_filename)
+        
+        import os
+        safe_filename = os.path.basename(original_filename)
+        if not safe_filename:
+            safe_filename = "unnamed_upload.xlsx"
+            
+        self._validate_extension(safe_filename)
 
         job_id = str(uuid4())
         stored_filename = self._uploaded_file_storage.save(
             file=file,
-            original_filename=original_filename,
+            original_filename=safe_filename,
             job_id=job_id,
         )
         job = self._job_repository.create_job(
             CreateJob(
                 job_id=job_id,
                 template_id=template_id,
-                original_filename=original_filename,
+                original_filename=safe_filename,
                 stored_filename=stored_filename,
                 status=JobStatus.UPLOADED,
             )
@@ -76,4 +82,3 @@ class JobService:
                     "allowed_extensions": list(self._allowed_extensions),
                 },
             )
-

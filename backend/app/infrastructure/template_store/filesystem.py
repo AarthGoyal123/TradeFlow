@@ -107,4 +107,3 @@ class FileSystemTemplateRepository:
                 details={"path": str(path)},
             )
         return content
-

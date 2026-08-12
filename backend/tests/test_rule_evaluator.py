@@ -96,4 +96,3 @@ def test_disabled_rule_does_not_match() -> None:
     )
 
     assert RuleEvaluator().evaluate_row(row=row, rule=rule) == (None, None, None, None)
-

@@ -22,11 +22,11 @@ export function useJob(id: string | undefined) {
   });
 }
 
-export function useJobReport(id: string | undefined) {
+export function useJobReport(id: string | undefined, status?: string) {
   return useQuery({
     queryKey: ["jobs", id, "report"],
     queryFn: () => fetchJobReport(id!),
-    enabled: !!id,
+    enabled: !!id && status === "completed",
     retry: 2,
   });
 }

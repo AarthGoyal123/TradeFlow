@@ -16,8 +16,7 @@ class ColumnRemovalStage:
     ) -> IntermediateDataset:
         """Return a dataset without configured removed columns."""
         removals = {
-            self._normalize_key(column_name)
-            for column_name in template.columns.remove_columns
+            self._normalize_key(column_name) for column_name in template.columns.remove_columns
         }
         if not removals:
             return dataset
@@ -36,9 +35,7 @@ class ColumnRemovalStage:
             for row in dataset.rows
         )
         removed_fields = tuple(
-            field
-            for field in dataset.fields
-            if self._normalize_key(field) in removals
+            field for field in dataset.fields if self._normalize_key(field) in removals
         )
         return IntermediateDataset(
             template_id=dataset.template_id,
@@ -84,4 +81,3 @@ class NormalizationStage:
             normalized = " ".join(value.strip().split())
             return normalized if normalized else None
         return value
-

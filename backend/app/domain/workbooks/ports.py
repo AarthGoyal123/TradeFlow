@@ -47,4 +47,3 @@ class WorkbookLoader(Protocol):
     def load(self, workbook_path: Path) -> WorkbookDocument:
         """Load a workbook document."""
         ...
-

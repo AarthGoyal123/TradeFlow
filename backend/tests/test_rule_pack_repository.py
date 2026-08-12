@@ -175,4 +175,3 @@ def _copy_template(tmp_path) -> Path:
 def _write_rule_pack(template_root: Path, filename: str, payload: dict[str, object]) -> None:
     path = template_root / "indian_rice_exports" / "rules" / filename
     path.write_text(json.dumps(payload), encoding="utf-8")
-

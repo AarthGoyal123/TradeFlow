@@ -36,40 +36,48 @@ class SemanticDetector:
 
             if pattern.pattern_type == "country":
                 has_country = True
-                entities.append(BusinessEntity(
-                    business_concept="country",
-                    workbook_header=cell.value,
-                    detection_method="semantic",
-                    confidence=pattern.confidence,
-                    sample_values=pattern.sample_values,
-                ))
+                entities.append(
+                    BusinessEntity(
+                        business_concept="country",
+                        workbook_header=cell.value,
+                        detection_method="semantic",
+                        confidence=pattern.confidence,
+                        sample_values=pattern.sample_values,
+                    )
+                )
             elif pattern.pattern_type == "hs_code":
                 has_hs = True
-                entities.append(BusinessEntity(
-                    business_concept="hs_code",
-                    workbook_header=cell.value,
-                    detection_method="semantic",
-                    confidence=pattern.confidence,
-                    sample_values=pattern.sample_values,
-                ))
+                entities.append(
+                    BusinessEntity(
+                        business_concept="hs_code",
+                        workbook_header=cell.value,
+                        detection_method="semantic",
+                        confidence=pattern.confidence,
+                        sample_values=pattern.sample_values,
+                    )
+                )
             elif pattern.pattern_type == "port":
                 has_port = True
-                entities.append(BusinessEntity(
-                    business_concept="port",
-                    workbook_header=cell.value,
-                    detection_method="semantic",
-                    confidence=pattern.confidence,
-                    sample_values=pattern.sample_values,
-                ))
+                entities.append(
+                    BusinessEntity(
+                        business_concept="port",
+                        workbook_header=cell.value,
+                        detection_method="semantic",
+                        confidence=pattern.confidence,
+                        sample_values=pattern.sample_values,
+                    )
+                )
             elif pattern.pattern_type == "currency":
                 has_currency = True
-                entities.append(BusinessEntity(
-                    business_concept="fob_value",
-                    workbook_header=cell.value,
-                    detection_method="semantic",
-                    confidence=pattern.confidence,
-                    sample_values=pattern.sample_values,
-                ))
+                entities.append(
+                    BusinessEntity(
+                        business_concept="fob_value",
+                        workbook_header=cell.value,
+                        detection_method="semantic",
+                        confidence=pattern.confidence,
+                        sample_values=pattern.sample_values,
+                    )
+                )
 
         return SemanticAnalysis(
             detected_entities=tuple(entities),
@@ -99,8 +107,10 @@ class SemanticDetector:
         )
         if currency_matches > len(values) * 0.3:
             return DetectedPattern(
-                "currency", header_name,
-                tuple(values[:5]), min(0.95, currency_matches / len(values)),
+                "currency",
+                header_name,
+                tuple(values[:5]),
+                min(0.95, currency_matches / len(values)),
             )
 
         # Check for HS codes (6-8 digit numbers, optionally with dots/hyphens)
@@ -114,8 +124,10 @@ class SemanticDetector:
                 hs_matches += 1
         if hs_matches > len(values) * 0.3:
             return DetectedPattern(
-                "hs_code", header_name,
-                tuple(values[:5]), min(0.95, hs_matches / len(values)),
+                "hs_code",
+                header_name,
+                tuple(values[:5]),
+                min(0.95, hs_matches / len(values)),
             )
 
         # Check for country names
@@ -124,8 +136,10 @@ class SemanticDetector:
         )
         if country_matches > len(values) * 0.3:
             return DetectedPattern(
-                "country", header_name,
-                tuple(values[:5]), min(0.95, country_matches / len(values)),
+                "country",
+                header_name,
+                tuple(values[:5]),
+                min(0.95, country_matches / len(values)),
             )
 
         # Check for port names
@@ -134,24 +148,30 @@ class SemanticDetector:
         )
         if port_matches > len(values) * 0.3:
             return DetectedPattern(
-                "port", header_name,
-                tuple(values[:5]), min(0.85, port_matches / len(values)),
+                "port",
+                header_name,
+                tuple(values[:5]),
+                min(0.85, port_matches / len(values)),
             )
 
         # Check for numeric values
         numeric_matches = sum(1 for v in values if _is_numeric(v))
         if numeric_matches > len(values) * 0.6:
             return DetectedPattern(
-                "numeric", header_name,
-                tuple(values[:5]), min(0.7, numeric_matches / len(values)),
+                "numeric",
+                header_name,
+                tuple(values[:5]),
+                min(0.7, numeric_matches / len(values)),
             )
 
         # Check for date-like values
         date_matches = sum(1 for v in values if _looks_like_date(v))
         if date_matches > len(values) * 0.4:
             return DetectedPattern(
-                "date", header_name,
-                tuple(values[:5]), min(0.75, date_matches / len(values)),
+                "date",
+                header_name,
+                tuple(values[:5]),
+                min(0.75, date_matches / len(values)),
             )
 
         return DetectedPattern("text", header_name, tuple(values[:3]), 0.5)
@@ -167,5 +187,6 @@ def _is_numeric(v: str) -> bool:
 
 def _looks_like_date(v: str) -> bool:
     import re
+
     patterns = [r"\d{2}[/-]\d{2}[/-]\d{2,4}", r"\d{4}[/-]\d{2}[/-]\d{2}"]
     return bool(re.match(patterns[0], v)) or bool(re.match(patterns[1], v))

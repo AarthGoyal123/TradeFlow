@@ -45,4 +45,3 @@ class LocalUploadedFileStorage:
     def path_for(self, stored_filename: str) -> Path:
         """Return the absolute path for a stored file."""
         return (self._upload_dir / stored_filename).resolve()
-

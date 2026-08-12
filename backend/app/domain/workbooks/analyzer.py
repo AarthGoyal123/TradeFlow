@@ -1,6 +1,5 @@
 """Workbook Analyzer — structure, sheet, header, and data sampling."""
 
-
 from app.domain.workbooks.intelligence import (
     DataSampleAnalysis,
     FileMetadata,
@@ -27,12 +26,14 @@ class WorkbookAnalyzer:
                 rows = list(sheet.iter_rows(min_row=1))[:5]
                 col_count = max((len(r.values) for r in rows if r.values), default=0)
                 total = len(list(sheet.iter_rows(min_row=1)))
-                sheet_infos.append(SheetInfo(
-                    name=name,
-                    row_count=total,
-                    column_count=col_count,
-                    is_likely_data_sheet=False,
-                ))
+                sheet_infos.append(
+                    SheetInfo(
+                        name=name,
+                        row_count=total,
+                        column_count=col_count,
+                        is_likely_data_sheet=False,
+                    )
+                )
             except Exception:
                 continue
 
@@ -40,16 +41,34 @@ class WorkbookAnalyzer:
         likely = self._find_likely_data_sheet(sheets)
         sheet_reader = sheet_readers.get(likely.name) if likely else None
 
-        header = self._detect_header(sheet_reader, likely) if sheet_reader and likely else HeaderAnalysis(
-            detected_row=1, confidence=0.0, cells=(), detection_method="none",
+        header = (
+            self._detect_header(sheet_reader, likely)
+            if sheet_reader and likely
+            else HeaderAnalysis(
+                detected_row=1,
+                confidence=0.0,
+                cells=(),
+                detection_method="none",
+            )
         )
-        data_sample = self._sample_data(sheet_reader, header.detected_row) if sheet_reader else DataSampleAnalysis(
-            column_count=0, estimated_data_rows=0, estimated_empty_rows=0,
-            has_title_rows=False, title_row_count=0, column_types={},
+        data_sample = (
+            self._sample_data(sheet_reader, header.detected_row)
+            if sheet_reader
+            else DataSampleAnalysis(
+                column_count=0,
+                estimated_data_rows=0,
+                estimated_empty_rows=0,
+                has_title_rows=False,
+                title_row_count=0,
+                column_types={},
+            )
         )
 
         file_meta = FileMetadata(
-            size_bytes=0, filename="", extension=".xlsx", sheet_count=len(sheets),
+            size_bytes=0,
+            filename="",
+            extension=".xlsx",
+            sheet_count=len(sheets),
         )
 
         conf = 0.0
@@ -101,7 +120,8 @@ class WorkbookAnalyzer:
             values = [
                 str(r.values[cell.column_number - 1]).strip()
                 for r in data_rows[:20]
-                if r.values and len(r.values) >= cell.column_number
+                if r.values
+                and len(r.values) >= cell.column_number
                 and r.values[cell.column_number - 1] is not None
             ]
             if values:

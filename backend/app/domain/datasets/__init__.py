@@ -1,2 +1,1 @@
 """Intermediate dataset domain models."""
-

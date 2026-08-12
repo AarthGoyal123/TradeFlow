@@ -141,4 +141,3 @@ def _client_with_temp_job_service(
     app = create_app()
     app.dependency_overrides[get_job_service] = lambda: job_service
     return TestClient(app), upload_dir
-

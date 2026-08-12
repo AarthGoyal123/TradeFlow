@@ -45,4 +45,3 @@ class ProcessingReportRepository(Protocol):
     def get_summary(self, job_id: str) -> ProcessingSummary:
         """Return a processing summary by job id."""
         ...
-

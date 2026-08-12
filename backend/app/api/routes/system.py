@@ -9,4 +9,3 @@ router = APIRouter(tags=["system"])
 def health_check() -> dict[str, str]:
     """Return service health status."""
     return {"status": "ok"}
-

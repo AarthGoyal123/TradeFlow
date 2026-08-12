@@ -1,2 +1,1 @@
 """Excel workbook infrastructure adapters."""
-

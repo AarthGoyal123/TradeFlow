@@ -21,4 +21,3 @@ def test_missing_template_raises_not_found() -> None:
 
     with pytest.raises(TemplateNotFoundError):
         repository.get_template("missing_template")
-

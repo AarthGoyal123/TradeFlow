@@ -96,9 +96,9 @@ class DetectedPattern:
 
 @dataclass(frozen=True, slots=True)
 class BusinessEntity:
-    business_concept: str          # "consignee", "port", "country", "hs_code"
-    workbook_header: str | None    # actual header found
-    detection_method: str          # "exact", "synonym", "fuzzy", "semantic", "missing"
+    business_concept: str  # "consignee", "port", "country", "hs_code"
+    workbook_header: str | None  # actual header found
+    detection_method: str  # "exact", "synonym", "fuzzy", "semantic", "missing"
     confidence: float
     sample_values: tuple[str, ...] = ()
 
@@ -159,7 +159,9 @@ class MappingExplanation:
     business_field: str
     workbook_header: str | None
     status: str  # "matched", "suggested", "missing"
-    detection_method: str  # "exact", "case_insensitive", "normalized", "synonym", "fuzzy", "semantic", "none"
+    detection_method: (
+        str  # "exact", "case_insensitive", "normalized", "synonym", "fuzzy", "semantic", "none"
+    )
     confidence: float
     searched_aliases: tuple[str, ...] = ()
     closest_matches: tuple[tuple[str, float], ...] = ()

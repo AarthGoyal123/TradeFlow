@@ -1,2 +1,1 @@
 """Rule evaluation application services."""
-

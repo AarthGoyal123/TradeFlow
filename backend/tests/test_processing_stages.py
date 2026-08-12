@@ -72,4 +72,3 @@ def _template(*, remove_columns: list[str]) -> TemplateDefinition:
         regex_rules=RulePack(),
         fuzzy_matches=RulePack(),
     )
-

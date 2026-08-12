@@ -93,10 +93,9 @@ class WorkbookIntelligenceService:
         header: WorksheetHeader,
     ) -> tuple[ColumnMappingExplanation, ...]:
         explanations: list[ColumnMappingExplanation] = []
-        all_mappings = (
-            [(c, True) for c in template.columns.required_fields]
-            + [(c, False) for c in template.columns.optional_fields]
-        )
+        all_mappings = [(c, True) for c in template.columns.required_fields] + [
+            (c, False) for c in template.columns.optional_fields
+        ]
         for column, required in all_mappings:
             explanation = self._explain_column(column.field, column.aliases, header, required)
             explanations.append(explanation)
@@ -115,9 +114,13 @@ class WorkbookIntelligenceService:
             if alias in header_values:
                 cell = next(c for c in header.cells if c.value == alias)
                 return ColumnMappingExplanation(
-                    field=field, required=required, matched=True,
-                    source_header=alias, column_number=cell.column_number,
-                    method="exact", confidence=1.0,
+                    field=field,
+                    required=required,
+                    matched=True,
+                    source_header=alias,
+                    column_number=cell.column_number,
+                    method="exact",
+                    confidence=1.0,
                     searched_aliases=tuple(template_aliases),
                 )
 
@@ -128,9 +131,13 @@ class WorkbookIntelligenceService:
                 orig = normalized_lookup[normal]
                 cell = next(c for c in header.cells if c.value == orig)
                 return ColumnMappingExplanation(
-                    field=field, required=required, matched=True,
-                    source_header=orig, column_number=cell.column_number,
-                    method="normalized", confidence=0.90,
+                    field=field,
+                    required=required,
+                    matched=True,
+                    source_header=orig,
+                    column_number=cell.column_number,
+                    method="normalized",
+                    confidence=0.90,
                     searched_aliases=tuple(template_aliases),
                 )
 
@@ -145,9 +152,13 @@ class WorkbookIntelligenceService:
                     cell = next(c for c in header.cells if c.value == value)
                     method = "fuzzy_auto" if normalized >= 0.95 else "fuzzy"
                     return ColumnMappingExplanation(
-                        field=field, required=required, matched=True,
-                        source_header=value, column_number=cell.column_number,
-                        method=method, confidence=normalized,
+                        field=field,
+                        required=required,
+                        matched=True,
+                        source_header=value,
+                        column_number=cell.column_number,
+                        method=method,
+                        confidence=normalized,
                         searched_aliases=tuple(template_aliases),
                         closest_matches=tuple(
                             {"value": v, "confidence": c}
@@ -157,12 +168,13 @@ class WorkbookIntelligenceService:
 
         sorted_closest = sorted(closest, key=lambda x: -x[1])[:3]
         return ColumnMappingExplanation(
-            field=field, required=required, matched=False,
-            method="none", confidence=0.0,
+            field=field,
+            required=required,
+            matched=False,
+            method="none",
+            confidence=0.0,
             searched_aliases=tuple(template_aliases),
-            closest_matches=tuple(
-                {"value": v, "confidence": c} for v, c in sorted_closest
-            ),
+            closest_matches=tuple({"value": v, "confidence": c} for v, c in sorted_closest),
         )
 
     @staticmethod
@@ -200,18 +212,22 @@ class WorkbookIntelligenceService:
                     "numeric": "Values are numeric",
                     "date": "Values match date patterns",
                 }.get(pattern.pattern_type, f"Detected as {pattern.pattern_type}")
-                fields.append(DetectedFieldInfo(
-                    label=pattern.pattern_type,
-                    column=0,
-                    sample=sample,
-                    confidence=pattern.confidence,
-                    reason=reason,
-                ))
+                fields.append(
+                    DetectedFieldInfo(
+                        label=pattern.pattern_type,
+                        column=0,
+                        sample=sample,
+                        confidence=pattern.confidence,
+                        reason=reason,
+                    )
+                )
         return tuple(fields)
 
     @staticmethod
     def _normalize(value: str) -> str:
-        return " ".join(value.strip().casefold().replace("_", " ").replace("-", " ").replace(".", " ").split())
+        return " ".join(
+            value.strip().casefold().replace("_", " ").replace("-", " ").replace(".", " ").split()
+        )
 
     @staticmethod
     def _select_sheet(workbook: WorkbookDocument) -> WorksheetReader | None:

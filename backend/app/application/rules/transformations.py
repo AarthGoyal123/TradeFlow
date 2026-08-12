@@ -27,8 +27,7 @@ class RuleTransformationApplier:
             template_id=dataset.template_id,
             sheet_name=dataset.sheet_name,
             rows=tuple(
-                self._apply_row(row=row, transformations=transformations)
-                for row in dataset.rows
+                self._apply_row(row=row, transformations=transformations) for row in dataset.rows
             ),
             removed_fields=dataset.removed_fields,
         )

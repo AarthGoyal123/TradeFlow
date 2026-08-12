@@ -29,11 +29,15 @@ class LocalOutputStorage:
             OutputType.NEEDS_REVIEW: "Needs_Review.xlsx",
             OutputType.PROCESSING_REPORT: "Processing_Report.xlsx",
         }
-        path = self._output_dir / job_id / filenames[output_type]
+        path = (self._output_dir / job_id / filenames[output_type]).resolve()
+        
+        # Prevent path traversal via job_id
+        if not str(path).startswith(str(self._output_dir.resolve())):
+            raise StorageError("Invalid output path")
+            
         if not path.exists():
             raise StorageError(
                 "Output file not found",
                 details={"job_id": job_id, "output_type": output_type.value},
             )
         return OutputArtifact(output_type=output_type, filename=path.name, path=path)
-

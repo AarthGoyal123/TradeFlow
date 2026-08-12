@@ -27,7 +27,7 @@ class FieldCleaningRule:
 
 
 def _remove_phrase(text: str, phrase: str) -> str:
-    lower = text.lower()
+    text.lower()
     pattern = re.compile(re.escape(phrase), re.IGNORECASE)
     result = pattern.sub("", text)
     result = " ".join(result.split())
@@ -35,7 +35,7 @@ def _remove_phrase(text: str, phrase: str) -> str:
 
 
 def _strip_bank_keywords(text: str, keywords: tuple[str, ...]) -> str:
-    lower = text.lower()
+    text.lower()
     tokens = text.split()
     filtered = [t for t in tokens if t.lower() not in keywords]
     result = " ".join(filtered)

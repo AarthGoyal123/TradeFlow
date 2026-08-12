@@ -7,6 +7,7 @@ from app.core.errors import WorkbookValidationError
 from app.domain.templates.models import TemplateDefinition
 from app.domain.templates.ports import TemplateRepository
 from app.domain.workbooks.analyzer import WorkbookAnalyzer
+from app.domain.workbooks.intelligence import SemanticAnalysis, StructureAnalysis
 from app.domain.workbooks.models import (
     WorkbookValidationIssue,
     WorkbookValidationResult,
@@ -51,7 +52,9 @@ class WorkbookValidationService:
                 mapped_columns=(),
                 issues=(
                     WorkbookValidationIssue(
-                        code=exc.code, message=exc.message, details=exc.details,
+                        code=exc.code,
+                        message=exc.message,
+                        details=exc.details,
                     ),
                 ),
             )
@@ -79,13 +82,13 @@ class WorkbookValidationService:
 
         # Use enhanced column mapper with global synonyms
         mapped_columns, issues = self._column_mapper.map_columns(
-            template=template, header=header,
+            template=template,
+            header=header,
         )
 
         # Attach intelligence context to every issue
         enriched = tuple(
-            self._enrich_issue(issue, structure, semantic, template)
-            for issue in issues
+            self._enrich_issue(issue, structure, semantic, template) for issue in issues
         )
 
         return WorkbookValidationResult(
@@ -126,7 +129,9 @@ class WorkbookValidationService:
                 return workbook.first_sheet(), None
             except WorkbookValidationError as exc:
                 return None, WorkbookValidationIssue(
-                    code=exc.code, message=exc.message, details=exc.details,
+                    code=exc.code,
+                    message=exc.message,
+                    details=exc.details,
                 )
 
         sheet_name = workbook_config.sheet_name

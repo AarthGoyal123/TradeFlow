@@ -138,4 +138,3 @@ class IntelligenceReportResponse(BaseModel):
     data_quality: DataQualityResponse
     column_mappings: list[ColumnMappingExplanationResponse]
     overall_confidence: float = 0.0
-

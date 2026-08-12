@@ -50,7 +50,8 @@ class IntermediateDatasetBuilder:
         )
         row_confidence = (
             sum(c.confidence for c in mapped_columns) / len(mapped_columns)
-            if mapped_columns else 0.0
+            if mapped_columns
+            else 0.0
         )
         return DatasetRow(source_row_number=row_number, cells=cells, confidence=row_confidence)
 

@@ -72,4 +72,3 @@ class IntermediateDataset:
             rows=new_rows,
             removed_fields=self.removed_fields,
         )
-

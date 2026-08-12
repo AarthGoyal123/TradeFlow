@@ -67,4 +67,3 @@ def _to_template_details_response(template: TemplateDefinition) -> TemplateDetai
         pipeline=template.pipeline.steps,
         outputs=outputs,
     )
-

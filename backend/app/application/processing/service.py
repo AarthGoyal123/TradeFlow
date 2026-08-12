@@ -1,8 +1,15 @@
 """Synchronous processing workflow to an intermediate dataset."""
+
 import logging
 import traceback
 from dataclasses import asdict
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from app.domain.jobs.models import Job
+    from app.domain.templates.models import Template
+    from app.domain.processing.dataset import IntermediateDataset
 
 from app.application.processing.cleaning_service import DataCleaningService
 from app.application.processing.dataset_builder import IntermediateDatasetBuilder
@@ -79,71 +86,7 @@ class ProcessingService:
         self._record(progress, "job", "processing", "Job processing started")
 
         try:
-            validation_result = self._workbook_validation_service.validate(
-                template_id=job.template_id,
-                workbook_path=workbook_path,
-            )
-            if self._is_fatal_validation_result(validation_result):
-                self._record(progress, "validation", "failed", "Workbook validation failed")
-                raise WorkbookValidationError(
-                    "Workbook validation failed",
-                    details={"issues": [asdict(issue) for issue in validation_result.issues]},
-                )
-            self._record(
-                progress, "validation",
-                "completed" if validation_result.valid else "partial",
-                "Workbook validation completed" if validation_result.valid else f"Workbook validation completed with {len(validation_result.issues)} issue(s)",
-            )
-
-            worksheet = self._select_validated_worksheet(
-                workbook_path=workbook_path,
-                sheet_name=validation_result.sheet_name,
-            )
-            dataset = self._dataset_builder.build(
-                validation_result=validation_result,
-                worksheet=worksheet,
-            )
-            self._record(progress, "dataset", "completed", "Intermediate dataset created")
-
-            dataset = self._column_removal_stage.run(dataset=dataset, template=template)
-            self._record(progress, "column_removal", "completed", "Configured columns removed")
-
-            dataset = self._normalization_stage.run(dataset=dataset)
-            self._record(progress, "normalization", "completed", "Dataset values normalized")
-
-            rule_report = self._rule_evaluation_service.evaluate_template_rules(
-                dataset=dataset,
-                review_threshold=template.output.review_threshold,
-            )
-            self._record(progress, "rules", "completed", "Template rules evaluated")
-
-            dataset = self._transformation_applier.apply(
-                dataset=dataset,
-                rule_report=rule_report,
-            )
-            self._record(progress, "transformations", "completed", "Rule transformations applied")
-
-            if template.output.column_order:
-                dataset = dataset.reorder(tuple(template.output.column_order))
-                self._record(progress, "order", "completed", "Columns reordered per template")
-
-            if template.output.cleaning:
-                cleaning_config = DatasetCleaningConfig(
-                    field_rules={
-                        field: FieldCleaningRule(
-                            remove_phrases=tuple(spec.remove_phrases),
-                            bank_keywords=tuple(spec.bank_keywords),
-                            trim=spec.trim,
-                            collapse_whitespace=spec.collapse_whitespace,
-                        )
-                        for field, spec in template.output.cleaning.items()
-                    }
-                )
-                dataset = self._cleaning_service.clean(
-                    dataset=dataset,
-                    cleaning_config=cleaning_config,
-                )
-                self._record(progress, "cleaning", "completed", "Field values cleaned per template")
+            dataset, rule_report = self._execute_pipeline(job, template, workbook_path, progress)
 
             artifacts = self._output_workbook_builder.build(
                 job_id=job_id,
@@ -207,6 +150,84 @@ class ProcessingService:
             rule_report=rule_report,
             summary=summary,
         )
+
+    def _execute_pipeline(
+        self,
+        job: "Job",
+        template: "Template",
+        workbook_path: Path,
+        progress: list[ProcessingProgress],
+    ) -> tuple["IntermediateDataset", RuleExecutionReport]:
+        validation_result = self._workbook_validation_service.validate(
+            template_id=job.template_id,
+            workbook_path=workbook_path,
+        )
+        if self._is_fatal_validation_result(validation_result):
+            self._record(progress, "validation", "failed", "Workbook validation failed")
+            raise WorkbookValidationError(
+                "Workbook validation failed",
+                details={"issues": [asdict(issue) for issue in validation_result.issues]},
+            )
+        self._record(
+            progress,
+            "validation",
+            "completed" if validation_result.valid else "partial",
+            "Workbook validation completed"
+            if validation_result.valid
+            else f"Workbook validation completed with {len(validation_result.issues)} issue(s)",
+        )
+
+        worksheet = self._select_validated_worksheet(
+            workbook_path=workbook_path,
+            sheet_name=validation_result.sheet_name,
+        )
+        dataset = self._dataset_builder.build(
+            validation_result=validation_result,
+            worksheet=worksheet,
+        )
+        self._record(progress, "dataset", "completed", "Intermediate dataset created")
+
+        dataset = self._column_removal_stage.run(dataset=dataset, template=template)
+        self._record(progress, "column_removal", "completed", "Configured columns removed")
+
+        dataset = self._normalization_stage.run(dataset=dataset)
+        self._record(progress, "normalization", "completed", "Dataset values normalized")
+
+        rule_report = self._rule_evaluation_service.evaluate_template_rules(
+            dataset=dataset,
+            review_threshold=template.output.review_threshold,
+        )
+        self._record(progress, "rules", "completed", "Template rules evaluated")
+
+        dataset = self._transformation_applier.apply(
+            dataset=dataset,
+            rule_report=rule_report,
+        )
+        self._record(progress, "transformations", "completed", "Rule transformations applied")
+
+        if template.output.column_order:
+            dataset = dataset.reorder(tuple(template.output.column_order))
+            self._record(progress, "order", "completed", "Columns reordered per template")
+
+        if template.output.cleaning:
+            cleaning_config = DatasetCleaningConfig(
+                field_rules={
+                    field: FieldCleaningRule(
+                        remove_phrases=tuple(spec.remove_phrases),
+                        bank_keywords=tuple(spec.bank_keywords),
+                        trim=spec.trim,
+                        collapse_whitespace=spec.collapse_whitespace,
+                    )
+                    for field, spec in template.output.cleaning.items()
+                }
+            )
+            dataset = self._cleaning_service.clean(
+                dataset=dataset,
+                cleaning_config=cleaning_config,
+            )
+            self._record(progress, "cleaning", "completed", "Field values cleaned per template")
+            
+        return dataset, rule_report
 
     def _select_validated_worksheet(
         self,

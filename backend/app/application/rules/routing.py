@@ -19,9 +19,7 @@ class RuleConflictResolver:
         classifications_by_row: dict[int, RowClassification] = {}
         for cls in report.classifications:
             existing = classifications_by_row.get(cls.row_number)
-            if existing is None or _severity_rank(cls.severity) > _severity_rank(
-                existing.severity
-            ):
+            if existing is None or _severity_rank(cls.severity) > _severity_rank(existing.severity):
                 classifications_by_row[cls.row_number] = cls
 
         confidence_by_row: dict[int, float] = {}
@@ -93,4 +91,3 @@ def _severity_rank(severity: RuleSeverity) -> int:
         RuleSeverity.WARNING: 2,
         RuleSeverity.ERROR: 3,
     }[severity]
-

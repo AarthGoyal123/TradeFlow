@@ -19,7 +19,7 @@ SUGGEST_THRESHOLD = 0.85
 
 class TemplateColumnMapper:
     """Map template conceptual columns to worksheet headers using layered matching.
-    
+
     Matching hierarchy:
         1. Exact match
         2. Case-insensitive match
@@ -92,7 +92,13 @@ class TemplateColumnMapper:
         for alias in template_aliases:
             if alias in lookup:
                 cell = lookup[alias]
-                mc = MappedColumn(field=field, required=required, source_header=cell.value, column_number=cell.column_number, confidence=1.0)
+                mc = MappedColumn(
+                    field=field,
+                    required=required,
+                    source_header=cell.value,
+                    column_number=cell.column_number,
+                    confidence=1.0,
+                )
                 return _FieldResult(mc, 1.0, "exact")
 
         # Stage 2: Case-insensitive / Normalized match on template aliases
@@ -100,7 +106,13 @@ class TemplateColumnMapper:
             normal = self._normalize(alias)
             if normal in lookup:
                 cell = lookup[normal]
-                mc = MappedColumn(field=field, required=required, source_header=cell.value, column_number=cell.column_number, confidence=0.90)
+                mc = MappedColumn(
+                    field=field,
+                    required=required,
+                    source_header=cell.value,
+                    column_number=cell.column_number,
+                    confidence=0.90,
+                )
                 return _FieldResult(mc, 0.90, "normalized")
 
         # Stage 3: Synonym dictionary match
@@ -108,12 +120,24 @@ class TemplateColumnMapper:
         for synonym in all_synonyms:
             if synonym in lookup:
                 cell = lookup[synonym]
-                mc = MappedColumn(field=field, required=required, source_header=cell.value, column_number=cell.column_number, confidence=0.85)
+                mc = MappedColumn(
+                    field=field,
+                    required=required,
+                    source_header=cell.value,
+                    column_number=cell.column_number,
+                    confidence=0.85,
+                )
                 return _FieldResult(mc, 0.85, "synonym")
             normal = self._normalize(synonym)
             if normal in lookup:
                 cell = lookup[normal]
-                mc = MappedColumn(field=field, required=required, source_header=cell.value, column_number=cell.column_number, confidence=0.82)
+                mc = MappedColumn(
+                    field=field,
+                    required=required,
+                    source_header=cell.value,
+                    column_number=cell.column_number,
+                    confidence=0.82,
+                )
                 return _FieldResult(mc, 0.82, "synonym")
 
         # Stage 4: Fuzzy match with auto-map threshold
@@ -124,34 +148,59 @@ class TemplateColumnMapper:
 
         best_cell: HeaderCell | None = None
         best_score = 0.0
-        best_alias = ""
 
         for alias in all_searched:
-            result = process.extractOne(alias, all_values, scorer=fuzz.WRatio, score_cutoff=int(SUGGEST_THRESHOLD * 100))
+            result = process.extractOne(
+                alias, all_values, scorer=fuzz.WRatio, score_cutoff=int(SUGGEST_THRESHOLD * 100)
+            )
             if result:
                 value, score, _ = result
                 normalized_score = score / 100.0
                 if normalized_score >= AUTO_MAP_THRESHOLD and lookup.get(value):
                     cell = lookup[value]
-                    mc = MappedColumn(field=field, required=required, source_header=cell.value, column_number=cell.column_number, confidence=normalized_score)
+                    mc = MappedColumn(
+                        field=field,
+                        required=required,
+                        source_header=cell.value,
+                        column_number=cell.column_number,
+                        confidence=normalized_score,
+                    )
                     return _FieldResult(mc, normalized_score, "fuzzy_auto")
                 if normalized_score > best_score and lookup.get(value):
                     best_score = normalized_score
                     best_cell = lookup[value]
-                    best_alias = value
 
         # Return best fuzzy match if above suggestion threshold
         if best_cell and best_score >= SUGGEST_THRESHOLD:
-            mc = MappedColumn(field=field, required=required, source_header=best_cell.value, column_number=best_cell.column_number, confidence=best_score)
+            mc = MappedColumn(
+                field=field,
+                required=required,
+                source_header=best_cell.value,
+                column_number=best_cell.column_number,
+                confidence=best_score,
+            )
             return _FieldResult(mc, best_score, "fuzzy_suggest")
 
-        return _FieldResult(None, 0.0, "none", suggestions=[(value, score/100.0) for result in [
-            process.extract(a, all_values, scorer=fuzz.WRatio, limit=2) for a in all_searched[:5]
-        ] for value, score, _ in (result or []) if score/100.0 >= SUGGEST_THRESHOLD - 0.1])
+        return _FieldResult(
+            None,
+            0.0,
+            "none",
+            suggestions=[
+                (value, score / 100.0)
+                for result in [
+                    process.extract(a, all_values, scorer=fuzz.WRatio, limit=2)
+                    for a in all_searched[:5]
+                ]
+                for value, score, _ in (result or [])
+                if score / 100.0 >= SUGGEST_THRESHOLD - 0.1
+            ],
+        )
 
-    def _build_issue(self, column: ColumnMapping, result: "_FieldResult", required: bool) -> WorkbookValidationIssue:
+    def _build_issue(
+        self, column: ColumnMapping, result: "_FieldResult", required: bool
+    ) -> WorkbookValidationIssue:
         all_synonyms = self._industry_dict.get_all(column.field)
-        
+
         if required:
             code = "missing_required_column"
             if result.suggestions:
@@ -175,12 +224,16 @@ class TemplateColumnMapper:
         if result.suggestions:
             best = result.suggestions[0]
             details["recommended_fix"] = (
-                f"Rename or map '{best[0]}' to '{column.field}' "
-                f"(confidence: {best[1]:.0%}). "
+                f"Rename or map '{best[0]}' to '{column.field}' (confidence: {best[1]:.0%}). "
             )
-            details["suggested_mapping"] = {"workbook_header": best[0], "business_field": column.field}
+            details["suggested_mapping"] = {
+                "workbook_header": best[0],
+                "business_field": column.field,
+            }
         else:
-            details["recommended_fix"] = f"Add a column named one of: {', '.join(column.aliases[:3])}"
+            details["recommended_fix"] = (
+                f"Add a column named one of: {', '.join(column.aliases[:3])}"
+            )
 
         issue_details: dict[str, object] = {
             "problem": f"Missing {'required' if required else 'optional'} field '{column.field}'",
@@ -199,7 +252,9 @@ class TemplateColumnMapper:
 
     @staticmethod
     def _normalize(value: str) -> str:
-        return " ".join(value.strip().casefold().replace("_", " ").replace("-", " ").replace(".", " ").split())
+        return " ".join(
+            value.strip().casefold().replace("_", " ").replace("-", " ").replace(".", " ").split()
+        )
 
 
 @dataclass

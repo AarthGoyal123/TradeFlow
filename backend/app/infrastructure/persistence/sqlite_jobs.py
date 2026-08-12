@@ -31,9 +31,11 @@ class SQLiteJobRepository:
                         stored_filename,
                         status,
                         created_at,
-                        updated_at
+                        updated_at,
+                        user_id,
+                        tenant_id
                     )
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
                         job.job_id,
@@ -43,6 +45,8 @@ class SQLiteJobRepository:
                         job.status.value,
                         now.isoformat(),
                         now.isoformat(),
+                        job.user_id,
+                        job.tenant_id,
                     ),
                 )
         except sqlite3.Error as exc:
@@ -65,7 +69,9 @@ class SQLiteJobRepository:
                         stored_filename,
                         status,
                         created_at,
-                        updated_at
+                        updated_at,
+                        user_id,
+                        tenant_id
                     FROM jobs
                     WHERE job_id = ?
                     """,
@@ -82,26 +88,34 @@ class SQLiteJobRepository:
         return self._row_to_job(row)
 
     def update_status(self, job_id: str, status: JobStatus) -> Job:
-        """Update job status and return the updated job."""
+        """Update job status ensuring valid transitions."""
         now = datetime.now(UTC)
         try:
             with self._connect() as connection:
-                cursor = connection.execute(
+                row = connection.execute(
+                    "SELECT * FROM jobs WHERE job_id = ?", (job_id,)
+                ).fetchone()
+                
+                if row is None:
+                    raise JobNotFoundError("Job not found", details={"job_id": job_id})
+                    
+                job = self._row_to_job(row)
+                job = job.transition_to(status, now)
+
+                connection.execute(
                     """
                     UPDATE jobs
                     SET status = ?, updated_at = ?
                     WHERE job_id = ?
                     """,
-                    (status.value, now.isoformat(), job_id),
+                    (job.status.value, job.updated_at.isoformat(), job_id),
                 )
         except sqlite3.Error as exc:
             raise StorageError(
                 "Failed to update job status",
                 details={"job_id": job_id, "status": status.value},
             ) from exc
-        if cursor.rowcount == 0:
-            raise JobNotFoundError("Job not found", details={"job_id": job_id})
-        return self.get_job(job_id)
+        return job
 
     def save_summary(self, summary: ProcessingSummary) -> ProcessingSummary:
         """Persist a processing summary and its outputs."""
@@ -236,10 +250,23 @@ class SQLiteJobRepository:
                             status IN ('uploaded', 'processing', 'completed', 'failed')
                         ),
                         created_at TEXT NOT NULL,
-                        updated_at TEXT NOT NULL
+                        updated_at TEXT NOT NULL,
+                        user_id TEXT,
+                        tenant_id TEXT
                     )
                     """
                 )
+                
+                # Non-destructive migration for existing tables
+                try:
+                    connection.execute("ALTER TABLE jobs ADD COLUMN user_id TEXT")
+                except sqlite3.OperationalError:
+                    pass
+                try:
+                    connection.execute("ALTER TABLE jobs ADD COLUMN tenant_id TEXT")
+                except sqlite3.OperationalError:
+                    pass
+
                 connection.execute(
                     """
                     CREATE TABLE IF NOT EXISTS processing_reports (
@@ -276,6 +303,7 @@ class SQLiteJobRepository:
 
     @staticmethod
     def _row_to_job(row: sqlite3.Row) -> Job:
+        keys = row.keys()
         return Job(
             job_id=row["job_id"],
             template_id=row["template_id"],
@@ -284,4 +312,6 @@ class SQLiteJobRepository:
             status=JobStatus(row["status"]),
             created_at=datetime.fromisoformat(row["created_at"]),
             updated_at=datetime.fromisoformat(row["updated_at"]),
+            user_id=row["user_id"] if "user_id" in keys else None,
+            tenant_id=row["tenant_id"] if "tenant_id" in keys else None,
         )

@@ -15,14 +15,54 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(TradeFlowError)
     async def handle_tradeflow_error(_: Request, exc: TradeFlowError) -> JSONResponse:
-        status_code = 404 if isinstance(exc, TemplateNotFoundError | JobNotFoundError) else 400
+        from app.core.errors import (
+            BusinessRuleError,
+            JobNotFoundError,
+            StorageError,
+            SystemError,
+            TemplateNotFoundError,
+            ValidationError,
+        )
+
+        # Base status mapping
+        if isinstance(exc, TemplateNotFoundError | JobNotFoundError):
+            status_code = 404
+        elif isinstance(exc, ValidationError):
+            status_code = 400
+        elif isinstance(exc, BusinessRuleError):
+            status_code = 422
+        elif isinstance(exc, StorageError | SystemError):
+            status_code = 500
+        else:
+            status_code = 400
+
+        # Prevent data leakage for infrastructure errors
+        if isinstance(exc, StorageError | SystemError):
+            logger.error("System/Storage Error: %s %s", exc.message, exc.details)
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "error": {
+                        "code": exc.code,
+                        "message": "An internal system error occurred.",
+                        "details": {},
+                    }
+                },
+            )
+
+        # Safe business/validation errors
+        # Sanitize known sensitive keys just in case
+        safe_details = {
+            k: v for k, v in exc.details.items() if "path" not in k.lower() and "file" not in k.lower()
+        }
+        
         return JSONResponse(
             status_code=status_code,
             content={
                 "error": {
                     "code": exc.code,
                     "message": exc.message,
-                    "details": exc.details,
+                    "details": safe_details,
                 }
             },
         )

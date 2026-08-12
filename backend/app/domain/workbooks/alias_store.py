@@ -19,7 +19,7 @@ class AliasRecord:
 
 class LearningAliasStore:
     """In-memory store for user-confirmed header-to-business-field mappings.
-    
+
     In production, this would be backed by a database table.
     """
 
@@ -40,7 +40,7 @@ class LearningAliasStore:
             )
 
     def get_learned_alias(self, workbook_header: str) -> str | None:
-        for key, record in self._records.items():
+        for key, _record in self._records.items():
             h, f = key.split("|", 1)
             if workbook_header.lower().strip() == h:
                 return f

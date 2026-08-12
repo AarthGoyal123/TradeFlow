@@ -25,11 +25,7 @@ from app.domain.templates.models import (
 from app.domain.workbooks.synonyms import GlobalSynonymDictionary, IndustrySynonymDictionary
 from app.infrastructure.excel.openpyxl_loader import OpenPyXLWorkbookLoader
 
-BENCHMARK_PATH = (
-    Path(__file__).resolve().parent.parent
-    / "samples"
-    / "1006 ALL EXPORT JULY 25.xlsx"
-)
+BENCHMARK_PATH = Path(__file__).resolve().parent.parent / "samples" / "1006 ALL EXPORT JULY 25.xlsx"
 
 BENCHMARK_HEADERS = [
     "Indian Port",
@@ -55,18 +51,46 @@ BENCHMARK_HEADERS = [
 
 BENCHMARK_SAMPLE_ROWS = [
     [
-        "PETRAPOLE (INPTPB)", "INPTPB", "2025-07-04 00:00:00", "0589007971",
-        "MAHYCO PRIVATE LIMITED", "2ND FLOOR,MANISH CHAMBER,B.N.BLOCK  LOCA",
-        "NEW DELHI ", "0", "YES AGRO SCIENCEHOLDING NO.28/5. ROAD NO",
-        "BENAPOLE", "BANGLADESH", "10", "10061010",
-        "INDIAN PLANTING SEED", "4.44", "MTS", "1866.57", "USD", "700299.67",
+        "PETRAPOLE (INPTPB)",
+        "INPTPB",
+        "2025-07-04 00:00:00",
+        "0589007971",
+        "MAHYCO PRIVATE LIMITED",
+        "2ND FLOOR,MANISH CHAMBER,B.N.BLOCK  LOCA",
+        "NEW DELHI ",
+        "0",
+        "YES AGRO SCIENCEHOLDING NO.28/5. ROAD NO",
+        "BENAPOLE",
+        "BANGLADESH",
+        "10",
+        "10061010",
+        "INDIAN PLANTING SEED",
+        "4.44",
+        "MTS",
+        "1866.57",
+        "USD",
+        "700299.67",
     ],
     [
-        "HYDERABAD ICD (INSNF6)", "INSNF6", "2025-07-09 00:00:00", "AAXCA1074E",
-        "ADVANTA ENTERPRISES LIMITED", "UNIPHOS HOUSE, MADHU PARK, C.D. MARG, 11",
-        "MUMBAI", "0", "ADVANTA SEEDS PHILIPPINES INCUNIT 1507,1",
-        "Manila", "PHILIPPINES", "10", "10061010",
-        "HYBRID RICE SEEDS ADV 8112", "73215", "KGS", "2.87", "USD", "17286760.73",
+        "HYDERABAD ICD (INSNF6)",
+        "INSNF6",
+        "2025-07-09 00:00:00",
+        "AAXCA1074E",
+        "ADVANTA ENTERPRISES LIMITED",
+        "UNIPHOS HOUSE, MADHU PARK, C.D. MARG, 11",
+        "MUMBAI",
+        "0",
+        "ADVANTA SEEDS PHILIPPINES INCUNIT 1507,1",
+        "Manila",
+        "PHILIPPINES",
+        "10",
+        "10061010",
+        "HYBRID RICE SEEDS ADV 8112",
+        "73215",
+        "KGS",
+        "2.87",
+        "USD",
+        "17286760.73",
     ],
 ]
 
@@ -181,8 +205,11 @@ def test_benchmark_full_pipeline() -> None:
         ind = IndustrySynonymDictionary(gd)
         mapper = TemplateColumnMapper(global_dict=gd, industry_dict=ind)
         validation = WorkbookValidationService(
-            template_repository=t_repo, workbook_loader=loader,
-            column_mapper=mapper, global_dict=gd, industry_dict=ind,
+            template_repository=t_repo,
+            workbook_loader=loader,
+            column_mapper=mapper,
+            global_dict=gd,
+            industry_dict=ind,
         )
         builder = IntermediateDatasetBuilder()
         cr = ColumnRemovalStage()
@@ -190,7 +217,9 @@ def test_benchmark_full_pipeline() -> None:
         dc = DataCleaningService()
         registry = RuleOperatorRegistry(operators=(*default_operators(), RapidFuzzEqualsOperator()))
         rp_repo = FileSystemRulePackRepository(template_root=tmpl_root, template_repository=t_repo)
-        rs = RuleEvaluationService(rule_evaluator=RuleEvaluator(registry), rule_pack_repository=rp_repo)
+        rs = RuleEvaluationService(
+            rule_evaluator=RuleEvaluator(registry), rule_pack_repository=rp_repo
+        )
         ta = RuleTransformationApplier()
         ob = OpenPyXLOutputWorkbookBuilder()
         us = LocalUploadedFileStorage(upload_dir, 50)
@@ -201,19 +230,29 @@ def test_benchmark_full_pipeline() -> None:
         src = BENCHMARK_PATH
         stored = f"{job_id}.xlsx"
         shutil.copy(src, upload_dir / stored)
-        jr.create_job(CreateJob(
-            job_id=job_id, template_id="indian_rice_exports",
-            original_filename=src.name, stored_filename=stored,
-        ))
+        jr.create_job(
+            CreateJob(
+                job_id=job_id,
+                template_id="indian_rice_exports",
+                original_filename=src.name,
+                stored_filename=stored,
+            )
+        )
 
         ps = ProcessingService(
-            job_repository=jr, template_repository=t_repo,
-            uploaded_file_storage=us, workbook_loader=loader,
-            workbook_validation_service=validation, dataset_builder=builder,
+            job_repository=jr,
+            template_repository=t_repo,
+            uploaded_file_storage=us,
+            workbook_loader=loader,
+            workbook_validation_service=validation,
+            dataset_builder=builder,
             cleaning_service=dc,
-            column_removal_stage=cr, normalization_stage=norm,
-            rule_evaluation_service=rs, transformation_applier=ta,
-            output_workbook_builder=ob, output_storage=os,
+            column_removal_stage=cr,
+            normalization_stage=norm,
+            rule_evaluation_service=rs,
+            transformation_applier=ta,
+            output_workbook_builder=ob,
+            output_storage=os,
             processing_report_repository=jr,
         )
         result = ps.process_job(job_id)
@@ -222,6 +261,7 @@ def test_benchmark_full_pipeline() -> None:
         s = result.summary
 
         from openpyxl import load_workbook
+
         clean_path = next(o.path for o in s.outputs if o.output_type.value == "clean_data")
         wb = load_workbook(clean_path)
         ws = wb.active
@@ -248,9 +288,19 @@ def test_benchmark_full_pipeline() -> None:
         assert s.clean_rows + s.removed_rows + s.needs_review_rows == s.total_rows
 
         assert result.dataset.fields == (
-            "exporter_name", "exporter_address", "exporter_city_state",
-            "consignee_name", "country", "port", "date",
-            "description", "quantity", "uqc", "unit_rate", "currency", "fob",
+            "exporter_name",
+            "exporter_address",
+            "exporter_city_state",
+            "consignee_name",
+            "country",
+            "port",
+            "date",
+            "description",
+            "quantity",
+            "uqc",
+            "unit_rate",
+            "currency",
+            "fob",
         )
 
         consignee_values = [
@@ -287,10 +337,25 @@ def _tmp_dir() -> Path:
 
 def test_benchmark_with_reordered_columns(_tmp_dir) -> None:
     reordered = [
-        "PORT_CD", "Consignee & Consignee_Address", "RITC", "Date", "COUNTRY",
-        "Indian Port", "CUSH", "IEC", "Exporter_Name", "Exporter_Address",
-        "Exporter_City_State", "Exporter_PIN", "CHP", "Description",
-        "Quantity", "UQC", "Unit Rate in FC", "Currency", "FOB",
+        "PORT_CD",
+        "Consignee & Consignee_Address",
+        "RITC",
+        "Date",
+        "COUNTRY",
+        "Indian Port",
+        "CUSH",
+        "IEC",
+        "Exporter_Name",
+        "Exporter_Address",
+        "Exporter_City_State",
+        "Exporter_PIN",
+        "CHP",
+        "Description",
+        "Quantity",
+        "UQC",
+        "Unit Rate in FC",
+        "Currency",
+        "FOB",
     ]
     workbook_path = _create_workbook_from_benchmark(_tmp_dir, reordered)
 
@@ -359,88 +424,228 @@ def _create_workbook_from_benchmark(temp_dir: Path, headers: list[str]) -> Path:
 
 def _template() -> TemplateDefinition:
     required_fields = [
-        ColumnMapping(field="consignee_name", aliases=[
-            "Consignee", "Importer", "Buyer", "Notify Party", "Consignee Name",
-            "Consignee & Consignee_Address", "Consignee and Consignee Address",
-            "Consignee & Address", "Customer",
-        ]),
-        ColumnMapping(field="port", aliases=[
-            "Port", "Destination Port", "Discharge Port", "POD", "PORT_CD",
-            "Port Code", "Port of Discharge", "Unloading Port",
-        ]),
-        ColumnMapping(field="hs_code", aliases=[
-            "HS Code", "HSN Code", "RITC", "ITC HS Code", "Commodity Code",
-            "Product Code", "Tariff Code",
-        ]),
+        ColumnMapping(
+            field="consignee_name",
+            aliases=[
+                "Consignee",
+                "Importer",
+                "Buyer",
+                "Notify Party",
+                "Consignee Name",
+                "Consignee & Consignee_Address",
+                "Consignee and Consignee Address",
+                "Consignee & Address",
+                "Customer",
+            ],
+        ),
+        ColumnMapping(
+            field="port",
+            aliases=[
+                "Port",
+                "Destination Port",
+                "Discharge Port",
+                "POD",
+                "PORT_CD",
+                "Port Code",
+                "Port of Discharge",
+                "Unloading Port",
+            ],
+        ),
+        ColumnMapping(
+            field="hs_code",
+            aliases=[
+                "HS Code",
+                "HSN Code",
+                "RITC",
+                "ITC HS Code",
+                "Commodity Code",
+                "Product Code",
+                "Tariff Code",
+            ],
+        ),
     ]
     optional_fields = [
-        ColumnMapping(field="shipping_company", aliases=[
-            "Shipping Line", "Carrier", "Vessel Operator", "Shipping Company",
-            "Transporter", "Vessel",
-        ]),
-        ColumnMapping(field="indian_port", aliases=[
-            "Indian Port", "Port of Loading", "Loading Port", "POL",
-            "Departure Port", "Origin Port",
-        ]),
-        ColumnMapping(field="cush", aliases=[
-            "CUSH", "CUSH Code", "Port Code Loading", "Loading Port Code",
-            "Origin Port Code",
-        ]),
-        ColumnMapping(field="date", aliases=[
-            "Date", "Shipment Date", "Export Date", "Transaction Date",
-            "Invoice Date", "Document Date",
-        ]),
-        ColumnMapping(field="iec", aliases=[
-            "IEC", "IEC Code", "Importer Exporter Code", "IE Code",
-            "Import Export Code", "Exporter IEC",
-        ]),
-        ColumnMapping(field="exporter_name", aliases=[
-            "Exporter Name", "Exporter_Name", "Exporter", "Shipper",
-            "Exporting Company", "Seller", "Supplier",
-        ]),
-        ColumnMapping(field="exporter_address", aliases=[
-            "Exporter Address", "Exporter_Address", "Shipper Address",
-            "Supplier Address",
-        ]),
-        ColumnMapping(field="exporter_city_state", aliases=[
-            "Exporter City State", "Exporter_City_State", "Exporter City",
-            "Shipper City", "Origin City",
-        ]),
-        ColumnMapping(field="exporter_pin", aliases=[
-            "Exporter PIN", "Exporter_PIN", "Exporter Pincode", "Shipper PIN",
-            "Shipper Zip", "Postal Code",
-        ]),
-        ColumnMapping(field="country", aliases=[
-            "COUNTRY", "Country", "Destination Country", "Importing Country",
-            "Country of Destination", "Consignee Country",
-        ]),
-        ColumnMapping(field="chp", aliases=[
-            "CHP", "CHP Code", "CHP Rate",
-        ]),
-        ColumnMapping(field="description", aliases=[
-            "Description", "Product Description", "Goods Description",
-            "Item Description", "Commodity Description", "Cargo Description",
-        ]),
-        ColumnMapping(field="quantity", aliases=[
-            "Quantity", "Qty", "Net Quantity", "Shipment Quantity",
-            "Gross Quantity",
-        ]),
-        ColumnMapping(field="uqc", aliases=[
-            "UQC", "Unit", "Unit of Quantity", "Unit Code", "UOM",
-            "Unit of Measure", "Measurement Unit",
-        ]),
-        ColumnMapping(field="unit_rate", aliases=[
-            "Unit Rate in FC", "Unit Rate", "Unit Price", "Rate per Unit",
-            "Unit Value", "Price per Unit",
-        ]),
-        ColumnMapping(field="currency", aliases=[
-            "Currency", "FC Currency", "Invoice Currency", "Transaction Currency",
-            "Foreign Currency",
-        ]),
-        ColumnMapping(field="fob", aliases=[
-            "FOB", "FOB Value", "FOB Amount", "Free on Board",
-            "Invoice Value", "Total Value", "Shipment Value",
-        ]),
+        ColumnMapping(
+            field="shipping_company",
+            aliases=[
+                "Shipping Line",
+                "Carrier",
+                "Vessel Operator",
+                "Shipping Company",
+                "Transporter",
+                "Vessel",
+            ],
+        ),
+        ColumnMapping(
+            field="indian_port",
+            aliases=[
+                "Indian Port",
+                "Port of Loading",
+                "Loading Port",
+                "POL",
+                "Departure Port",
+                "Origin Port",
+            ],
+        ),
+        ColumnMapping(
+            field="cush",
+            aliases=[
+                "CUSH",
+                "CUSH Code",
+                "Port Code Loading",
+                "Loading Port Code",
+                "Origin Port Code",
+            ],
+        ),
+        ColumnMapping(
+            field="date",
+            aliases=[
+                "Date",
+                "Shipment Date",
+                "Export Date",
+                "Transaction Date",
+                "Invoice Date",
+                "Document Date",
+            ],
+        ),
+        ColumnMapping(
+            field="iec",
+            aliases=[
+                "IEC",
+                "IEC Code",
+                "Importer Exporter Code",
+                "IE Code",
+                "Import Export Code",
+                "Exporter IEC",
+            ],
+        ),
+        ColumnMapping(
+            field="exporter_name",
+            aliases=[
+                "Exporter Name",
+                "Exporter_Name",
+                "Exporter",
+                "Shipper",
+                "Exporting Company",
+                "Seller",
+                "Supplier",
+            ],
+        ),
+        ColumnMapping(
+            field="exporter_address",
+            aliases=[
+                "Exporter Address",
+                "Exporter_Address",
+                "Shipper Address",
+                "Supplier Address",
+            ],
+        ),
+        ColumnMapping(
+            field="exporter_city_state",
+            aliases=[
+                "Exporter City State",
+                "Exporter_City_State",
+                "Exporter City",
+                "Shipper City",
+                "Origin City",
+            ],
+        ),
+        ColumnMapping(
+            field="exporter_pin",
+            aliases=[
+                "Exporter PIN",
+                "Exporter_PIN",
+                "Exporter Pincode",
+                "Shipper PIN",
+                "Shipper Zip",
+                "Postal Code",
+            ],
+        ),
+        ColumnMapping(
+            field="country",
+            aliases=[
+                "COUNTRY",
+                "Country",
+                "Destination Country",
+                "Importing Country",
+                "Country of Destination",
+                "Consignee Country",
+            ],
+        ),
+        ColumnMapping(
+            field="chp",
+            aliases=[
+                "CHP",
+                "CHP Code",
+                "CHP Rate",
+            ],
+        ),
+        ColumnMapping(
+            field="description",
+            aliases=[
+                "Description",
+                "Product Description",
+                "Goods Description",
+                "Item Description",
+                "Commodity Description",
+                "Cargo Description",
+            ],
+        ),
+        ColumnMapping(
+            field="quantity",
+            aliases=[
+                "Quantity",
+                "Qty",
+                "Net Quantity",
+                "Shipment Quantity",
+                "Gross Quantity",
+            ],
+        ),
+        ColumnMapping(
+            field="uqc",
+            aliases=[
+                "UQC",
+                "Unit",
+                "Unit of Quantity",
+                "Unit Code",
+                "UOM",
+                "Unit of Measure",
+                "Measurement Unit",
+            ],
+        ),
+        ColumnMapping(
+            field="unit_rate",
+            aliases=[
+                "Unit Rate in FC",
+                "Unit Rate",
+                "Unit Price",
+                "Rate per Unit",
+                "Unit Value",
+                "Price per Unit",
+            ],
+        ),
+        ColumnMapping(
+            field="currency",
+            aliases=[
+                "Currency",
+                "FC Currency",
+                "Invoice Currency",
+                "Transaction Currency",
+                "Foreign Currency",
+            ],
+        ),
+        ColumnMapping(
+            field="fob",
+            aliases=[
+                "FOB",
+                "FOB Value",
+                "FOB Amount",
+                "Free on Board",
+                "Invoice Value",
+                "Total Value",
+                "Shipment Value",
+            ],
+        ),
     ]
     return TemplateDefinition(
         config=TemplateConfig(
@@ -450,8 +655,14 @@ def _template() -> TemplateDefinition:
             description="Starter template for Indian rice export shipment data.",
             workbook=WorkbookConfig(sheet_strategy="first_sheet"),
             enabled_modules=[
-                "validation", "column_removal", "normalization", "keyword_rules",
-                "regex_rules", "fuzzy_matching", "confidence_scoring", "output_generation",
+                "validation",
+                "column_removal",
+                "normalization",
+                "keyword_rules",
+                "regex_rules",
+                "fuzzy_matching",
+                "confidence_scoring",
+                "output_generation",
             ],
         ),
         columns=ColumnsConfig(
@@ -459,25 +670,59 @@ def _template() -> TemplateDefinition:
             optional_fields=optional_fields,
             remove_columns=[],
         ),
-        pipeline=PipelineConfig(steps=[
-            "validation", "column_removal", "normalization", "keyword_rules",
-            "regex_rules", "fuzzy_matching", "confidence_scoring", "output_generation",
-        ]),
+        pipeline=PipelineConfig(
+            steps=[
+                "validation",
+                "column_removal",
+                "normalization",
+                "keyword_rules",
+                "regex_rules",
+                "fuzzy_matching",
+                "confidence_scoring",
+                "output_generation",
+            ]
+        ),
         output=OutputConfig(
             files=OutputFiles(),
             review_threshold=0.75,
             column_order=[
-                "exporter_name", "exporter_address", "exporter_city_state",
-                "consignee_name", "country", "port", "date",
-                "description", "quantity", "uqc", "unit_rate", "currency", "fob",
+                "exporter_name",
+                "exporter_address",
+                "exporter_city_state",
+                "consignee_name",
+                "country",
+                "port",
+                "date",
+                "description",
+                "quantity",
+                "uqc",
+                "unit_rate",
+                "currency",
+                "fob",
             ],
             cleaning={
                 "consignee_name": FieldCleaningRuleSchema(
                     remove_phrases=["to order"],
-                    bank_keywords=["bank", "hsbc", "hdfc", "icici", "sbi", "axis",
-                                   "yes bank", "idbi", "kotak", "indusind", "pnb",
-                                   "canara", "union", "bob", "baroda", "citibank",
-                                   "standard chartered", "dbs"],
+                    bank_keywords=[
+                        "bank",
+                        "hsbc",
+                        "hdfc",
+                        "icici",
+                        "sbi",
+                        "axis",
+                        "yes bank",
+                        "idbi",
+                        "kotak",
+                        "indusind",
+                        "pnb",
+                        "canara",
+                        "union",
+                        "bob",
+                        "baroda",
+                        "citibank",
+                        "standard chartered",
+                        "dbs",
+                    ],
                 ),
             },
         ),

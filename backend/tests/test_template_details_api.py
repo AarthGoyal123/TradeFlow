@@ -22,11 +22,26 @@ def test_get_template_details_returns_columns_pipeline_and_outputs() -> None:
 
     # Verify all new columns exist
     expected_fields = {
-        "consignee_name", "port", "hs_code",
-        "shipping_company", "indian_port", "cush", "date", "iec",
-        "exporter_name", "exporter_address", "exporter_city_state", "exporter_pin",
-        "country", "chp", "description", "quantity", "uqc", "unit_rate",
-        "currency", "fob",
+        "consignee_name",
+        "port",
+        "hs_code",
+        "shipping_company",
+        "indian_port",
+        "cush",
+        "date",
+        "iec",
+        "exporter_name",
+        "exporter_address",
+        "exporter_city_state",
+        "exporter_pin",
+        "country",
+        "chp",
+        "description",
+        "quantity",
+        "uqc",
+        "unit_rate",
+        "currency",
+        "fob",
     }
     assert col_fields.keys() == expected_fields
     assert len(data["columns"]) == 20
@@ -56,4 +71,3 @@ def test_get_template_details_missing_template_returns_404() -> None:
 
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "template_not_found"
-

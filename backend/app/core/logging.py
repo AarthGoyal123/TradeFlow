@@ -2,10 +2,25 @@
 
 import logging
 import sys
+from pathlib import Path
 
 
 def configure_logging(log_level: str) -> None:
     """Configure process-wide structured logging."""
+    import os
+    from logging.handlers import RotatingFileHandler
+
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
+    
+    file_handler = RotatingFileHandler(
+        log_dir / "tradeflow.log",
+        maxBytes=10 * 1024 * 1024,  # 10 MB
+        backupCount=5
+    )
+    
+    stream_handler = logging.StreamHandler(sys.stdout)
+    
     logging.basicConfig(
         level=log_level.upper(),
         format=(
@@ -13,7 +28,7 @@ def configure_logging(log_level: str) -> None:
             "event=%(message)s job_id=%(job_id)s template_id=%(template_id)s "
             "stage=%(stage)s duration_ms=%(duration_ms)s"
         ),
-        handlers=[logging.StreamHandler(sys.stdout)],
+        handlers=[stream_handler, file_handler],
         force=True,
     )
     for handler in logging.getLogger().handlers:

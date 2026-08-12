@@ -91,11 +91,6 @@ class RuleEvaluationService:
             raise ValueError("rule_pack_repository is required to load template rules")
         rule_packs = self._rule_pack_repository.list_rule_packs(dataset.template_id)
         rules = tuple(
-            rule
-            for rule_pack in rule_packs
-            if rule_pack.enabled
-            for rule in rule_pack.rules
+            rule for rule_pack in rule_packs if rule_pack.enabled for rule in rule_pack.rules
         )
-        return self.evaluate(
-            dataset=dataset, rules=rules, review_threshold=review_threshold
-        )
+        return self.evaluate(dataset=dataset, rules=rules, review_threshold=review_threshold)

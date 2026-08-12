@@ -32,3 +32,11 @@ class UploadedFileStorage(Protocol):
     def path_for(self, stored_filename: str) -> Path:
         """Return the absolute path for a stored file."""
         ...
+
+
+class JobExecutor(Protocol):
+    """Protocol for asynchronous background job execution."""
+
+    def submit_job(self, job_id: str) -> None:
+        """Submit a job for background processing."""
+        ...

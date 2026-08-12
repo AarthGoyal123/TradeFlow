@@ -40,4 +40,3 @@ def test_openpyxl_loader_rejects_unsupported_extension(tmp_path) -> None:
         assert exc.details["supported_extensions"] == [".xlsx"]
     else:
         raise AssertionError("Expected WorkbookValidationError")
-

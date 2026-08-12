@@ -17,4 +17,3 @@ class TemplateService:
     def get_template(self, template_id: str) -> TemplateDefinition:
         """Return one processing template by identifier."""
         return self._template_repository.get_template(template_id)
-

@@ -15,4 +15,3 @@ class TemplateRepository(Protocol):
     def get_template(self, template_id: str) -> TemplateDefinition:
         """Return one template by identifier."""
         ...
-

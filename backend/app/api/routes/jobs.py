@@ -49,9 +49,7 @@ _OUTPUT_TYPE_MAP: dict[str, OutputType] = {
     "report": OutputType.PROCESSING_REPORT,
 }
 
-_XLSX_MEDIA_TYPE = (
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-)
+_XLSX_MEDIA_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
 @router.post("", response_model=JobUploadResponse)
@@ -111,9 +109,7 @@ def process_job(
         template_id=result.template_id,
         status=JobStatus.COMPLETED if not result.errors else JobStatus.FAILED,
         progress=[
-            ProcessingProgressResponse(
-                stage=p.stage, status=p.status, message=p.message
-            )
+            ProcessingProgressResponse(stage=p.stage, status=p.status, message=p.message)
             for p in result.progress
         ],
         errors=[
@@ -205,6 +201,7 @@ def get_job_report(
 
 def _get_template_repository() -> TemplateRepository:
     from app.core.settings import get_settings
+
     return FileSystemTemplateRepository(get_settings().resolved_template_root)
 
 
@@ -212,12 +209,8 @@ def _get_template_repository() -> TemplateRepository:
 def get_job_intelligence(
     job_id: str,
     job_service: Annotated[JobService, Depends(get_job_service)],
-    intelligence_service: Annotated[
-        WorkbookIntelligenceService, Depends(get_intelligence_service)
-    ],
-    template_repository: Annotated[
-        TemplateRepository, Depends(_get_template_repository)
-    ],
+    intelligence_service: Annotated[WorkbookIntelligenceService, Depends(get_intelligence_service)],
+    template_repository: Annotated[TemplateRepository, Depends(_get_template_repository)],
 ) -> IntelligenceReportResponse:
     """Analyze a job's workbook and return an intelligence report."""
     from app.core.settings import get_settings
@@ -281,4 +274,3 @@ def _to_job_details_response(job: Job) -> JobDetailsResponse:
         created_at=job.created_at,
         updated_at=job.updated_at,
     )
-

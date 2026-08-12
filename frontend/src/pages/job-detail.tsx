@@ -46,7 +46,7 @@ export default function JobDetailPage() {
   const {
     data: report,
     isLoading: reportLoading,
-  } = useJobReport(id);
+  } = useJobReport(id, job?.status);
 
   const { data: template } = useTemplate(job?.template_id);
   const processMutation = useProcessJob();
