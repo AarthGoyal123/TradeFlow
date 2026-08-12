@@ -31,3 +31,19 @@ def test_sqlite_repository_missing_job_raises_not_found(tmp_path) -> None:
     else:
         raise AssertionError("Expected JobNotFoundError")
 
+
+def test_sqlite_repository_updates_job_status(tmp_path) -> None:
+    repository = SQLiteJobRepository(tmp_path / "tradeflow.sqlite")
+    repository.create_job(
+        CreateJob(
+            job_id="job-1",
+            template_id="indian_rice_exports",
+            original_filename="input.xlsx",
+            stored_filename="job-1.xlsx",
+        )
+    )
+
+    updated = repository.update_status("job-1", JobStatus.PROCESSING)
+
+    assert updated.status == JobStatus.PROCESSING
+    assert updated.updated_at >= updated.created_at
