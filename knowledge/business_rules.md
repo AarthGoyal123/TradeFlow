@@ -49,3 +49,37 @@ Each rule should explain why it exists, relevant assumptions, edge cases, and wh
 | --- | --- | --- | --- |
 | CR-008 | Allowed upload extensions | Control accepted workbook formats. | Application settings. |
 | CR-009 | Maximum upload size | Prevent oversized uploads from exhausting local resources. | Application settings. |
+
+## 2026-07-28 - Intermediate Dataset Processing Rules
+
+### Hard Requirements
+
+| Rule ID | Rule | Why It Exists | Assumptions | Edge Cases |
+| --- | --- | --- | --- | --- |
+| BR-008 | Intermediate dataset rows must preserve source worksheet row numbers. | Future reports and review files need traceability back to the original workbook. | Header row is row 1 unless template configuration evolves. | Blank rows may still have row numbers if read from the worksheet. |
+| BR-009 | Processing must fail before transformation when required columns are missing. | Avoid producing misleading partially mapped data. | Workbook validation runs before dataset creation. | Optional columns may be absent without failing processing. |
+| BR-010 | Template-configured removed columns should be excluded from the intermediate dataset. | Column removal is client-configurable and should not be hardcoded. | Removal can reference conceptual fields or source headers. | Unknown removal names are ignored at this stage and can become warnings later. |
+
+### Configurable Rules
+
+| Rule ID | Rule Category | Initial Purpose | Configuration Location |
+| --- | --- | --- | --- |
+| CR-010 | Removed columns | Exclude configured fields or source headers from intermediate data. | Template `columns.remove_columns`. |
+
+## 2026-07-28 - Rule Engine Foundation Rules
+
+### Hard Requirements
+
+| Rule ID | Rule | Why It Exists | Assumptions | Edge Cases |
+| --- | --- | --- | --- | --- |
+| BR-011 | Rule execution must preserve all rule hits in a structured report. | Future reports and review routing need explainable decisions. | Rules produce evidence before final output routing exists. | Multiple rules may apply to the same row or cell. |
+| BR-012 | Validation rules must not mutate dataset values. | Validation findings should be auditable separately from transformations. | Validation rules produce issues and classifications only. | A row can have validation findings and transformation outputs. |
+| BR-013 | Cell transformation rules must produce transformed values without modifying the original dataset in place. | Avoid hidden mutations and keep processing reproducible. | Later stages can decide whether transformed values become the canonical dataset. | Multiple transformations can target the same cell; conflict resolution is future work. |
+
+### Configurable Rules
+
+| Rule ID | Rule Category | Initial Purpose | Configuration Location |
+| --- | --- | --- | --- |
+| CR-011 | Rule enabled state | Allow rule packs to include inactive rules. | Rule definitions. |
+| CR-012 | Rule priority | Establish deterministic execution ordering. | Rule definitions. |
+| CR-013 | Rule operator | Define how a field is evaluated. | Rule definitions. |

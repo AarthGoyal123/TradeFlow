@@ -276,3 +276,73 @@ Application and domain code will depend on workbook abstractions and ports rathe
 - Add streaming row readers for very large workbooks.
 - Add `.xls` conversion or reader support if client files require legacy Excel parsing.
 - Add fixture-based performance tests once representative files are available.
+
+## ADR-009 - Use a Domain Intermediate Dataset Between Workbook Reading and Rules
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+Processing will convert a validated workbook into a domain-owned intermediate dataset before rule execution or output generation.
+The intermediate dataset will preserve source row numbers, mapped template fields, retained source headers, and normalized values.
+
+### Rationale
+
+- Rule execution and output generation need a stable input that is not tied to OpenPyXL.
+- Preserving source row numbers keeps future reports auditable.
+- Separating dataset creation, column removal, and normalization makes each processing stage testable.
+
+### Rejected Alternatives
+
+- Passing worksheet readers directly into future rule-engine code.
+- Using Pandas DataFrames as the domain model before core processing semantics are defined.
+- Running normalization directly in infrastructure while reading Excel rows.
+
+### Trade-Offs
+
+- The intermediate model adds a small translation step before full processing exists.
+- Large files may require a streaming dataset implementation later.
+
+### Future Improvements
+
+- Add chunked processing for very large workbooks.
+- Add dataset persistence or snapshots if report generation requires it.
+- Add rule-engine evidence collections against intermediate rows.
+
+## ADR-010 - Implement Rule Engine Foundation as Domain/Application Logic
+
+Date: 2026-07-28
+
+Status: accepted.
+
+### Decision
+
+The rule engine foundation will live in domain and application layers.
+Domain code defines rule models, operators, outcomes, and reports.
+Application code orchestrates rule evaluation over the intermediate dataset.
+
+### Rationale
+
+- Rules are business behavior and must not be hidden in API or infrastructure code.
+- Rule execution should consume the domain intermediate dataset instead of Excel-specific objects.
+- Future custom rule packs need stable extension points without changing orchestration.
+
+### Rejected Alternatives
+
+- Implementing rule execution directly inside processing service.
+- Evaluating rules inside infrastructure adapters.
+- Adding public rule APIs before internal rule semantics are stable.
+
+### Trade-Offs
+
+- The foundation adds internal models before full client rule packs exist.
+- Conflict resolution remains intentionally conservative until routing/output behavior is implemented.
+
+### Future Improvements
+
+- Load rule definitions from template rule-pack JSON files.
+- Add RapidFuzz-backed operators.
+- Add conflict resolution and final row routing.
+- Persist rule execution reports for processing reports and audit trails.

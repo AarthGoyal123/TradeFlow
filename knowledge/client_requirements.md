@@ -150,3 +150,45 @@ Do not remove requirements unless the project owner explicitly asks.
 - Return structured validation results.
 - Do not implement workbook parsing beyond structural reading.
 - Do not implement business cleaning, rule execution, classification, or output generation yet.
+
+## 2026-07-28 - Processing Pipeline to Intermediate Dataset Requirements
+
+### Processing Orchestration
+
+- Implement a processing workflow that starts from an uploaded job and a validated workbook.
+- Convert valid workbook rows into a normalized intermediate dataset.
+- Keep processing synchronous for now; do not add background workers or queues.
+- Do not implement rule engine, output workbook generation, download APIs, or report APIs yet.
+
+### Processing Stages
+
+- Add a column removal stage driven by template configuration.
+- Add a basic normalization stage for intermediate dataset values.
+- Preserve source worksheet row numbers.
+- Track structured progress for validation, dataset building, column removal, and normalization.
+- Provide extension points for future rule-engine stages without implementing rule behavior.
+
+### Job Workflow
+
+- Processing should update job state from `uploaded` to `processing`, then `completed` or `failed`.
+- Processing errors should be structured and traceable.
+
+## 2026-07-28 - Rule Engine Foundation Requirements
+
+### Rule Engine Foundation
+
+- Implement rule domain models.
+- Implement a rule evaluation pipeline over the intermediate dataset.
+- Implement built-in rule operators.
+- Support row classification results.
+- Support cell transformation results.
+- Support validation rule execution.
+- Produce a structured rule execution report.
+- Provide extension points for custom rule packs.
+- Do not implement workbook export, download APIs, background workers, or UI.
+
+### Rule Engine Boundaries
+
+- Rule business logic belongs in domain and application layers.
+- Infrastructure should not contain rule behavior.
+- Rule execution should consume the domain-owned intermediate dataset, not workbook or OpenPyXL objects.

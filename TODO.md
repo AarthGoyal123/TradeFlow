@@ -30,8 +30,10 @@
 - [x] Add sheet reader foundation.
 - [x] Add template column mapping foundation.
 - [x] Add Excel structure validation foundation.
-- [ ] Add column mapping and removal.
-- [ ] Add normalization pipeline.
+- [x] Add intermediate dataset model.
+- [x] Add synchronous processing workflow.
+- [x] Add column removal stage.
+- [x] Add normalization stage.
 - [ ] Add output generation.
 
 ## Persistence
@@ -45,7 +47,14 @@
 
 - [x] Add starter rule pack files.
 - [x] Add rule-pack envelope models.
-- [ ] Implement keyword rule engine.
+- [x] Add rule domain models.
+- [x] Add built-in rule operators.
+- [x] Add rule evaluator.
+- [x] Add rule execution report.
+- [x] Add row classification results.
+- [x] Add cell transformation results.
+- [x] Add validation rule findings.
+- [ ] Load JSON rule packs.
 - [ ] Implement regex rule engine.
 - [ ] Implement fuzzy matching engine.
 - [ ] Implement confidence scoring.
