@@ -1,6 +1,7 @@
 """FastAPI application entry point."""
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.errors import register_exception_handlers
 from app.api.routes.jobs import router as jobs_router
@@ -19,6 +20,15 @@ def create_app() -> FastAPI:
         title="TradeFlow API",
         version="0.1.0",
         description="Template-driven Excel processing API for trade shipment data.",
+    )
+
+    cors_origins = settings.cors_origins
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=cors_origins,
+        allow_credentials="*" not in cors_origins,
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
 
     register_exception_handlers(app)

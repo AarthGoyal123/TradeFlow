@@ -5,8 +5,8 @@ from pathlib import Path
 from typing import Any, cast
 from zipfile import BadZipFile
 
-from openpyxl import load_workbook  # type: ignore[import-untyped]
-from openpyxl.utils.exceptions import InvalidFileException  # type: ignore[import-untyped]
+from openpyxl import load_workbook
+from openpyxl.utils.exceptions import InvalidFileException
 
 from app.core.errors import WorkbookValidationError
 from app.domain.workbooks.models import CellValue, HeaderCell, WorkbookRow, WorksheetHeader

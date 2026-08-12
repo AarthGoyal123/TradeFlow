@@ -105,6 +105,17 @@ class OutputFiles(BaseModel):
     processing_report: str = "Processing_Report.xlsx"
 
 
+class FieldCleaningRuleSchema(BaseModel):
+    """Per-field cleaning rule schema."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    remove_phrases: list[str] = Field(default_factory=list)
+    bank_keywords: list[str] = Field(default_factory=list)
+    trim: bool = True
+    collapse_whitespace: bool = True
+
+
 class OutputConfig(BaseModel):
     """Output and review routing configuration."""
 
@@ -112,6 +123,8 @@ class OutputConfig(BaseModel):
 
     files: OutputFiles
     review_threshold: float = Field(ge=0.0, le=1.0)
+    column_order: list[str] = Field(default_factory=list)
+    cleaning: dict[str, FieldCleaningRuleSchema] = Field(default_factory=dict)
 
 
 class RulePack(BaseModel):

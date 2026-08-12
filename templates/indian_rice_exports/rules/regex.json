@@ -1,4 +1,30 @@
 {
-  "rules": []
+  "rules": [
+    {
+      "rule_id": "consignee_to_order_regex",
+      "name": "Remove TO ORDER variants",
+      "rule_type": "row_classification",
+      "condition": {
+        "field": "consignee_name",
+        "operator": "regex",
+        "expected_value": "(?i)\\b(to[\\s\\-_]*(the[\\s\\-_]*)?order|order[\\s\\-_]*of)"
+      },
+      "classification": "remove",
+      "severity": "info",
+      "message": "consignee_to_order"
+    },
+    {
+      "rule_id": "consignee_bank_regex",
+      "name": "Remove Bank-related consignees",
+      "rule_type": "row_classification",
+      "condition": {
+        "field": "consignee_name",
+        "operator": "regex",
+        "expected_value": "(?i)\\b(hsbc|bnp\\s+paribas|danske\\s+bank|deutsche\\s+bank|jpmorgan|bank\\s+of\\s+qatar|qatar\\s+national\\s+bank|standard\\s+chartered|emirates\\s+nbd|bank\\s+of\\s+america|national\\s+bank|commercial\\s+bank|islamic\\s+bank|central\\s+bank|banking\\s+corporation|banking\\s+company|bank|banking)\\b"
+      },
+      "classification": "remove",
+      "severity": "info",
+      "message": "consignee_bank"
+    }
+  ]
 }
-

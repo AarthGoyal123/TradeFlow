@@ -61,3 +61,9 @@ class UploadValidationError(TradeFlowError):
     """Raised when an uploaded file is rejected before processing."""
 
     code = "upload_validation_error"
+
+
+class RulePackValidationError(TradeFlowError):
+    """Raised when a rule pack cannot be loaded or validated."""
+
+    code = "rule_pack_validation_error"

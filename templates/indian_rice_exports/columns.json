@@ -2,19 +2,226 @@
   "required_fields": [
     {
       "field": "consignee_name",
-      "aliases": ["Consignee", "Importer", "Buyer", "Notify Party"]
+      "aliases": [
+        "Consignee",
+        "Importer",
+        "Buyer",
+        "Notify Party",
+        "Consignee Name",
+        "Consignee & Consignee_Address",
+        "Consignee and Consignee Address",
+        "Consignee & Address",
+        "Customer"
+      ]
     },
     {
       "field": "port",
-      "aliases": ["Port", "Destination Port", "Discharge Port", "POD"]
+      "aliases": [
+        "Port",
+        "Destination Port",
+        "Discharge Port",
+        "POD",
+        "PORT_CD",
+        "Port Code",
+        "Port of Discharge",
+        "Unloading Port"
+      ]
+    },
+    {
+      "field": "hs_code",
+      "aliases": [
+        "HS Code",
+        "HSN Code",
+        "RITC",
+        "ITC HS Code",
+        "Commodity Code",
+        "Product Code",
+        "Tariff Code"
+      ]
     }
   ],
   "optional_fields": [
     {
       "field": "shipping_company",
-      "aliases": ["Shipping Line", "Carrier", "Vessel Operator"]
+      "aliases": [
+        "Shipping Line",
+        "Carrier",
+        "Vessel Operator",
+        "Shipping Company",
+        "Transporter",
+        "Vessel"
+      ]
+    },
+    {
+      "field": "indian_port",
+      "aliases": [
+        "Indian Port",
+        "Port of Loading",
+        "Loading Port",
+        "POL",
+        "Departure Port",
+        "Origin Port"
+      ]
+    },
+    {
+      "field": "cush",
+      "aliases": [
+        "CUSH",
+        "CUSH Code",
+        "Port Code Loading",
+        "Loading Port Code",
+        "Origin Port Code"
+      ]
+    },
+    {
+      "field": "date",
+      "aliases": [
+        "Date",
+        "Shipment Date",
+        "Export Date",
+        "Transaction Date",
+        "Invoice Date",
+        "Document Date"
+      ]
+    },
+    {
+      "field": "iec",
+      "aliases": [
+        "IEC",
+        "IEC Code",
+        "Importer Exporter Code",
+        "IE Code",
+        "Import Export Code",
+        "Exporter IEC"
+      ]
+    },
+    {
+      "field": "exporter_name",
+      "aliases": [
+        "Exporter Name",
+        "Exporter_Name",
+        "Exporter",
+        "Shipper",
+        "Exporting Company",
+        "Seller",
+        "Supplier"
+      ]
+    },
+    {
+      "field": "exporter_address",
+      "aliases": [
+        "Exporter Address",
+        "Exporter_Address",
+        "Shipper Address",
+        "Supplier Address"
+      ]
+    },
+    {
+      "field": "exporter_city_state",
+      "aliases": [
+        "Exporter City State",
+        "Exporter_City_State",
+        "Exporter City",
+        "Shipper City",
+        "Origin City"
+      ]
+    },
+    {
+      "field": "exporter_pin",
+      "aliases": [
+        "Exporter PIN",
+        "Exporter_PIN",
+        "Exporter Pincode",
+        "Shipper PIN",
+        "Shipper Zip",
+        "Postal Code"
+      ]
+    },
+    {
+      "field": "country",
+      "aliases": [
+        "COUNTRY",
+        "Country",
+        "Destination Country",
+        "Importing Country",
+        "Country of Destination",
+        "Consignee Country"
+      ]
+    },
+    {
+      "field": "chp",
+      "aliases": [
+        "CHP",
+        "CHP Code",
+        "CHP Rate"
+      ]
+    },
+    {
+      "field": "description",
+      "aliases": [
+        "Description",
+        "Product Description",
+        "Goods Description",
+        "Item Description",
+        "Commodity Description",
+        "Cargo Description"
+      ]
+    },
+    {
+      "field": "quantity",
+      "aliases": [
+        "Quantity",
+        "Qty",
+        "Net Quantity",
+        "Shipment Quantity",
+        "Gross Quantity"
+      ]
+    },
+    {
+      "field": "uqc",
+      "aliases": [
+        "UQC",
+        "Unit",
+        "Unit of Quantity",
+        "Unit Code",
+        "UOM",
+        "Unit of Measure",
+        "Measurement Unit"
+      ]
+    },
+    {
+      "field": "unit_rate",
+      "aliases": [
+        "Unit Rate in FC",
+        "Unit Rate",
+        "Unit Price",
+        "Rate per Unit",
+        "Unit Value",
+        "Price per Unit"
+      ]
+    },
+    {
+      "field": "currency",
+      "aliases": [
+        "Currency",
+        "FC Currency",
+        "Invoice Currency",
+        "Transaction Currency",
+        "Foreign Currency"
+      ]
+    },
+    {
+      "field": "fob",
+      "aliases": [
+        "FOB",
+        "FOB Value",
+        "FOB Amount",
+        "Free on Board",
+        "Invoice Value",
+        "Total Value",
+        "Shipment Value"
+      ]
     }
   ],
-  "remove_columns": []
+  "remove_columns": ["indian_port", "cush", "exporter_pin", "chp", "iec"]
 }
-

@@ -1,9 +1,13 @@
 """HTTP exception mapping for expected TradeFlow errors."""
 
-from fastapi import FastAPI, Request
+import logging
+
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 
 from app.core.errors import JobNotFoundError, TemplateNotFoundError, TradeFlowError
+
+logger = logging.getLogger(__name__)
 
 
 def register_exception_handlers(app: FastAPI) -> None:
@@ -19,6 +23,31 @@ def register_exception_handlers(app: FastAPI) -> None:
                     "code": exc.code,
                     "message": exc.message,
                     "details": exc.details,
+                }
+            },
+        )
+
+    @app.exception_handler(HTTPException)
+    async def handle_http_exception(_: Request, exc: HTTPException) -> JSONResponse:
+        if isinstance(exc.detail, dict) and "error" in exc.detail:
+            content = exc.detail
+        else:
+            content = {"detail": exc.detail}
+        return JSONResponse(
+            status_code=exc.status_code,
+            content=content,
+        )
+
+    @app.exception_handler(Exception)
+    async def handle_unhandled_error(_: Request, exc: Exception) -> JSONResponse:
+        logger.exception("Unhandled API exception")
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": {
+                    "code": "internal_error",
+                    "message": "An internal error occurred",
+                    "details": {},
                 }
             },
         )

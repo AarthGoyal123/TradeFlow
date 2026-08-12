@@ -5,6 +5,29 @@
     "needs_review": "Needs_Review.xlsx",
     "processing_report": "Processing_Report.xlsx"
   },
-  "review_threshold": 0.75
+  "review_threshold": 0.75,
+  "column_order": [
+    "exporter_name",
+    "exporter_address",
+    "exporter_city_state",
+    "consignee_name",
+    "country",
+    "port",
+    "date",
+    "description",
+    "quantity",
+    "uqc",
+    "unit_rate",
+    "currency",
+    "fob"
+  ],
+  "cleaning": {
+    "consignee_name": {
+      "remove_phrases": ["to order"],
+      "bank_keywords": ["bank", "hsbc", "hdfc", "icici", "sbi", "axis", "yes bank", "idbi", "kotak", "indusind", "pnb", "canara", "union", "bob", "baroda", "citibank", "standard chartered", "dbs"],
+      "trim": true,
+      "collapse_whitespace": true
+    }
+  }
 }
 

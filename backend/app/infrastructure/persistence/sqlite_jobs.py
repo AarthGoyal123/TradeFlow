@@ -7,10 +7,11 @@ from sqlite3 import Connection
 
 from app.core.errors import JobNotFoundError, StorageError
 from app.domain.jobs.models import CreateJob, Job, JobStatus
+from app.domain.outputs.models import OutputArtifact, OutputType, ProcessingSummary
 
 
 class SQLiteJobRepository:
-    """Persist jobs in SQLite."""
+    """Persist jobs, processing summaries, and output metadata in SQLite."""
 
     def __init__(self, database_path: Path) -> None:
         self._database_path = database_path
@@ -80,6 +81,146 @@ class SQLiteJobRepository:
             raise JobNotFoundError("Job not found", details={"job_id": job_id})
         return self._row_to_job(row)
 
+    def update_status(self, job_id: str, status: JobStatus) -> Job:
+        """Update job status and return the updated job."""
+        now = datetime.now(UTC)
+        try:
+            with self._connect() as connection:
+                cursor = connection.execute(
+                    """
+                    UPDATE jobs
+                    SET status = ?, updated_at = ?
+                    WHERE job_id = ?
+                    """,
+                    (status.value, now.isoformat(), job_id),
+                )
+        except sqlite3.Error as exc:
+            raise StorageError(
+                "Failed to update job status",
+                details={"job_id": job_id, "status": status.value},
+            ) from exc
+        if cursor.rowcount == 0:
+            raise JobNotFoundError("Job not found", details={"job_id": job_id})
+        return self.get_job(job_id)
+
+    def save_summary(self, summary: ProcessingSummary) -> ProcessingSummary:
+        """Persist a processing summary and its outputs."""
+        try:
+            with self._connect() as connection:
+                connection.execute(
+                    """
+                    INSERT OR REPLACE INTO processing_reports (
+                        job_id,
+                        template_id,
+                        total_rows,
+                        clean_rows,
+                        removed_rows,
+                        needs_review_rows,
+                        rule_matches,
+                        validation_findings,
+                        created_at
+                    )
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        summary.job_id,
+                        summary.template_id,
+                        summary.total_rows,
+                        summary.clean_rows,
+                        summary.removed_rows,
+                        summary.needs_review_rows,
+                        summary.rule_matches,
+                        summary.validation_findings,
+                        datetime.now(UTC).isoformat(),
+                    ),
+                )
+                connection.execute(
+                    "DELETE FROM processing_outputs WHERE job_id = ?",
+                    (summary.job_id,),
+                )
+                connection.executemany(
+                    """
+                    INSERT INTO processing_outputs (
+                        job_id,
+                        output_type,
+                        filename,
+                        path
+                    )
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    [
+                        (
+                            summary.job_id,
+                            artifact.output_type.value,
+                            artifact.filename,
+                            str(artifact.path),
+                        )
+                        for artifact in summary.outputs
+                    ],
+                )
+        except sqlite3.Error as exc:
+            raise StorageError(
+                "Failed to save processing summary",
+                details={"job_id": summary.job_id},
+            ) from exc
+        return self.get_summary(summary.job_id)
+
+    def get_summary(self, job_id: str) -> ProcessingSummary:
+        """Return a processing summary by job id."""
+        try:
+            with self._connect() as connection:
+                report = connection.execute(
+                    """
+                    SELECT
+                        job_id,
+                        template_id,
+                        total_rows,
+                        clean_rows,
+                        removed_rows,
+                        needs_review_rows,
+                        rule_matches,
+                        validation_findings
+                    FROM processing_reports
+                    WHERE job_id = ?
+                    """,
+                    (job_id,),
+                ).fetchone()
+                output_rows = connection.execute(
+                    """
+                    SELECT output_type, filename, path
+                    FROM processing_outputs
+                    WHERE job_id = ?
+                    ORDER BY output_type
+                    """,
+                    (job_id,),
+                ).fetchall()
+        except sqlite3.Error as exc:
+            raise StorageError(
+                "Failed to retrieve processing summary",
+                details={"job_id": job_id},
+            ) from exc
+        if report is None:
+            raise StorageError("Processing report not found", details={"job_id": job_id})
+        outputs = tuple(
+            OutputArtifact(
+                output_type=OutputType(row["output_type"]),
+                filename=row["filename"],
+                path=Path(row["path"]),
+            )
+            for row in output_rows
+        )
+        return ProcessingSummary(
+            job_id=report["job_id"],
+            template_id=report["template_id"],
+            total_rows=report["total_rows"],
+            clean_rows=report["clean_rows"],
+            removed_rows=report["removed_rows"],
+            needs_review_rows=report["needs_review_rows"],
+            rule_matches=report["rule_matches"],
+            validation_findings=report["validation_findings"],
+            outputs=outputs,
+        )
+
     def _initialize(self) -> None:
         self._database_path.parent.mkdir(parents=True, exist_ok=True)
         try:
@@ -96,6 +237,32 @@ class SQLiteJobRepository:
                         ),
                         created_at TEXT NOT NULL,
                         updated_at TEXT NOT NULL
+                    )
+                    """
+                )
+                connection.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS processing_reports (
+                        job_id TEXT PRIMARY KEY,
+                        template_id TEXT NOT NULL,
+                        total_rows INTEGER NOT NULL,
+                        clean_rows INTEGER NOT NULL,
+                        removed_rows INTEGER NOT NULL,
+                        needs_review_rows INTEGER NOT NULL,
+                        rule_matches INTEGER NOT NULL,
+                        validation_findings INTEGER NOT NULL,
+                        created_at TEXT NOT NULL
+                    )
+                    """
+                )
+                connection.execute(
+                    """
+                    CREATE TABLE IF NOT EXISTS processing_outputs (
+                        job_id TEXT NOT NULL,
+                        output_type TEXT NOT NULL,
+                        filename TEXT NOT NULL,
+                        path TEXT NOT NULL,
+                        PRIMARY KEY (job_id, output_type)
                     )
                     """
                 )
@@ -118,4 +285,3 @@ class SQLiteJobRepository:
             created_at=datetime.fromisoformat(row["created_at"]),
             updated_at=datetime.fromisoformat(row["updated_at"]),
         )
-

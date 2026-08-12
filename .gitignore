@@ -31,3 +31,9 @@ data/tmp/
 Thumbs.db
 .idea/
 .vscode/
+
+backend/.analysis_tmp/
+backend/.pytest_tmp/
+backend/data/
+backend/*.log
+scratch/

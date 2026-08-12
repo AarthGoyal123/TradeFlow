@@ -33,7 +33,7 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
-addopts = ["-p", "no:cacheprovider"]
+addopts = ["-p", "no:cacheprovider", "--basetemp=.pytest_tmp"]
 
 [tool.mypy]
 python_version = "3.12"

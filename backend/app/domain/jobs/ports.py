@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import BinaryIO, Protocol
 
-from app.domain.jobs.models import CreateJob, Job
+from app.domain.jobs.models import CreateJob, Job, JobStatus
 
 
 class JobRepository(Protocol):
@@ -17,6 +17,10 @@ class JobRepository(Protocol):
         """Return one job by identifier."""
         ...
 
+    def update_status(self, job_id: str, status: JobStatus) -> Job:
+        """Update job status and return the updated job."""
+        ...
+
 
 class UploadedFileStorage(Protocol):
     """Store uploaded workbook files."""
@@ -28,4 +32,3 @@ class UploadedFileStorage(Protocol):
     def path_for(self, stored_filename: str) -> Path:
         """Return the absolute path for a stored file."""
         ...
-

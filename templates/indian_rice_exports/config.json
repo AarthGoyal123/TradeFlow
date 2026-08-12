@@ -1,6 +1,6 @@
 {
   "id": "indian_rice_exports",
-  "name": "Indian Rice Export Shipments",
+  "name": "Indian Rice Exports",
   "version": "0.1.0",
   "description": "Starter template for Indian rice export shipment data.",
   "workbook": {
