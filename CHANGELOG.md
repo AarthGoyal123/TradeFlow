@@ -22,3 +22,11 @@ All notable project changes will be documented here.
 - Added `GET /jobs/{job_id}` API endpoint returning persisted job metadata.
 - Added lightweight SQLite job repository and local upload storage.
 - Added workbook processing foundation with OpenPyXL-backed loading, sheet reading, template column mapping, and structured validation results.
+- Added synchronous processing workflow from uploaded job to normalized intermediate dataset with job status updates and progress entries.
+- Added rule engine foundation with typed rule definitions, built-in operators, row classifications, cell transformations, validation findings, and execution reports.
+- Fixed processing service instantiation in regression tests by injecting `DataCleaningService`.
+- Ensured `DatasetRow` fields (`row_number` and `confidence`) remain mutable to be explicitly preserved across processing stages.
+- Broadened `TO ORDER` variations regex detection and updated frontend to display "Indian Rice Exports" cleanly.
+- Validated real business logic against benchmark workbook `1006 ALL EXPORT JULY 25.xlsx`, correctly rejecting 10,565 rows for "to order" variations and 701 rows for "consignee_bank" entities.
+- Completed Phase 0.5: Established golden regression protection and GitHub Actions CI workflow to ensure the benchmark baseline (19,967 input -> 8,701 clean / 11,266 removed) remains protected.
+- Completed full production architecture audit and created `ARCHITECTURE_V2.md` proposal outlining migration to Celery, Redis, PostgreSQL, and object storage.
