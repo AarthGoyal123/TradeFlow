@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.infrastructure.database.base import Base
@@ -43,7 +43,7 @@ class UserModel(Base):
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
     email: Mapped[str] = mapped_column(String, nullable=False, unique=True, index=True)
-    password_hash: Mapped[str] = mapped_column(String, nullable=False)
+    password_hash: Mapped[str | None] = mapped_column(String, nullable=True)
     display_name: Mapped[str] = mapped_column(String, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
@@ -98,4 +98,22 @@ class OutputArtifactModel(Base):
 
     report: Mapped["JobReportModel"] = relationship(
         "JobReportModel", back_populates="outputs"
+    )
+
+
+class UserIdentityModel(Base):
+    """SQLAlchemy model for an external User Identity (OAuth/OIDC)."""
+
+    __tablename__ = "user_identities"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), nullable=False, index=True)
+    provider: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    provider_subject: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    email: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint("provider", "provider_subject", name="uq_user_identities_provider_subject"),
     )

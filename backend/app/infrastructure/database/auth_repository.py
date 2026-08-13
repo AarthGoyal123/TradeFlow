@@ -3,9 +3,9 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.domain.auth.models import Role, Tenant, TenantMembership, User
+from app.domain.auth.models import Role, Tenant, TenantMembership, User, UserIdentity
 from app.domain.auth.ports import AuthRepository
-from app.infrastructure.database.models import TenantMembershipModel, TenantModel, UserModel
+from app.infrastructure.database.models import TenantMembershipModel, TenantModel, UserModel, UserIdentityModel
 
 
 class SQLAlchemyAuthRepository(AuthRepository):
@@ -53,8 +53,8 @@ class SQLAlchemyAuthRepository(AuthRepository):
             return None
         return self._to_membership(model)
 
-    def create_account(self, user: User, tenant: Tenant, membership: TenantMembership) -> None:
-        """Atomically create a tenant, user, and membership."""
+    def create_account(self, user: User, tenant: Tenant, membership: TenantMembership, identity: UserIdentity | None = None) -> None:
+        """Atomically create a tenant, user, membership, and optionally an identity."""
         user_model = UserModel(
             id=user.id,
             email=user.email,
@@ -81,6 +81,50 @@ class SQLAlchemyAuthRepository(AuthRepository):
         self.session.add(user_model)
         self.session.add(tenant_model)
         self.session.add(membership_model)
+        
+        if identity:
+            identity_model = UserIdentityModel(
+                id=identity.id,
+                user_id=identity.user_id,
+                provider=identity.provider,
+                provider_subject=identity.provider_subject,
+                email=identity.email,
+                created_at=identity.created_at,
+                updated_at=identity.updated_at,
+            )
+            self.session.add(identity_model)
+            
+        self.session.commit()
+
+    def get_user_identity(self, provider: str, provider_subject: str) -> UserIdentity | None:
+        stmt = select(UserIdentityModel).where(
+            UserIdentityModel.provider == provider,
+            UserIdentityModel.provider_subject == provider_subject
+        )
+        model = self.session.scalars(stmt).first()
+        if not model:
+            return None
+        return UserIdentity(
+            id=model.id,
+            user_id=model.user_id,
+            provider=model.provider,
+            provider_subject=model.provider_subject,
+            email=model.email,
+            created_at=model.created_at,
+            updated_at=model.updated_at,
+        )
+
+    def create_user_identity(self, identity: UserIdentity) -> None:
+        model = UserIdentityModel(
+            id=identity.id,
+            user_id=identity.user_id,
+            provider=identity.provider,
+            provider_subject=identity.provider_subject,
+            email=identity.email,
+            created_at=identity.created_at,
+            updated_at=identity.updated_at,
+        )
+        self.session.add(model)
         self.session.commit()
 
     def _to_user(self, model: UserModel) -> User:

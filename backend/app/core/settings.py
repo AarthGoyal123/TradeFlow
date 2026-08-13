@@ -47,6 +47,14 @@ class Settings(BaseSettings):
     cookie_secure: bool = False  # Set True in production (HTTPS)
     cookie_samesite: str = "lax"
 
+    # Social Auth Settings
+    google_client_id: str | None = None
+    google_client_secret: str | None = None
+    google_redirect_uri: str | None = None
+    
+    # Frontend config for callbacks
+    frontend_url: str = "http://localhost:5173"
+
     @property
     def resolved_template_root(self) -> Path:
         """Return template root as an absolute path."""

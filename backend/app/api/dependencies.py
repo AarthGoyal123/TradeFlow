@@ -2,6 +2,7 @@
 
 from fastapi import Depends
 
+from app.application.auth.google import GoogleOAuthProvider
 from app.application.auth.service import AuthService
 from app.application.jobs.service import JobService
 from app.application.processing.cleaning_service import DataCleaningService
@@ -102,6 +103,11 @@ def get_auth_service(
 ) -> AuthService:
     """Dependency provider for AuthService."""
     return AuthService(auth_repository)
+
+
+def get_google_oauth_provider() -> GoogleOAuthProvider:
+    """Dependency provider for GoogleOAuthProvider."""
+    return GoogleOAuthProvider()
 
 
 def get_job_service() -> JobService:

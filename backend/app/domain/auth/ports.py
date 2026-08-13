@@ -2,7 +2,7 @@
 
 from typing import Protocol
 
-from app.domain.auth.models import Tenant, TenantMembership, User
+from app.domain.auth.models import Tenant, TenantMembership, User, UserIdentity
 
 
 class AuthRepository(Protocol):
@@ -28,6 +28,14 @@ class AuthRepository(Protocol):
         """Get a specific membership."""
         ...
 
-    def create_account(self, user: User, tenant: Tenant, membership: TenantMembership) -> None:
-        """Atomically create a tenant, user, and membership."""
+    def create_account(self, user: User, tenant: Tenant, membership: TenantMembership, identity: UserIdentity | None = None) -> None:
+        """Atomically create a tenant, user, membership, and optionally an identity."""
+        ...
+
+    def get_user_identity(self, provider: str, provider_subject: str) -> UserIdentity | None:
+        """Get a specific linked external identity."""
+        ...
+
+    def create_user_identity(self, identity: UserIdentity) -> None:
+        """Link an external identity to an existing user."""
         ...

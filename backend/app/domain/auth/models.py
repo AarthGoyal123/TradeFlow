@@ -29,7 +29,7 @@ class User:
 
     id: str
     email: str
-    password_hash: str
+    password_hash: str | None
     display_name: str
     is_active: bool
     created_at: datetime
@@ -45,3 +45,27 @@ class TenantMembership:
     user_id: str
     role: Role
     created_at: datetime
+
+
+@dataclass(frozen=True, slots=True)
+class ExternalIdentity:
+    """An identity verified by an external provider."""
+
+    provider: str
+    subject: str
+    email: str
+    display_name: str
+    email_verified: bool
+
+
+@dataclass(frozen=True, slots=True)
+class UserIdentity:
+    """A linked external identity for a TradeFlow User."""
+
+    id: str
+    user_id: str
+    provider: str
+    provider_subject: str
+    email: str
+    created_at: datetime
+    updated_at: datetime

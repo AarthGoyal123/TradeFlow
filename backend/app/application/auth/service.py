@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from app.application.auth.password import hash_password, verify_password
 from app.application.auth.tokens import create_access_token
 from app.core.errors import TradeFlowError
-from app.domain.auth.models import Role, Tenant, TenantMembership, User
+from app.domain.auth.models import Role, Tenant, TenantMembership, User, ExternalIdentity, UserIdentity
 from app.domain.auth.ports import AuthRepository
 
 
@@ -91,5 +91,83 @@ class AuthService:
         # Default to first tenant if multiple (or require explicit selection later)
         tenant_id = memberships[0].tenant_id if memberships else None
 
+        token = create_access_token(user.id, tenant_id)
+        return AuthResult(user=user, token=token)
+
+    def authenticate_with_external_identity(self, external: ExternalIdentity) -> AuthResult:
+        """Authenticate using an external identity, registering or linking as needed."""
+        # 1. Check if identity already linked
+        user_identity = self.auth_repo.get_user_identity(external.provider, external.subject)
+        if user_identity:
+            user = self.auth_repo.get_user_by_id(user_identity.user_id)
+            if not user or not user.is_active:
+                raise AuthenticationError("Account disabled or missing")
+            return self._issue_token(user)
+
+        # 2. Check if a user exists with this verified email
+        if not external.email_verified:
+            raise AuthenticationError("External email must be verified to link or register")
+
+        user = self.auth_repo.get_user_by_email(external.email)
+        now = datetime.now(timezone.utc)
+        
+        if user:
+            if not user.is_active:
+                raise AuthenticationError("Account disabled")
+            # Link the identity
+            new_identity = UserIdentity(
+                id=str(uuid.uuid4()),
+                user_id=user.id,
+                provider=external.provider,
+                provider_subject=external.subject,
+                email=external.email,
+                created_at=now,
+                updated_at=now,
+            )
+            self.auth_repo.create_user_identity(new_identity)
+            return self._issue_token(user)
+
+        # 3. New user -> Auto register
+        user = User(
+            id=str(uuid.uuid4()),
+            email=external.email,
+            password_hash=None,
+            display_name=external.display_name,
+            is_active=True,
+            created_at=now,
+            updated_at=now,
+        )
+
+        tenant = Tenant(
+            id=str(uuid.uuid4()),
+            name=f"{external.display_name}'s Organization",
+            created_at=now,
+            updated_at=now,
+        )
+
+        membership = TenantMembership(
+            id=str(uuid.uuid4()),
+            tenant_id=tenant.id,
+            user_id=user.id,
+            role=Role.OWNER,
+            created_at=now,
+        )
+
+        identity = UserIdentity(
+            id=str(uuid.uuid4()),
+            user_id=user.id,
+            provider=external.provider,
+            provider_subject=external.subject,
+            email=external.email,
+            created_at=now,
+            updated_at=now,
+        )
+
+        self.auth_repo.create_account(user, tenant, membership, identity=identity)
+        return self._issue_token(user)
+
+    def _issue_token(self, user: User) -> AuthResult:
+        memberships = self.auth_repo.get_memberships_for_user(user.id)
+        tenant_id = memberships[0].tenant_id if memberships else None
         token = create_access_token(user.id, tenant_id)
         return AuthResult(user=user, token=token)
