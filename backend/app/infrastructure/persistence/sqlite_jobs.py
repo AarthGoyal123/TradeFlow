@@ -1,19 +1,32 @@
 """SQLite job repository."""
 
 import sqlite3
+import warnings
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from sqlite3 import Connection
+from typing import Generator
 
 from app.core.errors import JobNotFoundError, StorageError
 from app.domain.jobs.models import CreateJob, Job, JobStatus
+from app.domain.jobs.ports import JobRepository
 from app.domain.outputs.models import OutputArtifact, OutputType, ProcessingSummary
+from app.domain.outputs.ports import ProcessingReportRepository
 
 
-class SQLiteJobRepository:
-    """Persist jobs, processing summaries, and output metadata in SQLite."""
+class SQLiteJobRepository(JobRepository, ProcessingReportRepository):
+    """
+    [LEGACY] SQLite implementation for jobs and reports using raw sqlite3.
+    This implementation is maintained temporarily while migrating to SQLAlchemy.
+    """
 
     def __init__(self, database_path: Path) -> None:
+        warnings.warn(
+            "SQLiteJobRepository is deprecated. Use SQLAlchemyJobRepository instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         self._database_path = database_path
         self._initialize()
 

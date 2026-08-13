@@ -52,7 +52,7 @@ export default function JobDetailPage() {
   const processMutation = useProcessJob();
 
   const canProcess = job?.status === "uploaded";
-  const isProcessing = job?.status === "processing";
+  const isProcessing = job?.status === "processing" || job?.status === "queued";
 
   const {
     data: intelligence,

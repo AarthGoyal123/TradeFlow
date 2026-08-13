@@ -14,14 +14,24 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="TRADEFLOW_", env_file=".env", extra="ignore")
 
     environment: Literal["development", "test", "production"] = "development"
-    database_url: str = "sqlite:///./tradeflow.sqlite"
     upload_dir: Path = Path("./data/uploads")
     output_dir: Path = Path("./data/outputs")
     template_root: Path = Path("../templates")
     max_upload_size_mb: int = Field(default=50, gt=0)
     allowed_extensions: tuple[str, ...] = (".xlsx", ".xls")
+    upload_size_limit_mb: int = 50
+    
+    # Persistence
+    database_url: str = "sqlite:///./data/tradeflow.db"
+    
+    # Infrastructure
     log_level: str = "INFO"
     cors_origins: list[str] = Field(default_factory=lambda: ["*"])
+    
+    # Background Processing Configuration
+    job_executor: Literal["sync", "celery"] = "sync"
+    celery_broker_url: str = "memory://"
+    celery_result_backend: str = "memory://"
 
     @property
     def resolved_template_root(self) -> Path:

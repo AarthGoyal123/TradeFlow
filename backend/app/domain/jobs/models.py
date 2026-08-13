@@ -9,6 +9,7 @@ class JobStatus(StrEnum):
     """Supported processing job statuses."""
 
     UPLOADED = "uploaded"
+    QUEUED = "queued"
     PROCESSING = "processing"
     COMPLETED = "completed"
     FAILED = "failed"
@@ -33,10 +34,11 @@ class Job:
         from app.core.errors import InvalidStateTransitionError
 
         valid_transitions = {
-            JobStatus.UPLOADED: {JobStatus.PROCESSING, JobStatus.FAILED},
+            JobStatus.UPLOADED: {JobStatus.QUEUED, JobStatus.PROCESSING, JobStatus.FAILED},
+            JobStatus.QUEUED: {JobStatus.PROCESSING, JobStatus.FAILED},
             JobStatus.PROCESSING: {JobStatus.COMPLETED, JobStatus.FAILED},
             JobStatus.COMPLETED: set(),  # Terminal state
-            JobStatus.FAILED: set(),  # Terminal state
+            JobStatus.FAILED: {JobStatus.QUEUED},  # Allow retry
         }
 
         if new_status not in valid_transitions[self.status]:

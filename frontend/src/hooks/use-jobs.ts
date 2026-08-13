@@ -16,7 +16,7 @@ export function useJob(id: string | undefined) {
     enabled: !!id,
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      if (status === "processing") return 2000;
+      if (status === "processing" || status === "queued") return 2000;
       return false;
     },
   });

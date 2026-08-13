@@ -346,3 +346,35 @@ Application code orchestrates rule evaluation over the intermediate dataset.
 - Add RapidFuzz-backed operators.
 - Add conflict resolution and final row routing.
 - Persist rule execution reports for processing reports and audit trails.
+
+## ADR-011 - Migrate Persistence to SQLAlchemy and Alembic
+
+Date: 2026-08-13
+
+Status: accepted.
+
+### Decision
+
+TradeFlow will use SQLAlchemy 2.0 and Alembic for its persistence layer. The JobRepository and ProcessingReportRepository interfaces will be backed by a new SQLAlchemyJobRepository. SQLite will remain the default database for local development and testing, while PostgreSQL will be supported for staging and production via environment configuration.
+
+### Rationale
+
+- **Database Agnosticism:** Raw sqlite3 queries coupled the application tightly to SQLite. Using SQLAlchemy provides an abstraction over the database engine.
+- **Production Readiness:** SQLite is not suitable for a production SaaS architecture. SQLAlchemy allows seamless transition to PostgreSQL in production environments.
+- **Migration Management:** As the domain model evolves, schema migrations need to be version-controlled and reproducible. Alembic provides this capability.
+- **Synchronous Design (For Now):** The existing application and file processing logic are strictly synchronous. Introducing asynchronous database drivers (syncpg) would require an extensive and risky rewrite of the entire API and worker architecture without immediate benefit. Therefore, synchronous SQLAlchemy and psycopg are used.
+
+### Rejected Alternatives
+
+- **Asyncpg/SQLAlchemy Async:** Rejected because the application processing is inherently synchronous and CPU-bound. Transitioning the entire API layer to async just to support an async DB driver would be premature optimization and risky.
+- **Raw PostgreSQL Queries:** Rejected because it sacrifices local development velocity. Running a PostgreSQL container locally consumes significant disk space and slows down the feedback loop. We need SQLite for local dev.
+
+### Trade-offs
+
+- The SQLiteJobRepository is temporarily marked as legacy but kept to demonstrate a clean fallback path.
+- The use of synchronous database operations might become a bottleneck under extremely high concurrent web traffic, though background processing (Celery) is the actual scaling dimension for TradeFlow.
+
+### Future Improvements
+
+- Fully deprecate and remove SQLiteJobRepository once PostgreSQL production behavior is deeply established.
+- Add connection pooling for PostgreSQL (already handled transparently by SQLAlchemy engine).

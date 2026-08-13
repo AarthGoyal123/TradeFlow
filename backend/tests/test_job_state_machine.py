@@ -58,3 +58,7 @@ def test_job_invalid_transitions():
     )
     with pytest.raises(InvalidStateTransitionError):
         failed_job.transition_to(JobStatus.COMPLETED, now)
+        
+    # Valid: FAILED -> QUEUED (Retry)
+    retried_job = failed_job.transition_to(JobStatus.QUEUED, now)
+    assert retried_job.status == JobStatus.QUEUED

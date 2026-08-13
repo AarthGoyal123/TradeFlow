@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse
 
 from app.api.dependencies import (
     get_intelligence_service,
+    get_job_executor,
     get_job_service,
     get_output_storage,
     get_processing_report_repository,
@@ -33,6 +34,7 @@ from app.application.processing.service import ProcessingService
 from app.application.workbooks.intelligence_service import WorkbookIntelligenceService
 from app.core.logging import log_extra
 from app.domain.jobs.models import Job, JobStatus
+from app.domain.jobs.ports import JobExecutor
 from app.domain.outputs.models import OutputType
 from app.domain.outputs.ports import OutputStorage, ProcessingReportRepository
 from app.domain.templates.ports import TemplateRepository
@@ -87,9 +89,9 @@ def get_job(
 def process_job(
     job_id: str,
     job_service: Annotated[JobService, Depends(get_job_service)],
-    processing_service: Annotated[ProcessingService, Depends(get_processing_service)],
+    job_executor: Annotated[JobExecutor, Depends(get_job_executor)],
 ) -> ProcessingResponse:
-    """Trigger synchronous processing for an uploaded job."""
+    """Trigger processing for an uploaded job (enqueues if background execution is enabled)."""
     job = job_service.get_job(job_id)
     logger.info(
         "processing_triggered",
@@ -103,19 +105,18 @@ def process_job(
             progress=[],
             errors=[],
         )
-    result = processing_service.process_job(job_id)
+        
+    job_executor.submit_job(job_id)
+    
+    # Reload job to get its updated status (could be QUEUED or PROCESSING)
+    job = job_service.get_job(job_id)
+    
     return ProcessingResponse(
-        job_id=result.job_id,
-        template_id=result.template_id,
-        status=JobStatus.COMPLETED if not result.errors else JobStatus.FAILED,
-        progress=[
-            ProcessingProgressResponse(stage=p.stage, status=p.status, message=p.message)
-            for p in result.progress
-        ],
-        errors=[
-            ProcessingIssueResponse(code=e.code, message=e.message, details=e.details)
-            for e in result.errors
-        ],
+        job_id=job_id,
+        template_id=job.template_id,
+        status=job.status,
+        progress=[],
+        errors=[],
     )
 
 
@@ -177,6 +178,17 @@ def get_job_report(
         "report_requested",
         extra=log_extra(job_id=job_id, template_id=job.template_id),
     )
+    if job.status != JobStatus.COMPLETED:
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": {
+                    "code": "job_not_processed",
+                    "message": "Job has not been processed yet",
+                    "details": {"job_id": job_id, "status": job.status.value},
+                }
+            },
+        )
     summary = report_repository.get_summary(job_id)
     return JobReportResponse(
         job_id=job.job_id,

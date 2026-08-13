@@ -99,14 +99,14 @@ Templates are defined in the filesystem (e.g., `templates/indian_rice_exports/`)
 - **Storage:** MinIO (local dev) / AWS S3 (production).
 
 ## 17. Migration Plan (Phased Approach)
-- **Phase 0:** Architecture Audit (Current Phase).
-- **Phase 1:** Harden current architecture (type checks, strict validation).
-- **Phase 2:** Production Job Model (State machine for jobs: `UPLOADED` -> `PROCESSING` -> `COMPLETED`).
-- **Phase 3:** PostgreSQL + Alembic migrations.
-- **Phase 4:** Redis + Background Workers (move processing out of FastAPI).
+- **Phase 0:** Architecture Audit (Completed).
+- **Phase 1:** Harden current architecture (type checks, strict validation) (Completed).
+- **Phase 2:** Production Job Model (State machine for jobs: `UPLOADED` -> `QUEUED` -> `PROCESSING` -> `COMPLETED`) & Asynchronous Job Executor using Celery and Redis (Completed).
+- **Phase 3:** PostgreSQL + Alembic migrations (Completed).
+- **Phase 4:** Expand Worker Architecture (Celery multi-worker deployment).
 - **Phase 5:** S3 Object Storage adapter.
 - **Phase 6:** Authentication & Authorization (JWT/OIDC).
-- **Phase 7:** Frontend UX overhaul (WebSockets/Polling for job status).
+- **Phase 7:** Frontend UX overhaul (WebSockets/Polling for job status) - Polling implemented in Phase 2.
 - **Phase 8:** Observability (Prometheus, structured logging).
 - **Phase 9:** Docker + CI/CD.
 - **Phase 10:** Production Deployment.
