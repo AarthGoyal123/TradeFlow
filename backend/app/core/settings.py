@@ -24,6 +24,14 @@ class Settings(BaseSettings):
     # Persistence
     database_url: str = "sqlite:///./data/tradeflow.db"
     
+    # Storage Architecture
+    storage_backend: Literal["local", "s3"] = "local"
+    s3_endpoint_url: str | None = None
+    s3_access_key: str | None = None
+    s3_secret_key: str | None = None
+    s3_bucket_name: str | None = None
+    s3_region: str | None = None
+    
     # Infrastructure
     log_level: str = "INFO"
     cors_origins: list[str] = Field(default_factory=lambda: ["*"])

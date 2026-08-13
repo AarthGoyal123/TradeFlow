@@ -104,7 +104,7 @@ Templates are defined in the filesystem (e.g., `templates/indian_rice_exports/`)
 - **Phase 2:** Production Job Model (State machine for jobs: `UPLOADED` -> `QUEUED` -> `PROCESSING` -> `COMPLETED`) & Asynchronous Job Executor using Celery and Redis (Completed).
 - **Phase 3:** PostgreSQL + Alembic migrations (Completed).
 - **Phase 4:** Expand Worker Architecture (Celery multi-worker deployment).
-- **Phase 5:** S3 Object Storage adapter.
+- **Phase 5:** S3 Object Storage adapter (Zero-Cost MinIO Self-Hosted) (Completed).
 - **Phase 6:** Authentication & Authorization (JWT/OIDC).
 - **Phase 7:** Frontend UX overhaul (WebSockets/Polling for job status) - Polling implemented in Phase 2.
 - **Phase 8:** Observability (Prometheus, structured logging).

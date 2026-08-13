@@ -281,3 +281,55 @@
 2026-08-13 00:06:08,056 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
 2026-08-13 00:06:08,088 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
 2026-08-13 00:06:08,112 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:13:57,025 INFO app.application.processing.service event=job_processing_completed job_id=9800c3a8-178a-463b-abf1-afdb958f137f template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:16,011 ERROR app.api.errors event=System/Storage Error: Disk full {'path': '/tmp/secret/file.txt'} job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,019 INFO httpx event=HTTP Request: GET http://testserver/error/storage "HTTP/1.1 500 Internal Server Error" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,034 INFO httpx event=HTTP Request: GET http://testserver/error/validation "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,046 INFO httpx event=HTTP Request: GET http://testserver/error/job-not-found "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,053 INFO app.application.jobs.service event=job_uploaded job_id=1 template_id=t1 stage=- duration_ms=-1.0
+2026-08-13 12:14:16,102 INFO httpx event=HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,211 INFO app.application.jobs.service event=job_uploaded job_id=0af21955-3498-41df-8ab3-3231cb273c6e template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:16,211 INFO app.api.routes.jobs event=job_uploaded job_id=0af21955-3498-41df-8ab3-3231cb273c6e template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:16,213 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,248 INFO httpx event=HTTP Request: GET http://testserver/jobs/0af21955-3498-41df-8ab3-3231cb273c6e "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,344 INFO app.application.jobs.service event=job_uploaded job_id=b4ef14f3-a3b5-4de1-9dec-f1447309687e template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:16,344 INFO app.api.routes.jobs event=job_uploaded job_id=b4ef14f3-a3b5-4de1-9dec-f1447309687e template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:16,344 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,429 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,507 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,598 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,671 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,820 INFO app.application.jobs.service event=job_uploaded job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:16,820 INFO app.api.routes.jobs event=job_uploaded job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:16,828 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:16,835 INFO app.api.routes.jobs event=processing_triggered job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,042 INFO app.application.processing.service event=job_processing_completed job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,051 INFO httpx event=HTTP Request: POST http://testserver/jobs/1429604c-03de-40c0-8a29-957ed303c9db/process "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,060 INFO httpx event=HTTP Request: GET http://testserver/jobs/1429604c-03de-40c0-8a29-957ed303c9db "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,067 INFO app.api.routes.jobs event=output_downloaded job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=- stage=outputs/accepted duration_ms=-1.0
+2026-08-13 12:14:17,092 INFO httpx event=HTTP Request: GET http://testserver/jobs/1429604c-03de-40c0-8a29-957ed303c9db/outputs/accepted "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,101 INFO app.api.routes.jobs event=output_downloaded job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=- stage=outputs/rejected duration_ms=-1.0
+2026-08-13 12:14:17,125 INFO httpx event=HTTP Request: GET http://testserver/jobs/1429604c-03de-40c0-8a29-957ed303c9db/outputs/rejected "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,133 INFO app.api.routes.jobs event=output_downloaded job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=- stage=outputs/review duration_ms=-1.0
+2026-08-13 12:14:17,133 INFO httpx event=HTTP Request: GET http://testserver/jobs/1429604c-03de-40c0-8a29-957ed303c9db/outputs/review "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,150 INFO app.api.routes.jobs event=output_downloaded job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=- stage=outputs/report duration_ms=-1.0
+2026-08-13 12:14:17,167 INFO httpx event=HTTP Request: GET http://testserver/jobs/1429604c-03de-40c0-8a29-957ed303c9db/outputs/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,175 INFO app.api.routes.jobs event=report_requested job_id=1429604c-03de-40c0-8a29-957ed303c9db template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,183 INFO httpx event=HTTP Request: GET http://testserver/jobs/1429604c-03de-40c0-8a29-957ed303c9db/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,261 INFO httpx event=HTTP Request: POST http://testserver/jobs/missing-job/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,341 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/outputs/accepted "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,535 INFO app.application.jobs.service event=job_uploaded job_id=47ed2f68-de62-4da0-aebb-5917528ab339 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,535 INFO app.api.routes.jobs event=job_uploaded job_id=47ed2f68-de62-4da0-aebb-5917528ab339 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,539 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,552 INFO httpx event=HTTP Request: GET http://testserver/jobs/47ed2f68-de62-4da0-aebb-5917528ab339/outputs/invalid_type "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,633 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,730 INFO app.application.jobs.service event=job_uploaded job_id=1cdabfec-41ab-4d72-a9ac-857b6d5e7bd9 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,730 INFO app.api.routes.jobs event=job_uploaded job_id=1cdabfec-41ab-4d72-a9ac-857b6d5e7bd9 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,730 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,738 INFO app.api.routes.jobs event=report_requested job_id=1cdabfec-41ab-4d72-a9ac-857b6d5e7bd9 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:17,742 INFO httpx event=HTTP Request: GET http://testserver/jobs/1cdabfec-41ab-4d72-a9ac-857b6d5e7bd9/report "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:17,991 INFO app.application.processing.service event=job_processing_completed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:18,155 INFO app.application.processing.service event=job_processing_failed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 12:14:18,913 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:18,945 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 12:14:18,961 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0

@@ -378,3 +378,27 @@ TradeFlow will use SQLAlchemy 2.0 and Alembic for its persistence layer. The Job
 
 - Fully deprecate and remove SQLiteJobRepository once PostgreSQL production behavior is deeply established.
 - Add connection pooling for PostgreSQL (already handled transparently by SQLAlchemy engine).
+
+## ADR-012 - Zero-Cost Object Storage and Self-Hostable Infrastructure Mandate
+
+Date: 2026-08-13
+
+Status: accepted.
+
+### Decision
+
+TradeFlow is permanently constrained by the "Zero Paid Services" principle. No paid cloud service (like AWS S3, AWS RDS, etc.) can be a mandatory dependency. Required infrastructure must have a free/self-hostable implementation. 
+
+For Phase 5, an S3-compatible `OutputStorage` and `UploadedFileStorage` adapter using `boto3` is introduced to support self-hosted MinIO object storage. However, `LocalFilesystemStorage` remains the default local development adapter, meaning MinIO doesn't need to be installed locally and disk space is saved.
+
+### Rationale
+
+- **Self-Hostable Independence:** Guarantees that TradeFlow can run independently of paid vendors.
+- **Resource Constraints:** My local development machine has limited C: drive space, so local filesystem storage must remain fully functional.
+- **Dependency Cleanliness:** `boto3` is introduced strictly as an optional dependency (`[storage]`) to avoid forcing local developers to install unused infrastructure SDKs.
+- **S3 Compatibility:** By writing adapters against the S3 API instead of AWS S3 specifically, we remain compatible with AWS but can self-host via MinIO without modifying domain code.
+
+### Trade-offs
+
+- The application now manages dependency injection branching based on `TRADEFLOW_STORAGE_BACKEND`.
+- S3 endpoints and credentials must be safely managed in production, unlike the simpler local file system which just needs read/write paths.

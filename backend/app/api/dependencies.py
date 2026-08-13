@@ -14,7 +14,7 @@ from app.application.workbooks.column_mapper import TemplateColumnMapper
 from app.application.workbooks.intelligence_service import WorkbookIntelligenceService
 from app.application.workbooks.validation import WorkbookValidationService
 from app.core.settings import get_settings
-from app.domain.jobs.ports import JobExecutor
+from app.domain.jobs.ports import JobExecutor, UploadedFileStorage
 from app.domain.outputs.ports import OutputStorage, ProcessingReportRepository
 from app.domain.rules.evaluator import RuleEvaluator
 from app.domain.rules.operators import RuleOperatorRegistry, default_operators
@@ -24,6 +24,7 @@ from app.infrastructure.excel.openpyxl_loader import OpenPyXLWorkbookLoader
 from app.infrastructure.excel.output_builder import OpenPyXLOutputWorkbookBuilder
 from app.infrastructure.files.local_outputs import LocalOutputStorage
 from app.infrastructure.files.local_uploads import LocalUploadedFileStorage
+from app.infrastructure.files.s3_storage import S3OutputStorage, S3UploadedFileStorage
 from app.infrastructure.rules.filesystem import FileSystemRulePackRepository
 from app.infrastructure.rules.rapidfuzz_operator import RapidFuzzEqualsOperator
 from app.infrastructure.template_store.filesystem import FileSystemTemplateRepository
@@ -52,14 +53,46 @@ def get_template_service() -> TemplateService:
     return TemplateService(repository)
 
 
+def _get_uploaded_file_storage() -> UploadedFileStorage:
+    settings = get_settings()
+    if settings.storage_backend == "s3":
+        if not all([settings.s3_endpoint_url, settings.s3_access_key, settings.s3_secret_key, settings.s3_bucket_name]):
+            raise ValueError("S3 storage requested but S3 configuration is incomplete.")
+        return S3UploadedFileStorage(
+            endpoint_url=settings.s3_endpoint_url,
+            access_key=settings.s3_access_key,
+            secret_key=settings.s3_secret_key,
+            bucket_name=settings.s3_bucket_name,
+            region=settings.s3_region or "us-east-1",
+            max_size_mb=settings.max_upload_size_mb,
+            allowed_extensions=settings.allowed_extensions,
+        )
+    return LocalUploadedFileStorage(
+        settings.resolved_upload_dir,
+        settings.max_upload_size_mb,
+    )
+
+
+def _get_output_storage() -> OutputStorage:
+    settings = get_settings()
+    if settings.storage_backend == "s3":
+        if not all([settings.s3_endpoint_url, settings.s3_access_key, settings.s3_secret_key, settings.s3_bucket_name]):
+            raise ValueError("S3 storage requested but S3 configuration is incomplete.")
+        return S3OutputStorage(
+            endpoint_url=settings.s3_endpoint_url,
+            access_key=settings.s3_access_key,
+            secret_key=settings.s3_secret_key,
+            bucket_name=settings.s3_bucket_name,
+            region=settings.s3_region or "us-east-1",
+        )
+    return LocalOutputStorage(settings.resolved_output_dir)
+
+
 def get_job_service() -> JobService:
     settings = get_settings()
     template_repository = FileSystemTemplateRepository(settings.resolved_template_root)
     job_repository = SQLAlchemyJobRepository(get_session_factory())
-    uploaded_file_storage = LocalUploadedFileStorage(
-        settings.resolved_upload_dir,
-        settings.max_upload_size_mb,
-    )
+    uploaded_file_storage = _get_uploaded_file_storage()
     return JobService(
         job_repository=job_repository,
         template_repository=template_repository,
@@ -116,10 +149,7 @@ def get_processing_service() -> ProcessingService:
     return ProcessingService(
         job_repository=job_repository,
         template_repository=template_repository,
-        uploaded_file_storage=LocalUploadedFileStorage(
-            settings.resolved_upload_dir,
-            settings.max_upload_size_mb,
-        ),
+        uploaded_file_storage=_get_uploaded_file_storage(),
         workbook_loader=workbook_loader,
         workbook_validation_service=_build_workbook_validation_service(
             template_repository,
@@ -134,7 +164,7 @@ def get_processing_service() -> ProcessingService:
         ),
         transformation_applier=RuleTransformationApplier(),
         output_workbook_builder=OpenPyXLOutputWorkbookBuilder(),
-        output_storage=LocalOutputStorage(settings.resolved_output_dir),
+        output_storage=_get_output_storage(),
         processing_report_repository=job_repository,
     )
 
