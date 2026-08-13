@@ -1,12 +1,14 @@
 """FastAPI application entry point."""
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.errors import register_exception_handlers
+from app.api.routes.auth import router as auth_router
 from app.api.routes.jobs import router as jobs_router
 from app.api.routes.system import router as system_router
 from app.api.routes.templates import router as templates_router
+from app.api.security import csrf_protect
 from app.core.logging import configure_logging
 from app.core.settings import get_settings
 
@@ -33,8 +35,9 @@ def create_app() -> FastAPI:
 
     register_exception_handlers(app)
     app.include_router(system_router)
-    app.include_router(templates_router)
-    app.include_router(jobs_router)
+    app.include_router(auth_router)
+    app.include_router(templates_router, dependencies=[Depends(csrf_protect)])
+    app.include_router(jobs_router, dependencies=[Depends(csrf_protect)])
 
     return app
 

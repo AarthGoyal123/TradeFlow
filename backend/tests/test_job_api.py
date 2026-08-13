@@ -7,7 +7,9 @@ from app.application.jobs.service import JobService
 from app.infrastructure.files.local_uploads import LocalUploadedFileStorage
 from app.infrastructure.persistence.sqlite_jobs import SQLiteJobRepository
 from app.infrastructure.template_store.filesystem import FileSystemTemplateRepository
+from app.infrastructure.template_store.filesystem import FileSystemTemplateRepository
 from app.main import create_app
+from tests.helpers.auth import create_test_user, override_auth
 
 
 def test_upload_job_saves_file_creates_job_and_allows_retrieval(tmp_path) -> None:
@@ -140,4 +142,9 @@ def _client_with_temp_job_service(
     )
     app = create_app()
     app.dependency_overrides[get_job_service] = lambda: job_service
+    
+    # Override auth to simulate logged in user
+    user = create_test_user()
+    override_auth(app, user, tenant_id="test_tenant")
+    
     return TestClient(app), upload_dir

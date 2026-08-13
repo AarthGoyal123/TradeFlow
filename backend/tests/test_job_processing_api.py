@@ -26,6 +26,7 @@ from app.infrastructure.files.local_uploads import LocalUploadedFileStorage
 from app.infrastructure.persistence.sqlite_jobs import SQLiteJobRepository
 from app.infrastructure.template_store.filesystem import FileSystemTemplateRepository
 from app.main import create_app
+from tests.helpers.auth import create_test_user, override_auth
 
 
 def test_processing_api_uploads_processes_downloads_and_reports(tmp_path) -> None:
@@ -168,6 +169,10 @@ def _build_client(tmp_path: Path):
     app.dependency_overrides[get_processing_service] = lambda: processing_service
     app.dependency_overrides[get_output_storage] = lambda: output_storage
     app.dependency_overrides[get_processing_report_repository] = lambda: job_repository
+
+    # Override auth to simulate logged in user
+    user = create_test_user()
+    override_auth(app, user, tenant_id="test_tenant")
 
     return TestClient(app), upload_dir, output_dir, db_path
 

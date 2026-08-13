@@ -13,7 +13,7 @@ export interface Job {
   template_id: string;
   original_filename: string;
   stored_filename: string;
-  status: "uploaded" | "processing" | "completed" | "failed";
+  status: "uploaded" | "queued" | "processing" | "completed" | "failed";
   created_at: string;
   updated_at: string;
 }

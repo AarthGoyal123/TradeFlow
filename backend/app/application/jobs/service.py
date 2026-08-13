@@ -36,6 +36,8 @@ class JobService:
         template_id: str,
         original_filename: str,
         file: BinaryIO,
+        tenant_id: str | None = None,
+        user_id: str | None = None,
     ) -> Job:
         """Validate and store an uploaded workbook, then persist its job record."""
         self._template_repository.get_template(template_id)
@@ -60,6 +62,8 @@ class JobService:
                 original_filename=safe_filename,
                 stored_filename=stored_filename,
                 status=JobStatus.UPLOADED,
+                tenant_id=tenant_id,
+                user_id=user_id,
             )
         )
         logger.info(
@@ -68,9 +72,13 @@ class JobService:
         )
         return job
 
-    def get_job(self, job_id: str) -> Job:
-        """Return job metadata by identifier."""
-        return self._job_repository.get_job(job_id)
+    def get_job(self, job_id: str, tenant_id: str | None = None) -> Job:
+        """Return job metadata by identifier, ensuring it belongs to the tenant."""
+        from app.core.errors import JobNotFoundError
+        job = self._job_repository.get_job(job_id)
+        if tenant_id and job.tenant_id != tenant_id:
+            raise JobNotFoundError(f"Job {job_id} not found in tenant")
+        return job
 
     def _validate_extension(self, filename: str) -> None:
         extension = Path(filename).suffix.lower()

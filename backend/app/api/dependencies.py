@@ -2,6 +2,7 @@
 
 from fastapi import Depends
 
+from app.application.auth.service import AuthService
 from app.application.jobs.service import JobService
 from app.application.processing.cleaning_service import DataCleaningService
 from app.application.processing.dataset_builder import IntermediateDatasetBuilder
@@ -14,12 +15,14 @@ from app.application.workbooks.column_mapper import TemplateColumnMapper
 from app.application.workbooks.intelligence_service import WorkbookIntelligenceService
 from app.application.workbooks.validation import WorkbookValidationService
 from app.core.settings import get_settings
+from app.domain.auth.ports import AuthRepository
 from app.domain.jobs.ports import JobExecutor, UploadedFileStorage
 from app.domain.outputs.ports import OutputStorage, ProcessingReportRepository
 from app.domain.rules.evaluator import RuleEvaluator
 from app.domain.rules.operators import RuleOperatorRegistry, default_operators
 from app.domain.workbooks.synonyms import GlobalSynonymDictionary, IndustrySynonymDictionary
 from app.infrastructure.database import get_session_factory, SQLAlchemyJobRepository
+from app.infrastructure.database.auth_repository import SQLAlchemyAuthRepository
 from app.infrastructure.excel.openpyxl_loader import OpenPyXLWorkbookLoader
 from app.infrastructure.excel.output_builder import OpenPyXLOutputWorkbookBuilder
 from app.infrastructure.files.local_outputs import LocalOutputStorage
@@ -86,6 +89,19 @@ def _get_output_storage() -> OutputStorage:
             region=settings.s3_region or "us-east-1",
         )
     return LocalOutputStorage(settings.resolved_output_dir)
+
+
+def get_auth_repository() -> AuthRepository:
+    """Dependency provider for AuthRepository."""
+    session_factory = get_session_factory()
+    return SQLAlchemyAuthRepository(session_factory())
+
+
+def get_auth_service(
+    auth_repository: AuthRepository = Depends(get_auth_repository),
+) -> AuthService:
+    """Dependency provider for AuthService."""
+    return AuthService(auth_repository)
 
 
 def get_job_service() -> JobService:

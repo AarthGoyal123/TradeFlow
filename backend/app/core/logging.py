@@ -41,6 +41,7 @@ def log_extra(
     template_id: str | None = None,
     stage: str | None = None,
     duration_ms: float | None = None,
+    tenant_id: str | None = None,
 ) -> dict[str, str | float]:
     """Return common logging fields with stable defaults."""
     return {
@@ -48,6 +49,7 @@ def log_extra(
         "template_id": template_id or "-",
         "stage": stage or "-",
         "duration_ms": duration_ms if duration_ms is not None else -1.0,
+        "tenant_id": tenant_id or "-",
     }
 
 

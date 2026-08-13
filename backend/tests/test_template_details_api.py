@@ -1,10 +1,11 @@
 from fastapi.testclient import TestClient
 
 from app.main import create_app
+from tests.helpers.auth import create_authenticated_client
 
 
 def test_get_template_details_returns_columns_pipeline_and_outputs() -> None:
-    client = TestClient(create_app())
+    client = create_authenticated_client()
 
     response = client.get("/templates/indian_rice_exports")
 
@@ -64,8 +65,8 @@ def test_get_template_details_returns_columns_pipeline_and_outputs() -> None:
     ]
 
 
-def test_get_template_details_missing_template_returns_404() -> None:
-    client = TestClient(create_app())
+def test_get_missing_template_details_returns_404() -> None:
+    client = create_authenticated_client()
 
     response = client.get("/templates/missing_template")
 

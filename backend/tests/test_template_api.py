@@ -1,10 +1,11 @@
 from fastapi.testclient import TestClient
 
 from app.main import create_app
+from tests.helpers.auth import create_authenticated_client
 
 
 def test_get_templates_returns_template_summaries() -> None:
-    client = TestClient(create_app())
+    client = create_authenticated_client()
 
     response = client.get("/templates")
 

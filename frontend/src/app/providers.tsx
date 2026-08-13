@@ -3,6 +3,7 @@ import { useState } from "react";
 import { RouterProvider } from "react-router-dom";
 
 import { router } from "@/routes";
+import { AuthProvider } from "@/hooks/useAuth";
 
 export function Providers() {
   const [queryClient] = useState(
@@ -20,7 +21,9 @@ export function Providers() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

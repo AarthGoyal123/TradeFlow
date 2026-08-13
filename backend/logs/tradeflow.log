@@ -333,3 +333,830 @@
 2026-08-13 12:14:18,913 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
 2026-08-13 12:14:18,945 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
 2026-08-13 12:14:18,961 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:56:47,882 INFO app.application.processing.service event=job_processing_completed job_id=a32f44b2-a37d-433a-a89a-59d1cc2935b4 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 16:57:00,616 ERROR app.api.errors event=System/Storage Error: Disk full {'path': '/tmp/secret/file.txt'} job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:00,618 INFO httpx event=HTTP Request: GET http://testserver/error/storage "HTTP/1.1 500 Internal Server Error" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:00,626 INFO httpx event=HTTP Request: GET http://testserver/error/validation "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:00,634 INFO httpx event=HTTP Request: GET http://testserver/error/job-not-found "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:00,638 INFO app.application.jobs.service event=job_uploaded job_id=1 template_id=t1 stage=- duration_ms=-1.0
+2026-08-13 16:57:00,705 INFO httpx event=HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:01,972 INFO app.application.processing.service event=job_processing_completed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 16:57:02,056 INFO app.application.processing.service event=job_processing_failed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 16:57:35,816 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,261 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,283 WARNING app.api.routes.auth event=Login failed for email login@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,286 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,303 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,311 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,320 WARNING app.api.routes.auth event=Login failed for email me@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,322 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,344 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,364 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,373 WARNING app.api.routes.auth event=Login failed for email logout@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,375 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,597 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,605 WARNING app.api.routes.auth event=Login failed for email csrf@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,607 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:57:36,633 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,062 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,496 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,530 WARNING app.api.routes.auth event=Login failed for email login@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,533 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,594 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,599 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,606 WARNING app.api.routes.auth event=Login failed for email me@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,608 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,614 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,639 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,656 WARNING app.api.routes.auth event=Login failed for email logout@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,658 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,794 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 422 Unprocessable Entity" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,803 WARNING app.api.routes.auth event=Login failed for email csrf@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,804 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:14,828 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:33,772 INFO app.application.processing.service event=job_processing_completed job_id=4825c951-91b0-4458-aa7a-e47f42b0ea87 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 16:58:46,599 ERROR app.api.errors event=System/Storage Error: Disk full {'path': '/tmp/secret/file.txt'} job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,601 INFO httpx event=HTTP Request: GET http://testserver/error/storage "HTTP/1.1 500 Internal Server Error" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,609 INFO httpx event=HTTP Request: GET http://testserver/error/validation "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,618 INFO httpx event=HTTP Request: GET http://testserver/error/job-not-found "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,622 INFO app.application.jobs.service event=job_uploaded job_id=1 template_id=t1 stage=- duration_ms=-1.0
+2026-08-13 16:58:46,676 INFO httpx event=HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,748 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,819 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,906 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:46,979 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,068 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,144 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,244 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,324 INFO httpx event=HTTP Request: POST http://testserver/jobs/missing-job/process "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,406 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/outputs/accepted "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,489 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,572 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,643 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:47,819 INFO app.application.processing.service event=job_processing_completed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 16:58:47,907 INFO app.application.processing.service event=job_processing_failed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 16:58:48,362 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:48,391 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:48,413 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 16:58:48,463 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:53,659 INFO app.api.routes.auth event=Registered new user 5490b27a-bc59-4120-8004-7032b59752ae job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:53,664 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,198 INFO app.api.routes.auth event=Registered new user 7b20bddb-7355-4dbc-bd79-967cd205a522 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,200 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,307 INFO app.api.routes.auth event=User 7b20bddb-7355-4dbc-bd79-967cd205a522 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,310 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,413 WARNING app.api.routes.auth event=Login failed for email login_2ff731d3@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,415 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,431 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,553 INFO app.api.routes.auth event=Registered new user 1335c178-d3f4-45bc-9c08-959e59f39adc job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,558 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,663 INFO app.api.routes.auth event=User 1335c178-d3f4-45bc-9c08-959e59f39adc logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,665 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,677 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,808 INFO app.api.routes.auth event=Registered new user 0c477c9b-b7e9-498b-b9f0-90e15edf7e34 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,810 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,916 INFO app.api.routes.auth event=User 0c477c9b-b7e9-498b-b9f0-90e15edf7e34 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,919 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,926 INFO httpx event=HTTP Request: POST http://testserver/auth/logout "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:54,931 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:55,055 INFO app.api.routes.auth event=Registered new user 8137303c-ea8d-4590-86d5-176e01d3010f job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:55,057 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:55,179 INFO app.api.routes.auth event=User 8137303c-ea8d-4590-86d5-176e01d3010f logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:55,184 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:55,222 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:01:55,228 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:51,492 INFO app.application.processing.service event=job_processing_completed job_id=28defeea-eb73-449e-aae5-4f2b82a63cf8 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:02:59,005 INFO app.api.routes.auth event=Registered new user 963842ba-cbec-4609-91d7-a79148a6a04b job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,008 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,557 INFO app.api.routes.auth event=Registered new user e56e9e00-39df-4d35-b2fc-a17fb0073b45 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,560 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,670 INFO app.api.routes.auth event=User e56e9e00-39df-4d35-b2fc-a17fb0073b45 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,672 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,775 WARNING app.api.routes.auth event=Login failed for email login_5dc1af51@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,776 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,790 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,915 INFO app.api.routes.auth event=Registered new user 3c819f98-4e16-4227-8173-1c5384dde1e9 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:02:59,917 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,041 INFO app.api.routes.auth event=User 3c819f98-4e16-4227-8173-1c5384dde1e9 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,044 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,057 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,200 INFO app.api.routes.auth event=Registered new user adc57008-6d27-49da-81b0-e593085155ff job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,203 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,320 INFO app.api.routes.auth event=User adc57008-6d27-49da-81b0-e593085155ff logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,322 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,328 INFO httpx event=HTTP Request: POST http://testserver/auth/logout "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,334 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,471 INFO app.api.routes.auth event=Registered new user 5e9e3489-a13b-4d74-a997-dd06f9e33e05 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,473 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,627 INFO app.api.routes.auth event=User 5e9e3489-a13b-4d74-a997-dd06f9e33e05 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,632 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,683 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:00,693 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:05,959 ERROR app.api.errors event=System/Storage Error: Disk full {'path': '/tmp/secret/file.txt'} job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:05,961 INFO httpx event=HTTP Request: GET http://testserver/error/storage "HTTP/1.1 500 Internal Server Error" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:05,968 INFO httpx event=HTTP Request: GET http://testserver/error/validation "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:05,974 INFO httpx event=HTTP Request: GET http://testserver/error/job-not-found "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:05,980 INFO app.application.jobs.service event=job_uploaded job_id=1 template_id=t1 stage=- duration_ms=-1.0
+2026-08-13 17:03:06,030 INFO httpx event=HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:06,171 INFO app.application.jobs.service event=job_uploaded job_id=86eaafd3-6570-450a-8b35-4c9b50e4b5c2 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:06,172 ERROR app.api.errors event=Unhandled API exception job_id=- template_id=- stage=- duration_ms=-1.0
+Traceback (most recent call last):
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2689, in app
+    await route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1770, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2744, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1790, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1270, in handle
+    await app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 156, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 142, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\app\api\routes\jobs.py", line 74, in create_job
+    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: log_extra() got an unexpected keyword argument 'tenant_id'
+2026-08-13 17:03:07,232 INFO app.application.jobs.service event=job_uploaded job_id=296f0ed3-f7a1-4679-8a08-a9eaf2623544 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:07,233 ERROR app.api.errors event=Unhandled API exception job_id=- template_id=- stage=- duration_ms=-1.0
+Traceback (most recent call last):
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2689, in app
+    await route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1770, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2744, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1790, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1270, in handle
+    await app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 156, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 142, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\app\api\routes\jobs.py", line 74, in create_job
+    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: log_extra() got an unexpected keyword argument 'tenant_id'
+2026-08-13 17:03:07,894 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:07,964 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:08,044 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:08,123 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:08,234 INFO app.application.jobs.service event=job_uploaded job_id=e93bcb8c-9fdc-42d3-b85e-21924175bac7 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:08,235 ERROR app.api.errors event=Unhandled API exception job_id=- template_id=- stage=- duration_ms=-1.0
+Traceback (most recent call last):
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2689, in app
+    await route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1770, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2744, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1790, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1270, in handle
+    await app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 156, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 142, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\app\api\routes\jobs.py", line 74, in create_job
+    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: log_extra() got an unexpected keyword argument 'tenant_id'
+2026-08-13 17:03:08,846 INFO httpx event=HTTP Request: POST http://testserver/jobs/missing-job/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:08,920 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/outputs/accepted "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:09,017 INFO app.application.jobs.service event=job_uploaded job_id=ec998a65-fd61-4f59-9279-d69c0a167a94 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:09,017 ERROR app.api.errors event=Unhandled API exception job_id=- template_id=- stage=- duration_ms=-1.0
+Traceback (most recent call last):
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2689, in app
+    await route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1770, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2744, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1790, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1270, in handle
+    await app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 156, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 142, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\app\api\routes\jobs.py", line 74, in create_job
+    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: log_extra() got an unexpected keyword argument 'tenant_id'
+2026-08-13 17:03:09,667 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:09,755 INFO app.application.jobs.service event=job_uploaded job_id=5ee5bbb3-b803-4830-944c-549cde1b7e0b template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:09,756 ERROR app.api.errors event=Unhandled API exception job_id=- template_id=- stage=- duration_ms=-1.0
+Traceback (most recent call last):
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2689, in app
+    await route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1770, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2744, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1790, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1270, in handle
+    await app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 156, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 142, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\app\api\routes\jobs.py", line 74, in create_job
+    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: log_extra() got an unexpected keyword argument 'tenant_id'
+2026-08-13 17:03:10,458 INFO app.application.processing.service event=job_processing_completed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:10,544 INFO app.application.processing.service event=job_processing_failed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:10,573 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:10,596 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:10,616 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:11,022 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:11,103 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:11,119 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:11,184 INFO app.application.jobs.service event=job_uploaded job_id=bde940a4-6caf-4af3-b0c3-eb1cd57c2186 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 17:03:11,185 ERROR app.api.errors event=Unhandled API exception job_id=- template_id=- stage=- duration_ms=-1.0
+Traceback (most recent call last):
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2689, in app
+    await route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1770, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 2744, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1790, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 1270, in handle
+    await app(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 156, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 142, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 698, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\.venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Desktop\TradeFlow\backend\app\api\routes\jobs.py", line 74, in create_job
+    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: log_extra() got an unexpected keyword argument 'tenant_id'
+2026-08-13 17:03:59,430 INFO app.api.routes.auth event=Registered new user 1c9282db-c8cb-43a4-859c-a38b811dcf21 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:59,432 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:59,996 INFO app.api.routes.auth event=Registered new user d62ed5a6-ab5b-4214-b7bb-fac810bc9edb job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:03:59,998 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,115 INFO app.api.routes.auth event=User d62ed5a6-ab5b-4214-b7bb-fac810bc9edb logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,119 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,221 WARNING app.api.routes.auth event=Login failed for email login_57cf5f6f@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,224 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,239 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,354 INFO app.api.routes.auth event=Registered new user fee6260b-e915-4ac7-bf14-03a7cdd66353 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,356 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,460 INFO app.api.routes.auth event=User fee6260b-e915-4ac7-bf14-03a7cdd66353 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,463 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,474 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,627 INFO app.api.routes.auth event=Registered new user 069ceeb5-2ada-452d-b0f4-1f0719231b1b job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,629 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,728 INFO app.api.routes.auth event=User 069ceeb5-2ada-452d-b0f4-1f0719231b1b logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,731 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,736 INFO httpx event=HTTP Request: POST http://testserver/auth/logout "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,742 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,887 INFO app.api.routes.auth event=Registered new user f4c56d6b-e56a-4a00-b345-3127225c3648 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:00,889 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:01,028 INFO app.api.routes.auth event=User f4c56d6b-e56a-4a00-b345-3127225c3648 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:01,032 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:01,113 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:01,142 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:21,102 INFO app.api.routes.auth event=Registered new user 877e096f-3003-4a74-81e9-e347f65d1e25 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:21,106 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:21,979 INFO app.api.routes.auth event=Registered new user dea7c2cf-b45a-4898-9ccb-510dee73d46f job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:21,988 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,143 INFO app.api.routes.auth event=User dea7c2cf-b45a-4898-9ccb-510dee73d46f logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,144 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,291 WARNING app.api.routes.auth event=Login failed for email login_7883e5f7@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,291 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,324 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,507 INFO app.api.routes.auth event=Registered new user 2ca8b200-2c94-48a2-b13c-f3e0c5d87414 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,513 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,662 INFO app.api.routes.auth event=User 2ca8b200-2c94-48a2-b13c-f3e0c5d87414 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,672 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,686 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,888 INFO app.api.routes.auth event=Registered new user 051645f5-6c93-4d4f-bbe8-ea5ba626e810 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:22,892 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,053 INFO app.api.routes.auth event=User 051645f5-6c93-4d4f-bbe8-ea5ba626e810 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,060 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,072 INFO httpx event=HTTP Request: POST http://testserver/auth/logout "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,077 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,295 INFO app.api.routes.auth event=Registered new user db0f33fa-b785-4107-bd73-0824fb39ac3c job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,297 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,454 INFO app.api.routes.auth event=User db0f33fa-b785-4107-bd73-0824fb39ac3c logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,460 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,509 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 17:04:23,522 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:24:59,535 INFO app.application.processing.service event=job_processing_completed job_id=76c33b41-a9c9-4489-89be-3a7a67b5a5b8 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:11,885 INFO app.api.routes.auth event=Registered new user ce7d10c1-0bcd-42a1-a321-d68d80d9a3d5 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:11,891 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:12,976 INFO app.api.routes.auth event=Registered new user 30acc6f4-1bab-4c30-ae0a-6eba9cc52285 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:12,976 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,123 INFO app.api.routes.auth event=User 30acc6f4-1bab-4c30-ae0a-6eba9cc52285 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,123 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,283 WARNING app.api.routes.auth event=Login failed for email login_1ec38771@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,286 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,322 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,573 INFO app.api.routes.auth event=Registered new user 36ff26c1-0283-44a9-8df6-68d82d4bef3f job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,579 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,793 INFO app.api.routes.auth event=User 36ff26c1-0283-44a9-8df6-68d82d4bef3f logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,799 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:13,823 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,007 INFO app.api.routes.auth event=Registered new user eb0b6e04-ce1e-4a6d-ad51-31bf712d7ac5 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,011 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,163 INFO app.api.routes.auth event=User eb0b6e04-ce1e-4a6d-ad51-31bf712d7ac5 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,167 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,180 INFO httpx event=HTTP Request: POST http://testserver/auth/logout "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,190 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,389 INFO app.api.routes.auth event=Registered new user 21f3b32b-55a0-4689-9b0d-0dd3033595bc job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,389 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,580 INFO app.api.routes.auth event=User 21f3b32b-55a0-4689-9b0d-0dd3033595bc logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,585 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,655 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:14,667 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:42,398 ERROR app.api.errors event=System/Storage Error: Disk full {'path': '/tmp/secret/file.txt'} job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:42,408 INFO httpx event=HTTP Request: GET http://testserver/error/storage "HTTP/1.1 500 Internal Server Error" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:42,446 INFO httpx event=HTTP Request: GET http://testserver/error/validation "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:42,485 INFO httpx event=HTTP Request: GET http://testserver/error/job-not-found "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:42,504 INFO app.application.jobs.service event=job_uploaded job_id=1 template_id=t1 stage=- duration_ms=-1.0
+2026-08-13 18:25:42,739 INFO httpx event=HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:42,954 INFO app.application.jobs.service event=job_uploaded job_id=b12c53ca-a67a-4d5c-ad78-11a29b39c714 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:42,954 INFO app.api.routes.jobs event=job_uploaded job_id=b12c53ca-a67a-4d5c-ad78-11a29b39c714 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:42,964 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:42,998 INFO httpx event=HTTP Request: GET http://testserver/jobs/b12c53ca-a67a-4d5c-ad78-11a29b39c714 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:43,177 INFO app.application.jobs.service event=job_uploaded job_id=5514c0f3-17b5-4ae6-ab57-652a88bfa7ec template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:43,178 INFO app.api.routes.jobs event=job_uploaded job_id=5514c0f3-17b5-4ae6-ab57-652a88bfa7ec template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:43,184 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:43,333 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:43,494 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:43,724 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:43,933 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,215 INFO app.application.jobs.service event=job_uploaded job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:44,217 INFO app.api.routes.jobs event=job_uploaded job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:44,220 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,243 INFO app.api.routes.jobs event=processing_triggered job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:44,609 INFO app.application.processing.service event=job_processing_completed job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:44,619 INFO httpx event=HTTP Request: POST http://testserver/jobs/0c30858f-ce63-4bbd-93cc-48d23e156a66/process "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,635 INFO httpx event=HTTP Request: GET http://testserver/jobs/0c30858f-ce63-4bbd-93cc-48d23e156a66 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,653 INFO app.api.routes.jobs event=output_downloaded job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=- stage=outputs/accepted duration_ms=-1.0
+2026-08-13 18:25:44,692 INFO httpx event=HTTP Request: GET http://testserver/jobs/0c30858f-ce63-4bbd-93cc-48d23e156a66/outputs/accepted "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,705 INFO app.api.routes.jobs event=output_downloaded job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=- stage=outputs/rejected duration_ms=-1.0
+2026-08-13 18:25:44,740 INFO httpx event=HTTP Request: GET http://testserver/jobs/0c30858f-ce63-4bbd-93cc-48d23e156a66/outputs/rejected "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,754 INFO app.api.routes.jobs event=output_downloaded job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=- stage=outputs/review duration_ms=-1.0
+2026-08-13 18:25:44,765 INFO httpx event=HTTP Request: GET http://testserver/jobs/0c30858f-ce63-4bbd-93cc-48d23e156a66/outputs/review "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,785 INFO app.api.routes.jobs event=output_downloaded job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=- stage=outputs/report duration_ms=-1.0
+2026-08-13 18:25:44,826 INFO httpx event=HTTP Request: GET http://testserver/jobs/0c30858f-ce63-4bbd-93cc-48d23e156a66/outputs/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:44,838 INFO app.api.routes.jobs event=report_requested job_id=0c30858f-ce63-4bbd-93cc-48d23e156a66 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:44,845 INFO httpx event=HTTP Request: GET http://testserver/jobs/0c30858f-ce63-4bbd-93cc-48d23e156a66/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:45,080 INFO httpx event=HTTP Request: POST http://testserver/jobs/missing-job/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:45,268 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/outputs/accepted "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:45,621 INFO app.application.jobs.service event=job_uploaded job_id=69733d64-b2b3-4263-a52f-3020a60a5dfc template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:45,623 INFO app.api.routes.jobs event=job_uploaded job_id=69733d64-b2b3-4263-a52f-3020a60a5dfc template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:45,626 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:45,654 INFO httpx event=HTTP Request: GET http://testserver/jobs/69733d64-b2b3-4263-a52f-3020a60a5dfc/outputs/invalid_type "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:45,818 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:46,080 INFO app.application.jobs.service event=job_uploaded job_id=053cab82-9492-4af8-8084-b572a4ef23da template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:46,082 INFO app.api.routes.jobs event=job_uploaded job_id=053cab82-9492-4af8-8084-b572a4ef23da template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:46,088 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:46,105 INFO app.api.routes.jobs event=report_requested job_id=053cab82-9492-4af8-8084-b572a4ef23da template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:46,110 INFO httpx event=HTTP Request: GET http://testserver/jobs/053cab82-9492-4af8-8084-b572a4ef23da/report "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:46,515 INFO app.application.processing.service event=job_processing_completed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:46,642 INFO app.application.processing.service event=job_processing_failed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:46,730 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:46,828 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:46,909 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:47,062 INFO app.api.routes.auth event=Registered new user 119c45ef-50e8-473f-b94a-c6612ec42219 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:47,070 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:47,800 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:47,858 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:47,898 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,062 INFO app.application.jobs.service event=job_uploaded job_id=ea73c3a9-f5cf-476f-88c8-1d55150a5240 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:48,062 INFO app.api.routes.jobs event=job_uploaded job_id=ea73c3a9-f5cf-476f-88c8-1d55150a5240 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:48,066 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,093 INFO httpx event=HTTP Request: GET http://testserver/jobs/ea73c3a9-f5cf-476f-88c8-1d55150a5240 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,140 INFO app.application.jobs.service event=job_uploaded job_id=f7cdbacd-1a6c-46f7-a940-fbeb6f7fb6b2 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:48,142 INFO app.api.routes.jobs event=job_uploaded job_id=f7cdbacd-1a6c-46f7-a940-fbeb6f7fb6b2 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:25:48,148 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,174 INFO httpx event=HTTP Request: GET http://testserver/jobs/f7cdbacd-1a6c-46f7-a940-fbeb6f7fb6b2 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,198 INFO httpx event=HTTP Request: GET http://testserver/jobs/ea73c3a9-f5cf-476f-88c8-1d55150a5240 "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,228 INFO httpx event=HTTP Request: POST http://testserver/jobs/ea73c3a9-f5cf-476f-88c8-1d55150a5240/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,258 INFO httpx event=HTTP Request: GET http://testserver/jobs/ea73c3a9-f5cf-476f-88c8-1d55150a5240/intelligence "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,282 INFO httpx event=HTTP Request: GET http://testserver/jobs/ea73c3a9-f5cf-476f-88c8-1d55150a5240/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,308 INFO httpx event=HTTP Request: GET http://testserver/jobs/ea73c3a9-f5cf-476f-88c8-1d55150a5240/outputs/clean "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,336 INFO httpx event=HTTP Request: GET http://testserver/jobs/f7cdbacd-1a6c-46f7-a940-fbeb6f7fb6b2 "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,579 INFO app.api.routes.auth event=Registered new user e1ba2ec0-f3f1-4af8-bf7e-c99b716b2b08 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,586 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,841 INFO app.api.routes.auth event=User e1ba2ec0-f3f1-4af8-bf7e-c99b716b2b08 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:48,854 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,092 WARNING app.api.routes.auth event=Login failed for email login_dd850e9f@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,096 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,151 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,444 INFO app.api.routes.auth event=Registered new user 1c14c48f-09a9-4cbe-a4a6-41cc474e2868 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,450 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,640 INFO app.api.routes.auth event=User 1c14c48f-09a9-4cbe-a4a6-41cc474e2868 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,644 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:49,668 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,009 INFO app.api.routes.auth event=Registered new user b0e2bf5e-413d-4bf4-a8d5-84732a1dd205 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,022 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,221 INFO app.api.routes.auth event=User b0e2bf5e-413d-4bf4-a8d5-84732a1dd205 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,225 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,241 INFO httpx event=HTTP Request: POST http://testserver/auth/logout "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,254 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,478 INFO app.api.routes.auth event=Registered new user 2e602169-7fcc-49ca-93cc-0c4346db36c1 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,484 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,664 INFO app.api.routes.auth event=User 2e602169-7fcc-49ca-93cc-0c4346db36c1 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,668 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,728 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:25:50,737 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,042 INFO app.api.routes.auth event=Registered new user de8cd7cf-be5a-425f-9cfc-ad7755f2c1e4 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,048 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,065 WARNING app.api.routes.auth event=Registration failed: Registration failed job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,070 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,288 INFO app.api.routes.auth event=Registered new user 4e419842-ed13-4b71-bd80-c9595e0f95fc job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,294 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,483 INFO app.api.routes.auth event=User 4e419842-ed13-4b71-bd80-c9595e0f95fc logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,490 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,652 WARNING app.api.routes.auth event=Login failed for email login_da97531a@example.com job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,658 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,694 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,883 INFO app.api.routes.auth event=Registered new user 024b7a7e-353b-4271-b202-a67ed1879714 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:16,885 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,053 INFO app.api.routes.auth event=User 024b7a7e-353b-4271-b202-a67ed1879714 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,060 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,081 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,295 INFO app.api.routes.auth event=Registered new user df58161c-8d8b-4454-a4e1-70c157f0da99 job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,300 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,628 INFO app.api.routes.auth event=User df58161c-8d8b-4454-a4e1-70c157f0da99 logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,634 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,646 INFO httpx event=HTTP Request: POST http://testserver/auth/logout "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,655 INFO httpx event=HTTP Request: GET http://testserver/auth/me "HTTP/1.1 401 Unauthorized" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,855 INFO app.api.routes.auth event=Registered new user aba0e261-1a27-4442-b38b-7c404b8afe5f job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:17,863 INFO httpx event=HTTP Request: POST http://testserver/auth/register "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:18,016 INFO app.api.routes.auth event=User aba0e261-1a27-4442-b38b-7c404b8afe5f logged in job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:18,021 INFO httpx event=HTTP Request: POST http://testserver/auth/login "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:18,082 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:26:18,094 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 403 Forbidden" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:27:51,182 INFO app.application.processing.service event=job_processing_completed job_id=1f958d49-5526-464b-89a5-88916795e841 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:23,231 ERROR app.api.errors event=System/Storage Error: Disk full {'path': '/tmp/secret/file.txt'} job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,232 INFO httpx event=HTTP Request: GET http://testserver/error/storage "HTTP/1.1 500 Internal Server Error" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,250 INFO httpx event=HTTP Request: GET http://testserver/error/validation "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,268 INFO httpx event=HTTP Request: GET http://testserver/error/job-not-found "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,276 INFO app.application.jobs.service event=job_uploaded job_id=1 template_id=t1 stage=- duration_ms=-1.0
+2026-08-13 18:28:23,402 INFO httpx event=HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,550 INFO app.application.jobs.service event=job_uploaded job_id=6d28e660-7e53-492d-a71a-00ec960e3904 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:23,550 INFO app.api.routes.jobs event=job_uploaded job_id=6d28e660-7e53-492d-a71a-00ec960e3904 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:23,556 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,572 INFO httpx event=HTTP Request: GET http://testserver/jobs/6d28e660-7e53-492d-a71a-00ec960e3904 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,715 INFO app.application.jobs.service event=job_uploaded job_id=936328c8-1f86-4bbf-916f-2f4132cf80cc template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:23,715 INFO app.api.routes.jobs event=job_uploaded job_id=936328c8-1f86-4bbf-916f-2f4132cf80cc template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:23,718 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,840 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:23,954 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:24,105 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:24,305 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:24,582 INFO app.application.jobs.service event=job_uploaded job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:24,584 INFO app.api.routes.jobs event=job_uploaded job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:24,594 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:24,613 INFO app.api.routes.jobs event=processing_triggered job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:24,879 INFO app.application.processing.service event=job_processing_completed job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:24,886 INFO httpx event=HTTP Request: POST http://testserver/jobs/35c49821-077a-47bf-8a7c-43710b148992/process "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:24,901 INFO httpx event=HTTP Request: GET http://testserver/jobs/35c49821-077a-47bf-8a7c-43710b148992 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:24,920 INFO app.api.routes.jobs event=output_downloaded job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=- stage=outputs/accepted duration_ms=-1.0
+2026-08-13 18:28:24,954 INFO httpx event=HTTP Request: GET http://testserver/jobs/35c49821-077a-47bf-8a7c-43710b148992/outputs/accepted "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:24,971 INFO app.api.routes.jobs event=output_downloaded job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=- stage=outputs/rejected duration_ms=-1.0
+2026-08-13 18:28:25,008 INFO httpx event=HTTP Request: GET http://testserver/jobs/35c49821-077a-47bf-8a7c-43710b148992/outputs/rejected "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,028 INFO app.api.routes.jobs event=output_downloaded job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=- stage=outputs/review duration_ms=-1.0
+2026-08-13 18:28:25,036 INFO httpx event=HTTP Request: GET http://testserver/jobs/35c49821-077a-47bf-8a7c-43710b148992/outputs/review "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,052 INFO app.api.routes.jobs event=output_downloaded job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=- stage=outputs/report duration_ms=-1.0
+2026-08-13 18:28:25,088 INFO httpx event=HTTP Request: GET http://testserver/jobs/35c49821-077a-47bf-8a7c-43710b148992/outputs/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,102 INFO app.api.routes.jobs event=report_requested job_id=35c49821-077a-47bf-8a7c-43710b148992 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:25,117 INFO httpx event=HTTP Request: GET http://testserver/jobs/35c49821-077a-47bf-8a7c-43710b148992/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,276 INFO httpx event=HTTP Request: POST http://testserver/jobs/missing-job/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,430 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/outputs/accepted "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,684 INFO app.application.jobs.service event=job_uploaded job_id=140629fa-713d-46ff-856c-da5208933fff template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:25,719 INFO app.api.routes.jobs event=job_uploaded job_id=140629fa-713d-46ff-856c-da5208933fff template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:25,724 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,750 INFO httpx event=HTTP Request: GET http://testserver/jobs/140629fa-713d-46ff-856c-da5208933fff/outputs/invalid_type "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:25,918 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:26,095 INFO app.application.jobs.service event=job_uploaded job_id=4f6ae25a-abc3-4ed3-8b3f-5654a1c44a3d template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:26,095 INFO app.api.routes.jobs event=job_uploaded job_id=4f6ae25a-abc3-4ed3-8b3f-5654a1c44a3d template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:26,100 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:26,118 INFO app.api.routes.jobs event=report_requested job_id=4f6ae25a-abc3-4ed3-8b3f-5654a1c44a3d template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:26,123 INFO httpx event=HTTP Request: GET http://testserver/jobs/4f6ae25a-abc3-4ed3-8b3f-5654a1c44a3d/report "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:26,478 INFO app.application.processing.service event=job_processing_completed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:26,611 INFO app.application.processing.service event=job_processing_failed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:26,692 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:26,754 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:26,810 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:27,719 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:27,786 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:27,838 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,064 INFO app.application.jobs.service event=job_uploaded job_id=1d2c8438-eefa-4a4b-abec-116effaf8c41 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:28,064 INFO app.api.routes.jobs event=job_uploaded job_id=1d2c8438-eefa-4a4b-abec-116effaf8c41 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:28,071 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,098 INFO httpx event=HTTP Request: GET http://testserver/jobs/1d2c8438-eefa-4a4b-abec-116effaf8c41 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,152 INFO app.application.jobs.service event=job_uploaded job_id=ae28052d-5180-4abe-915a-c16e6c06ec7b template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:28,152 INFO app.api.routes.jobs event=job_uploaded job_id=ae28052d-5180-4abe-915a-c16e6c06ec7b template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:28:28,158 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,185 INFO httpx event=HTTP Request: GET http://testserver/jobs/ae28052d-5180-4abe-915a-c16e6c06ec7b "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,217 INFO httpx event=HTTP Request: GET http://testserver/jobs/1d2c8438-eefa-4a4b-abec-116effaf8c41 "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,252 INFO httpx event=HTTP Request: POST http://testserver/jobs/1d2c8438-eefa-4a4b-abec-116effaf8c41/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,282 INFO httpx event=HTTP Request: GET http://testserver/jobs/1d2c8438-eefa-4a4b-abec-116effaf8c41/intelligence "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,308 INFO httpx event=HTTP Request: GET http://testserver/jobs/1d2c8438-eefa-4a4b-abec-116effaf8c41/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,336 INFO httpx event=HTTP Request: GET http://testserver/jobs/1d2c8438-eefa-4a4b-abec-116effaf8c41/outputs/clean "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:28,362 INFO httpx event=HTTP Request: GET http://testserver/jobs/ae28052d-5180-4abe-915a-c16e6c06ec7b "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:28:48,390 INFO app.application.processing.service event=job_processing_completed job_id=3376338d-83d4-4bec-a2b7-135c8c45d6c1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:16,598 ERROR app.api.errors event=System/Storage Error: Disk full {'path': '/tmp/secret/file.txt'} job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:16,603 INFO httpx event=HTTP Request: GET http://testserver/error/storage "HTTP/1.1 500 Internal Server Error" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:16,618 INFO httpx event=HTTP Request: GET http://testserver/error/validation "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:16,639 INFO httpx event=HTTP Request: GET http://testserver/error/job-not-found "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:16,646 INFO app.application.jobs.service event=job_uploaded job_id=1 template_id=t1 stage=- duration_ms=-1.0
+2026-08-13 18:29:16,786 INFO httpx event=HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:16,950 INFO app.application.jobs.service event=job_uploaded job_id=8bf5160a-e39f-4765-80a6-84373a7e89ca template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:16,950 INFO app.api.routes.jobs event=job_uploaded job_id=8bf5160a-e39f-4765-80a6-84373a7e89ca template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:16,956 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:16,975 INFO httpx event=HTTP Request: GET http://testserver/jobs/8bf5160a-e39f-4765-80a6-84373a7e89ca "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:17,118 INFO app.application.jobs.service event=job_uploaded job_id=d0838618-fccc-4f3d-b5da-fc8aebb6c7e9 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:17,121 INFO app.api.routes.jobs event=job_uploaded job_id=d0838618-fccc-4f3d-b5da-fc8aebb6c7e9 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:17,123 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:17,258 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:17,383 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:17,547 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:17,683 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:17,873 INFO app.application.jobs.service event=job_uploaded job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:17,873 INFO app.api.routes.jobs event=job_uploaded job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:17,878 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:17,891 INFO app.api.routes.jobs event=processing_triggered job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:18,078 INFO app.application.processing.service event=job_processing_completed job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:18,089 INFO httpx event=HTTP Request: POST http://testserver/jobs/d8befd1b-cbd1-4db3-be15-9f2eedd323be/process "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,101 INFO httpx event=HTTP Request: GET http://testserver/jobs/d8befd1b-cbd1-4db3-be15-9f2eedd323be "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,112 INFO app.api.routes.jobs event=output_downloaded job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=- stage=outputs/accepted duration_ms=-1.0
+2026-08-13 18:29:18,133 INFO httpx event=HTTP Request: GET http://testserver/jobs/d8befd1b-cbd1-4db3-be15-9f2eedd323be/outputs/accepted "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,143 INFO app.api.routes.jobs event=output_downloaded job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=- stage=outputs/rejected duration_ms=-1.0
+2026-08-13 18:29:18,170 INFO httpx event=HTTP Request: GET http://testserver/jobs/d8befd1b-cbd1-4db3-be15-9f2eedd323be/outputs/rejected "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,178 INFO app.api.routes.jobs event=output_downloaded job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=- stage=outputs/review duration_ms=-1.0
+2026-08-13 18:29:18,211 INFO httpx event=HTTP Request: GET http://testserver/jobs/d8befd1b-cbd1-4db3-be15-9f2eedd323be/outputs/review "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,224 INFO app.api.routes.jobs event=output_downloaded job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=- stage=outputs/report duration_ms=-1.0
+2026-08-13 18:29:18,242 INFO httpx event=HTTP Request: GET http://testserver/jobs/d8befd1b-cbd1-4db3-be15-9f2eedd323be/outputs/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,252 INFO app.api.routes.jobs event=report_requested job_id=d8befd1b-cbd1-4db3-be15-9f2eedd323be template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:18,258 INFO httpx event=HTTP Request: GET http://testserver/jobs/d8befd1b-cbd1-4db3-be15-9f2eedd323be/report "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,387 INFO httpx event=HTTP Request: POST http://testserver/jobs/missing-job/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,508 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/outputs/accepted "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,699 INFO app.application.jobs.service event=job_uploaded job_id=9f5f4c44-a456-42a4-89a9-1d42e7442d02 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:18,699 INFO app.api.routes.jobs event=job_uploaded job_id=9f5f4c44-a456-42a4-89a9-1d42e7442d02 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:18,705 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,720 INFO httpx event=HTTP Request: GET http://testserver/jobs/9f5f4c44-a456-42a4-89a9-1d42e7442d02/outputs/invalid_type "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,858 INFO httpx event=HTTP Request: GET http://testserver/jobs/missing-job/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:18,992 INFO app.application.jobs.service event=job_uploaded job_id=0f1265f4-6d49-45f5-8abb-e0355a45cebc template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:18,992 INFO app.api.routes.jobs event=job_uploaded job_id=0f1265f4-6d49-45f5-8abb-e0355a45cebc template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:18,997 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:19,008 INFO app.api.routes.jobs event=report_requested job_id=0f1265f4-6d49-45f5-8abb-e0355a45cebc template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:19,011 INFO httpx event=HTTP Request: GET http://testserver/jobs/0f1265f4-6d49-45f5-8abb-e0355a45cebc/report "HTTP/1.1 400 Bad Request" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:19,294 INFO app.application.processing.service event=job_processing_completed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:19,422 INFO app.application.processing.service event=job_processing_failed job_id=job-1 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:19,491 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:19,541 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:19,591 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,511 INFO httpx event=HTTP Request: GET http://testserver/templates "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,562 INFO httpx event=HTTP Request: GET http://testserver/templates/indian_rice_exports "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,604 INFO httpx event=HTTP Request: GET http://testserver/templates/missing_template "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,742 INFO app.application.jobs.service event=job_uploaded job_id=0bfd7e5f-a388-4990-86ea-9cf40e3754c3 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:20,742 INFO app.api.routes.jobs event=job_uploaded job_id=0bfd7e5f-a388-4990-86ea-9cf40e3754c3 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:20,746 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,770 INFO httpx event=HTTP Request: GET http://testserver/jobs/0bfd7e5f-a388-4990-86ea-9cf40e3754c3 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,820 INFO app.application.jobs.service event=job_uploaded job_id=95ea621a-5b18-4a52-99c2-735b034c8572 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:20,820 INFO app.api.routes.jobs event=job_uploaded job_id=95ea621a-5b18-4a52-99c2-735b034c8572 template_id=indian_rice_exports stage=- duration_ms=-1.0
+2026-08-13 18:29:20,824 INFO httpx event=HTTP Request: POST http://testserver/jobs "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,847 INFO httpx event=HTTP Request: GET http://testserver/jobs/95ea621a-5b18-4a52-99c2-735b034c8572 "HTTP/1.1 200 OK" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,864 INFO httpx event=HTTP Request: GET http://testserver/jobs/0bfd7e5f-a388-4990-86ea-9cf40e3754c3 "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,890 INFO httpx event=HTTP Request: POST http://testserver/jobs/0bfd7e5f-a388-4990-86ea-9cf40e3754c3/process "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,914 INFO httpx event=HTTP Request: GET http://testserver/jobs/0bfd7e5f-a388-4990-86ea-9cf40e3754c3/intelligence "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,936 INFO httpx event=HTTP Request: GET http://testserver/jobs/0bfd7e5f-a388-4990-86ea-9cf40e3754c3/report "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,958 INFO httpx event=HTTP Request: GET http://testserver/jobs/0bfd7e5f-a388-4990-86ea-9cf40e3754c3/outputs/clean "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0
+2026-08-13 18:29:20,980 INFO httpx event=HTTP Request: GET http://testserver/jobs/95ea621a-5b18-4a52-99c2-735b034c8572 "HTTP/1.1 404 Not Found" job_id=- template_id=- stage=- duration_ms=-1.0

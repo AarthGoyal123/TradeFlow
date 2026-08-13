@@ -3,10 +3,7 @@ import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 import type { ApiErrorResponse } from "@/types/api";
 
 export function requestInterceptor(config: InternalAxiosRequestConfig) {
-  const token = localStorage.getItem("auth_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+  // Authorization is now handled via HttpOnly cookies by the browser.
   return config;
 }
 

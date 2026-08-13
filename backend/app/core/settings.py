@@ -39,7 +39,13 @@ class Settings(BaseSettings):
     # Background Processing Configuration
     job_executor: Literal["sync", "celery"] = "sync"
     celery_broker_url: str = "memory://"
-    celery_result_backend: str = "memory://"
+    celery_result_backend: str = "redis://localhost:6379/1"
+
+    # Authentication Settings
+    auth_secret: str = "super-secret-development-key-change-in-production"
+    jwt_expire_minutes: int = 60
+    cookie_secure: bool = False  # Set True in production (HTTPS)
+    cookie_samesite: str = "lax"
 
     @property
     def resolved_template_root(self) -> Path:

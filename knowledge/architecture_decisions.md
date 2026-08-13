@@ -402,3 +402,27 @@ For Phase 5, an S3-compatible `OutputStorage` and `UploadedFileStorage` adapter 
 
 - The application now manages dependency injection branching based on `TRADEFLOW_STORAGE_BACKEND`.
 - S3 endpoints and credentials must be safely managed in production, unlike the simpler local file system which just needs read/write paths.
+
+## ADR-013 - Minimal and Secure Authentication Architecture
+
+Date: 2026-08-13
+
+Status: accepted.
+
+### Decision
+
+TradeFlow will use a minimal, zero-paid-service authentication architecture utilizing `argon2-cffi` for password hashing and `PyJWT` for token generation. State-changing requests are protected via HTTP-only cookies and a double-submit CSRF mechanism, rather than passing bearer tokens in headers.
+
+A multi-tenant data isolation strategy uses a `CurrentUserContext` which ensures database queries are scoped to the user's `tenant_id` at the repository layer. A `Role` mechanism handles RBAC.
+
+### Rationale
+
+- **Zero-Paid-Services:** Ensures we avoid paid Auth providers like Auth0 or Cognito.
+- **Dependency Minimization:** Explicitly avoids heavy frameworks like `passlib` and multiple crypto backends.
+- **Security Posture:** HttpOnly cookies mitigate XSS-based token theft. Double-submit CSRF mitigates CSRF.
+- **Test Compatibility:** Security measures are strictly enforced, requiring test suites to bypass CSRF in integration tests explicitly via dependency overrides rather than disabling security globally.
+
+### Trade-offs
+
+- **Frontend Complexity:** The frontend (Axios/TanStack) must be carefully configured to include credentials and extract the CSRF token from non-HttpOnly cookies for state-changing requests.
+- **Testing Complexity:** Integration tests must use specialized test clients (`create_authenticated_client`, `override_auth`) to interact with protected endpoints.

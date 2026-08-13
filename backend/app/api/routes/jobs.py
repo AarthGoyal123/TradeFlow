@@ -14,6 +14,7 @@ from app.api.dependencies import (
     get_processing_report_repository,
     get_processing_service,
 )
+from app.api.security import CurrentUserContext, require_tenant_access
 from app.api.schemas.jobs import (
     ColumnMappingExplanationResponse,
     DataQualityResponse,
@@ -59,6 +60,7 @@ def create_job(
     template_id: Annotated[str, Form()],
     file: Annotated[UploadFile, File()],
     job_service: Annotated[JobService, Depends(get_job_service)],
+    context: Annotated[CurrentUserContext, Depends(require_tenant_access)],
 ) -> JobUploadResponse:
     """Accept an uploaded workbook and create an uploaded job."""
     original_filename = file.filename or ""
@@ -66,8 +68,10 @@ def create_job(
         template_id=template_id,
         original_filename=original_filename,
         file=file.file,
+        tenant_id=context.tenant_id,
+        user_id=context.user.id,
     )
-    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id))
+    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
     return JobUploadResponse(
         job_id=job.job_id,
         status=job.status,
@@ -80,9 +84,10 @@ def create_job(
 def get_job(
     job_id: str,
     job_service: Annotated[JobService, Depends(get_job_service)],
+    context: Annotated[CurrentUserContext, Depends(require_tenant_access)],
 ) -> JobDetailsResponse:
     """Return job metadata and current status."""
-    return _to_job_details_response(job_service.get_job(job_id))
+    return _to_job_details_response(job_service.get_job(job_id, tenant_id=context.tenant_id))
 
 
 @router.post("/{job_id}/process", response_model=ProcessingResponse)
@@ -90,9 +95,10 @@ def process_job(
     job_id: str,
     job_service: Annotated[JobService, Depends(get_job_service)],
     job_executor: Annotated[JobExecutor, Depends(get_job_executor)],
+    context: Annotated[CurrentUserContext, Depends(require_tenant_access)],
 ) -> ProcessingResponse:
     """Trigger processing for an uploaded job (enqueues if background execution is enabled)."""
-    job = job_service.get_job(job_id)
+    job = job_service.get_job(job_id, tenant_id=context.tenant_id)
     logger.info(
         "processing_triggered",
         extra=log_extra(job_id=job_id, template_id=job.template_id),
@@ -109,7 +115,7 @@ def process_job(
     job_executor.submit_job(job_id)
     
     # Reload job to get its updated status (could be QUEUED or PROCESSING)
-    job = job_service.get_job(job_id)
+    job = job_service.get_job(job_id, tenant_id=context.tenant_id)
     
     return ProcessingResponse(
         job_id=job_id,
@@ -126,9 +132,10 @@ def get_output(
     output_type: str,
     job_service: Annotated[JobService, Depends(get_job_service)],
     output_storage: Annotated[OutputStorage, Depends(get_output_storage)],
+    context: Annotated[CurrentUserContext, Depends(require_tenant_access)],
 ) -> FileResponse:
     """Stream a generated output workbook."""
-    job = job_service.get_job(job_id)
+    job = job_service.get_job(job_id, tenant_id=context.tenant_id)
     if output_type not in _OUTPUT_TYPE_MAP:
         raise HTTPException(
             status_code=404,
@@ -165,15 +172,14 @@ def get_output(
 
 
 @router.get("/{job_id}/report", response_model=JobReportResponse)
-def get_job_report(
+def get_report(
     job_id: str,
     job_service: Annotated[JobService, Depends(get_job_service)],
-    report_repository: Annotated[
-        ProcessingReportRepository, Depends(get_processing_report_repository)
-    ],
+    report_repo: Annotated[ProcessingReportRepository, Depends(get_processing_report_repository)],
+    context: Annotated[CurrentUserContext, Depends(require_tenant_access)],
 ) -> JobReportResponse:
-    """Return processing summary with output metadata and statistics."""
-    job = job_service.get_job(job_id)
+    """Return the detailed processing report for a completed job."""
+    job = job_service.get_job(job_id, tenant_id=context.tenant_id)
     logger.info(
         "report_requested",
         extra=log_extra(job_id=job_id, template_id=job.template_id),
@@ -189,7 +195,7 @@ def get_job_report(
                 }
             },
         )
-    summary = report_repository.get_summary(job_id)
+    summary = report_repo.get_summary(job_id)
     return JobReportResponse(
         job_id=job.job_id,
         template_id=job.template_id,
@@ -218,16 +224,17 @@ def _get_template_repository() -> TemplateRepository:
 
 
 @router.get("/{job_id}/intelligence", response_model=IntelligenceReportResponse)
-def get_job_intelligence(
+def get_intelligence(
     job_id: str,
     job_service: Annotated[JobService, Depends(get_job_service)],
     intelligence_service: Annotated[WorkbookIntelligenceService, Depends(get_intelligence_service)],
+    context: Annotated[CurrentUserContext, Depends(require_tenant_access)],
     template_repository: Annotated[TemplateRepository, Depends(_get_template_repository)],
 ) -> IntelligenceReportResponse:
-    """Analyze a job's workbook and return an intelligence report."""
+    """Return the data intelligence report for a completed job."""
     from app.core.settings import get_settings
 
-    job = job_service.get_job(job_id)
+    job = job_service.get_job(job_id, tenant_id=context.tenant_id)
     settings = get_settings()
     workbook_path = settings.resolved_upload_dir / job.stored_filename
     template = template_repository.get_template(job.template_id)
