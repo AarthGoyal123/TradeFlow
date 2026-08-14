@@ -1,5 +1,6 @@
 from app.infrastructure.jobs.local_executor import SynchronousJobExecutor
 
+
 def test_synchronous_executor_submits_job(mocker) -> None:
     processing_service = mocker.Mock()
     executor = SynchronousJobExecutor(processing_service)

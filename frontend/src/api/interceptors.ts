@@ -2,8 +2,17 @@ import type { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 import type { ApiErrorResponse } from "@/types/api";
 
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  if (match) return decodeURIComponent(match[2]);
+  return null;
+}
+
 export function requestInterceptor(config: InternalAxiosRequestConfig) {
-  // Authorization is now handled via HttpOnly cookies by the browser.
+  const csrfToken = getCookie("csrf_token");
+  if (csrfToken) {
+    config.headers["X-CSRF-Token"] = csrfToken;
+  }
   return config;
 }
 

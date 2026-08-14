@@ -1,14 +1,25 @@
 """Authentication application service."""
 
 import uuid
-from datetime import datetime, timezone
 from dataclasses import dataclass
+from datetime import UTC, datetime
 
 from app.application.auth.password import hash_password, verify_password
 from app.application.auth.tokens import create_access_token
 from app.core.errors import TradeFlowError
-from app.domain.auth.models import Role, Tenant, TenantMembership, User, ExternalIdentity, UserIdentity
-from app.domain.auth.ports import AuthRepository
+from app.domain.auth.models import (
+    ExternalIdentity,
+    Role,
+    Tenant,
+    TenantMembership,
+    User,
+    UserIdentity,
+)
+from app.domain.auth.ports import (
+    AccountAlreadyExistsError,
+    AuthRepository,
+    IdentityAlreadyExistsError,
+)
 
 
 class AuthenticationError(TradeFlowError):
@@ -46,7 +57,7 @@ class AuthService:
             # However, for registration forms it is common to return a 400.
             raise RegistrationError("Registration failed")
 
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         user = User(
             id=str(uuid.uuid4()),
             email=email,
@@ -109,7 +120,7 @@ class AuthService:
             raise AuthenticationError("External email must be verified to link or register")
 
         user = self.auth_repo.get_user_by_email(external.email)
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         
         if user:
             if not user.is_active:
@@ -124,7 +135,17 @@ class AuthService:
                 created_at=now,
                 updated_at=now,
             )
-            self.auth_repo.create_user_identity(new_identity)
+            try:
+                self.auth_repo.create_user_identity(new_identity)
+            except IdentityAlreadyExistsError:
+                # Concurrent request linked this identity. Re-query.
+                user_identity = self.auth_repo.get_user_identity(external.provider, external.subject)
+                if user_identity:
+                    user = self.auth_repo.get_user_by_id(user_identity.user_id)
+                    if not user or not user.is_active:
+                        raise AuthenticationError("Account disabled or missing")
+                    return self._issue_token(user)
+                raise AuthenticationError("Concurrent identity linking failed")
             return self._issue_token(user)
 
         # 3. New user -> Auto register
@@ -163,7 +184,18 @@ class AuthService:
             updated_at=now,
         )
 
-        self.auth_repo.create_account(user, tenant, membership, identity=identity)
+        try:
+            self.auth_repo.create_account(user, tenant, membership, identity=identity)
+        except AccountAlreadyExistsError:
+            # Re-query if concurrent creation succeeded
+            user_identity = self.auth_repo.get_user_identity(external.provider, external.subject)
+            if user_identity:
+                existing_user = self.auth_repo.get_user_by_id(user_identity.user_id)
+                if not existing_user or not existing_user.is_active:
+                    raise AuthenticationError("Account disabled or missing")
+                return self._issue_token(existing_user)
+            raise RegistrationError("Concurrent registration failed")
+            
         return self._issue_token(user)
 
     def _issue_token(self, user: User) -> AuthResult:

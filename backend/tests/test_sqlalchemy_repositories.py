@@ -1,17 +1,16 @@
 """Tests for SQLAlchemy repositories."""
 
-import pytest
-from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from app.core.errors import JobNotFoundError, StorageError
 from app.domain.jobs.models import CreateJob, JobStatus
 from app.domain.outputs.models import OutputArtifact, OutputType, ProcessingSummary
 from app.infrastructure.database.models import Base
 from app.infrastructure.database.repositories import SQLAlchemyJobRepository
-from app.core.errors import JobNotFoundError, StorageError
 
 
 @pytest.fixture

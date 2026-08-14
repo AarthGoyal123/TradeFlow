@@ -40,15 +40,14 @@ Processing Pipeline
 Download (Clean Data, Removed Rows, Needs Review, Report)
 ```
 
-## Current Status (Phase 1 Complete)
+## Current Status (Phase 7A Complete)
 
-- ✅ Workbook Intelligence Engine — structure analysis, semantic detection, layered column matching
-- ✅ Global Trade Synonym Dictionary — 20+ business field groups with real-world header variants
-- ✅ Non-fatal validation — missing columns produce warnings, not crashes
-- ✅ Intelligence API — `GET /jobs/{id}/intelligence` returns full analysis report
-- ✅ Rule Engine with complex regex handling, robust DatasetRow manipulation, and reliable Output creation.
-- ✅ Full end-to-end benchmark regression test against realistic trade data (19k+ rows) properly segregating To Order/Bank consignees into `Removed_Rows.xlsx`.
-- ✅ React Frontend capable of listing and processing jobs utilizing all backend functionalities.
+- ✅ **Authentication & Authorization**: Argon2id passwords, HttpOnly JWT cookies, Double-submit CSRF, Role-Based Access Control (RBAC).
+- ✅ **Tenant Isolation**: Secure multi-tenancy ensuring users can only access jobs, outputs, and artifacts belonging to their organization.
+- ✅ **Google OAuth (OIDC)**: Direct, Zero-Paid-Service integration with Google for Social Login, including automatic account creation and identity linking, hardened against open redirects and race conditions.
+- ✅ **Workbook Intelligence Engine**: Structure analysis, semantic detection, layered column matching, Global Trade Synonym Dictionary.
+- ✅ **Processing Pipeline**: Complex regex handling, dataset normalization, robust rule evaluation, and output generation.
+- ✅ **Golden Benchmark**: Full end-to-end regression test against realistic trade data (19k+ rows) properly segregating To Order/Bank consignees.
 
 ## Planned Stack
 

@@ -1,11 +1,21 @@
 """SQLAlchemy implementation of auth repository."""
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.domain.auth.models import Role, Tenant, TenantMembership, User, UserIdentity
-from app.domain.auth.ports import AuthRepository
-from app.infrastructure.database.models import TenantMembershipModel, TenantModel, UserModel, UserIdentityModel
+from app.domain.auth.ports import (
+    AccountAlreadyExistsError,
+    AuthRepository,
+    IdentityAlreadyExistsError,
+)
+from app.infrastructure.database.models import (
+    TenantMembershipModel,
+    TenantModel,
+    UserIdentityModel,
+    UserModel,
+)
 
 
 class SQLAlchemyAuthRepository(AuthRepository):
@@ -94,7 +104,11 @@ class SQLAlchemyAuthRepository(AuthRepository):
             )
             self.session.add(identity_model)
             
-        self.session.commit()
+        try:
+            self.session.commit()
+        except IntegrityError:
+            self.session.rollback()
+            raise AccountAlreadyExistsError()
 
     def get_user_identity(self, provider: str, provider_subject: str) -> UserIdentity | None:
         stmt = select(UserIdentityModel).where(
@@ -125,7 +139,11 @@ class SQLAlchemyAuthRepository(AuthRepository):
             updated_at=identity.updated_at,
         )
         self.session.add(model)
-        self.session.commit()
+        try:
+            self.session.commit()
+        except IntegrityError:
+            self.session.rollback()
+            raise IdentityAlreadyExistsError()
 
     def _to_user(self, model: UserModel) -> User:
         return User(

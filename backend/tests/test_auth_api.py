@@ -1,6 +1,7 @@
+import uuid
+
 import pytest
 from fastapi.testclient import TestClient
-import uuid
 
 from app.main import create_app
 
@@ -8,7 +9,7 @@ from app.main import create_app
 @pytest.fixture
 def client():
     app = create_app()
-    return TestClient(app)
+    return TestClient(app, base_url="http://testserver/api/v1")
 
 
 def test_auth_registration_creates_tenant_and_user(client: TestClient) -> None:

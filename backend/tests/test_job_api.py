@@ -7,7 +7,6 @@ from app.application.jobs.service import JobService
 from app.infrastructure.files.local_uploads import LocalUploadedFileStorage
 from app.infrastructure.persistence.sqlite_jobs import SQLiteJobRepository
 from app.infrastructure.template_store.filesystem import FileSystemTemplateRepository
-from app.infrastructure.template_store.filesystem import FileSystemTemplateRepository
 from app.main import create_app
 from tests.helpers.auth import create_test_user, override_auth
 
@@ -147,4 +146,4 @@ def _client_with_temp_job_service(
     user = create_test_user()
     override_auth(app, user, tenant_id="test_tenant")
     
-    return TestClient(app), upload_dir
+    return TestClient(app, base_url="http://testserver/api/v1"), upload_dir

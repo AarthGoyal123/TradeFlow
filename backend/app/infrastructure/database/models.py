@@ -1,7 +1,6 @@
 """SQLAlchemy declarative models for persistence."""
 
 from datetime import datetime
-from typing import List
 
 from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -76,7 +75,7 @@ class JobReportModel(Base):
     rule_matches: Mapped[dict] = mapped_column(JSON, nullable=False)
     validation_findings: Mapped[list] = mapped_column(JSON, nullable=False)
 
-    outputs: Mapped[List["OutputArtifactModel"]] = relationship(
+    outputs: Mapped[list["OutputArtifactModel"]] = relationship(
         "OutputArtifactModel",
         back_populates="report",
         cascade="all, delete-orphan",

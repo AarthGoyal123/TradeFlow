@@ -1,12 +1,15 @@
 """Authentication test helpers."""
 
 from datetime import UTC, datetime
-from typing import Dict, Any, Callable
-import uuid
 
 from fastapi.testclient import TestClient
 
-from app.api.security import CurrentUserContext, get_current_user_context, require_tenant_access, csrf_protect
+from app.api.security import (
+    CurrentUserContext,
+    csrf_protect,
+    get_current_user_context,
+    require_tenant_access,
+)
 from app.domain.auth.models import Role, Tenant, User
 from app.main import create_app
 
@@ -64,4 +67,4 @@ def create_authenticated_client(
     app = create_app()
     user = create_test_user(user_id=user_id)
     override_auth(app, user, tenant_id=tenant_id, role=role)
-    return TestClient(app)
+    return TestClient(app, base_url="http://testserver/api/v1")

@@ -1,9 +1,8 @@
 """API security dependencies."""
 
 import logging
-from typing import Annotated
-
 import uuid
+from typing import Annotated
 
 import jwt
 from fastapi import Cookie, Depends, Header, HTTPException, Request, Response, status
@@ -11,7 +10,7 @@ from pydantic import BaseModel
 
 from app.api.dependencies import get_auth_repository
 from app.application.auth.tokens import decode_access_token
-from app.domain.auth.models import Role, User
+from app.domain.auth.models import User
 from app.domain.auth.ports import AuthRepository
 
 logger = logging.getLogger(__name__)
@@ -97,6 +96,7 @@ def csrf_protect(
         return
 
     if not csrf_cookie or not csrf_header or csrf_cookie != csrf_header:
+        logger.warning(f"CSRF Failed! Cookie: {csrf_cookie}, Header: {csrf_header}, URL: {request.url}")
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="CSRF token validation failed",
@@ -115,4 +115,5 @@ def set_csrf_cookie(response: Response) -> None:
         secure=settings.cookie_secure,
         samesite=settings.cookie_samesite,
         max_age=settings.jwt_expire_minutes * 60,
+        path="/",
     )

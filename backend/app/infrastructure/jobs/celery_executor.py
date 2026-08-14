@@ -1,6 +1,7 @@
 """Celery implementation of the JobExecutor port."""
 
 import logging
+
 from app.domain.jobs.ports import JobExecutor
 from app.infrastructure.jobs.celery_app import process_job_task
 

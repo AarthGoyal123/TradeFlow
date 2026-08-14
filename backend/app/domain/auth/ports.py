@@ -5,6 +5,18 @@ from typing import Protocol
 from app.domain.auth.models import Tenant, TenantMembership, User, UserIdentity
 
 
+class AuthRepositoryError(Exception):
+    """Base class for auth repository errors."""
+
+
+class IdentityAlreadyExistsError(AuthRepositoryError):
+    """Raised when attempting to create a user identity that already exists."""
+
+
+class AccountAlreadyExistsError(AuthRepositoryError):
+    """Raised when attempting to create an account that already exists."""
+
+
 class AuthRepository(Protocol):
     """Port for authentication and authorization data access."""
 

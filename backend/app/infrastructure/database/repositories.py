@@ -1,19 +1,16 @@
 """SQLAlchemy repositories for data persistence."""
 
 from datetime import UTC, datetime
-from typing import Dict, List, Optional
 from pathlib import Path
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.core.errors import JobNotFoundError, StorageError
 from app.domain.jobs.models import CreateJob, Job, JobStatus
-from app.domain.outputs.models import OutputArtifact, OutputType, ProcessingSummary
 from app.domain.jobs.ports import JobRepository
+from app.domain.outputs.models import OutputArtifact, OutputType, ProcessingSummary
 from app.domain.outputs.ports import ProcessingReportRepository
-
 from app.infrastructure.database.models import JobModel, JobReportModel, OutputArtifactModel
 
 

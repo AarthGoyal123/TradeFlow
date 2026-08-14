@@ -1,5 +1,6 @@
-from app.domain.jobs.ports import JobExecutor
 from app.application.processing.service import ProcessingService
+from app.domain.jobs.ports import JobExecutor
+
 
 class SynchronousJobExecutor(JobExecutor):
     """Executes jobs synchronously in the current thread."""

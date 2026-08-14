@@ -1,9 +1,8 @@
-import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from app.api.errors import register_exception_handlers
-from app.core.errors import StorageError, WorkbookValidationError, JobNotFoundError
+from app.core.errors import JobNotFoundError, StorageError, WorkbookValidationError
 
 app = FastAPI()
 register_exception_handlers(app)

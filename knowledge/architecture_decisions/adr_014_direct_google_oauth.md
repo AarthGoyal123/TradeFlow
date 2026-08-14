@@ -26,4 +26,7 @@ We will implement Direct Google OAuth (OIDC) natively within TradeFlow's existin
 
 ## Implementation details
 - **Libraries**: `httpx` for token exchange requests, `PyJWT[crypto]` for ID Token validation.
-- **Security**: OAuth state and PKCE `code_verifier` are stored in a short-lived (5-minute), encrypted `oauth_state` HttpOnly cookie before redirecting to Google.
+- **Security**: OAuth state, PKCE `code_verifier`, and OIDC `nonce` are stored in a short-lived (5-minute), encrypted `oauth_state` HttpOnly cookie before redirecting to Google.
+- **OIDC Nonce Verification**: A cryptographically random `nonce` is generated during initialization, passed to Google, and strictly verified upon callback to prevent replay attacks.
+- **Open Redirect Protection**: The callback strictly routes users to the configured `TRADEFLOW_FRONTEND_URL` and ignores arbitrary `next` parameters.
+- **Concurrency Hardening**: The identity and account creation processes use explicit `try/except` blocks handling `IntegrityError` to safely manage race conditions during simultaneous registration attempts.

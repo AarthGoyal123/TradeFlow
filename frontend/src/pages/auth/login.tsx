@@ -27,7 +27,9 @@ export default function LoginPage() {
   }, [searchParams]);
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8000/api/v1/auth/google/login";
+    setIsLoading(true);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+    window.location.href = `${baseUrl}/auth/google/login`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

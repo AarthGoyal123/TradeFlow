@@ -2,11 +2,9 @@
 
 import sqlite3
 import warnings
-from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from sqlite3 import Connection
-from typing import Generator
 
 from app.core.errors import JobNotFoundError, StorageError
 from app.domain.jobs.models import CreateJob, Job, JobStatus

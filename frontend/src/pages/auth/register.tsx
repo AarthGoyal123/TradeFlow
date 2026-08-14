@@ -12,11 +12,12 @@ export default function RegisterPage() {
   const [organizationName, setOrganizationName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const { refreshUser } = useAuth();
   const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:8000/api/v1/auth/google/login";
+    setIsLoading(true);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api/v1";
+    window.location.href = `${baseUrl}/auth/google/login`;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

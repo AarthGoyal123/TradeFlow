@@ -1,6 +1,4 @@
-from fastapi.testclient import TestClient
 
-from app.main import create_app
 from tests.helpers.auth import create_authenticated_client
 
 

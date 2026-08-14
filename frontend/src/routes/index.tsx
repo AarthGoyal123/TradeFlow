@@ -16,6 +16,7 @@ const SettingsPage = lazy(() => import("@/pages/settings"));
 const NotFoundPage = lazy(() => import("@/pages/not-found"));
 const LoginPage = lazy(() => import("@/pages/auth/login"));
 const RegisterPage = lazy(() => import("@/pages/auth/register"));
+const GlobalErrorPage = lazy(() => import("@/pages/global-error"));
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
@@ -60,7 +61,7 @@ export const router = createBrowserRouter([
     ),
     errorElement: (
       <ErrorBoundary>
-        <NotFoundPage />
+        <GlobalErrorPage />
       </ErrorBoundary>
     ),
     children: [

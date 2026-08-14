@@ -1,8 +1,10 @@
 from datetime import UTC, datetime
+
 import pytest
 
 from app.core.errors import InvalidStateTransitionError
 from app.domain.jobs.models import Job, JobStatus
+
 
 def test_job_valid_transitions():
     now = datetime.now(UTC)

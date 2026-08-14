@@ -1,6 +1,6 @@
 """JWT Token service."""
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import jwt
 
@@ -10,7 +10,7 @@ from app.core.settings import get_settings
 def create_access_token(user_id: str, tenant_id: str | None = None) -> str:
     """Create a signed JWT access token."""
     settings = get_settings()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     expires = now + timedelta(minutes=settings.jwt_expire_minutes)
 
     payload = {

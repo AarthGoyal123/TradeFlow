@@ -1,6 +1,7 @@
 """Celery application and task definitions."""
 
 import logging
+
 from celery import Celery
 
 from app.core.settings import get_settings

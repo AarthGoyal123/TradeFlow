@@ -174,7 +174,7 @@ def _build_client(tmp_path: Path):
     user = create_test_user()
     override_auth(app, user, tenant_id="test_tenant")
 
-    return TestClient(app), upload_dir, output_dir, db_path
+    return TestClient(app, base_url="http://testserver/api/v1"), upload_dir, output_dir, db_path
 
 
 def _upload_workbook_via_api(client: TestClient) -> str:

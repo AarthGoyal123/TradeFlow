@@ -12,9 +12,7 @@ from app.api.dependencies import (
     get_job_service,
     get_output_storage,
     get_processing_report_repository,
-    get_processing_service,
 )
-from app.api.security import CurrentUserContext, require_tenant_access
 from app.api.schemas.jobs import (
     ColumnMappingExplanationResponse,
     DataQualityResponse,
@@ -24,14 +22,12 @@ from app.api.schemas.jobs import (
     JobReportResponse,
     JobUploadResponse,
     OutputArtifactResponse,
-    ProcessingIssueResponse,
-    ProcessingProgressResponse,
     ProcessingResponse,
     SemanticAnalysisResponse,
     StructureAnalysisResponse,
 )
+from app.api.security import CurrentUserContext, require_tenant_access
 from app.application.jobs.service import JobService
-from app.application.processing.service import ProcessingService
 from app.application.workbooks.intelligence_service import WorkbookIntelligenceService
 from app.core.logging import log_extra
 from app.domain.jobs.models import Job, JobStatus

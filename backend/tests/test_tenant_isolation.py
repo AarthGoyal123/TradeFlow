@@ -2,13 +2,13 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.main import create_app
-from tests.helpers.auth import create_test_user, override_auth, clear_auth_override
+from tests.helpers.auth import clear_auth_override, create_test_user, override_auth
 
 
 @pytest.fixture
 def client():
     app = create_app()
-    return TestClient(app)
+    return TestClient(app, base_url="http://testserver/api/v1")
 
 
 def test_tenant_isolation_jobs_and_outputs(client: TestClient) -> None:

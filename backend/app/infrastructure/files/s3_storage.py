@@ -2,15 +2,15 @@
 
 import os
 from pathlib import Path
-from typing import BinaryIO, Optional
+from typing import BinaryIO
 
 import boto3
 from botocore.exceptions import ClientError
 
 from app.core.errors import StorageError
+from app.domain.jobs.ports import UploadedFileStorage
 from app.domain.outputs.models import OutputArtifact, OutputType
 from app.domain.outputs.ports import OutputStorage
-from app.domain.jobs.ports import UploadedFileStorage
 
 
 class S3OutputStorage(OutputStorage):

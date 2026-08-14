@@ -35,9 +35,9 @@ def create_app() -> FastAPI:
 
     register_exception_handlers(app)
     app.include_router(system_router)
-    app.include_router(auth_router)
-    app.include_router(templates_router, dependencies=[Depends(csrf_protect)])
-    app.include_router(jobs_router, dependencies=[Depends(csrf_protect)])
+    app.include_router(auth_router, prefix="/api/v1")
+    app.include_router(templates_router, prefix="/api/v1", dependencies=[Depends(csrf_protect)])
+    app.include_router(jobs_router, prefix="/api/v1", dependencies=[Depends(csrf_protect)])
 
     return app
 

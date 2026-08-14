@@ -7,7 +7,6 @@ from pathlib import Path
 
 def configure_logging(log_level: str) -> None:
     """Configure process-wide structured logging."""
-    import os
     from logging.handlers import RotatingFileHandler
 
     log_dir = Path("logs")

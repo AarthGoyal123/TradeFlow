@@ -4,7 +4,7 @@ import logging
 import secrets
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Response, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.responses import RedirectResponse
 
 from app.api.dependencies import get_auth_service, get_google_oauth_provider
@@ -29,6 +29,7 @@ def _set_auth_cookie(response: Response, token: str) -> None:
         secure=settings.cookie_secure,
         samesite=settings.cookie_samesite,
         max_age=settings.jwt_expire_minutes * 60,
+        path="/",
     )
 
 
@@ -133,16 +134,17 @@ async def google_login(
 ):
     """Initiate Google OAuth flow."""
     state = secrets.token_urlsafe(32)
+    nonce = secrets.token_urlsafe(32)
     code_verifier, code_challenge = oauth_provider.generate_pkce()
     
     settings = get_settings()
-    url = await oauth_provider.get_authorization_url(state, code_challenge)
+    url = await oauth_provider.get_authorization_url(state, code_challenge, nonce)
     redirect_response = RedirectResponse(url)
     
     # Store OAuth state in a short-lived secure HttpOnly cookie
     redirect_response.set_cookie(
         key="oauth_state",
-        value=f"{state}:{code_verifier}",
+        value=f"{state}:{code_verifier}:{nonce}",
         httponly=True,
         secure=settings.cookie_secure,
         samesite="lax",
@@ -181,7 +183,7 @@ async def google_callback(
     )
     
     try:
-        saved_state, code_verifier = oauth_cookie.split(":", 1)
+        saved_state, code_verifier, expected_nonce = oauth_cookie.split(":", 2)
     except ValueError:
         return redirect_response
         
@@ -189,7 +191,7 @@ async def google_callback(
         return redirect_response
         
     try:
-        identity = await oauth_provider.authenticate(code, code_verifier)
+        identity = await oauth_provider.authenticate(code, code_verifier, expected_nonce)
         result = auth_service.authenticate_with_external_identity(identity)
         
         # Set normal TradeFlow session cookies on the redirect response itself

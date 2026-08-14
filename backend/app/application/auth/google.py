@@ -3,7 +3,7 @@
 import base64
 import hashlib
 import os
-from typing import Any
+import secrets
 
 import httpx
 import jwt
@@ -45,7 +45,7 @@ class GoogleOAuthProvider(AuthenticationProvider):
         ).decode("utf-8").rstrip("=")
         return code_verifier, code_challenge
 
-    async def get_authorization_url(self, state: str, code_challenge: str) -> str:
+    async def get_authorization_url(self, state: str, code_challenge: str, nonce: str) -> str:
         """Return the Google OAuth authorize URL."""
         params = {
             "client_id": self.client_id,
@@ -53,6 +53,7 @@ class GoogleOAuthProvider(AuthenticationProvider):
             "response_type": "code",
             "scope": "openid email profile",
             "state": state,
+            "nonce": nonce,
             "code_challenge": code_challenge,
             "code_challenge_method": "S256",
             "access_type": "online",
@@ -60,7 +61,7 @@ class GoogleOAuthProvider(AuthenticationProvider):
         query_string = "&".join(f"{k}={v}" for k, v in params.items())
         return f"{self.AUTHORIZE_URL}?{query_string}"
 
-    async def authenticate(self, code: str, code_verifier: str) -> ExternalIdentity:
+    async def authenticate(self, code: str, code_verifier: str, expected_nonce: str) -> ExternalIdentity:
         """Exchange code for tokens and verify the ID token."""
         data = {
             "client_id": self.client_id,
@@ -82,10 +83,10 @@ class GoogleOAuthProvider(AuthenticationProvider):
         if not id_token:
             raise ValueError("No id_token received from Google")
 
-        identity = self._verify_id_token(id_token)
+        identity = self._verify_id_token(id_token, expected_nonce)
         return identity
 
-    def _verify_id_token(self, id_token: str) -> ExternalIdentity:
+    def _verify_id_token(self, id_token: str, expected_nonce: str) -> ExternalIdentity:
         """Verify the Google ID token and return an ExternalIdentity."""
         signing_key = self.jwks_client.get_signing_key_from_jwt(id_token)
 
@@ -98,6 +99,10 @@ class GoogleOAuthProvider(AuthenticationProvider):
             )
         except jwt.PyJWTError as e:
             raise ValueError(f"Invalid ID token: {e}")
+
+        token_nonce = payload.get("nonce")
+        if not token_nonce or not secrets.compare_digest(token_nonce, expected_nonce):
+            raise ValueError("Invalid or missing nonce")
 
         issuer = payload.get("iss")
         if issuer not in self.ISSUERS:

@@ -22,7 +22,7 @@ from app.domain.outputs.ports import OutputStorage, ProcessingReportRepository
 from app.domain.rules.evaluator import RuleEvaluator
 from app.domain.rules.operators import RuleOperatorRegistry, default_operators
 from app.domain.workbooks.synonyms import GlobalSynonymDictionary, IndustrySynonymDictionary
-from app.infrastructure.database import get_session_factory, SQLAlchemyJobRepository
+from app.infrastructure.database import SQLAlchemyJobRepository, get_session_factory
 from app.infrastructure.database.auth_repository import SQLAlchemyAuthRepository
 from app.infrastructure.excel.openpyxl_loader import OpenPyXLWorkbookLoader
 from app.infrastructure.excel.output_builder import OpenPyXLOutputWorkbookBuilder

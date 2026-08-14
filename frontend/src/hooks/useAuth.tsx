@@ -6,6 +6,7 @@ import { getCurrentUser, User } from "@/api/auth";
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  isFetching: boolean;
   error: Error | null;
   refreshUser: () => Promise<void>;
 }
@@ -15,7 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, isFetching, error } = useQuery({
     queryKey: ["currentUser"],
     queryFn: getCurrentUser,
     retry: false, // Don't retry if 401 Unauthorized
@@ -28,6 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = {
     user: data?.user || null,
     isLoading,
+    isFetching,
     error: error as Error | null,
     refreshUser,
   };

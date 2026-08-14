@@ -17,10 +17,8 @@ def register_exception_handlers(app: FastAPI) -> None:
     async def handle_tradeflow_error(_: Request, exc: TradeFlowError) -> JSONResponse:
         from app.core.errors import (
             BusinessRuleError,
-            JobNotFoundError,
             StorageError,
             SystemError,
-            TemplateNotFoundError,
             ValidationError,
         )
 

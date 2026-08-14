@@ -1,11 +1,13 @@
 import io
-import pytest
 from pathlib import Path
+
+import pytest
 
 from app.application.jobs.service import JobService
 from app.core.errors import StorageError
 from app.domain.outputs.models import OutputType
 from app.infrastructure.files.local_outputs import LocalOutputStorage
+
 
 def test_original_filename_sanitized(mocker) -> None:
     job_repo = mocker.Mock()
