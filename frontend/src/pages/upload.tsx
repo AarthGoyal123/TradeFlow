@@ -46,9 +46,16 @@ export default function UploadPage() {
           file,
           onProgress: setUploadProgress,
         });
-        await processJob.mutateAsync(result.job_id);
-
-        navigate(`/jobs/${result.job_id}`);
+        processJob.mutate(result.job_id, {
+          onSuccess: (data) => {
+            navigate(`/jobs/${data.job_id}`);
+          },
+          onError: () => {
+            // If the queue request fails, we still want to navigate to the job detail
+            // where the user can see the status or try again
+            navigate(`/jobs/${result.job_id}`);
+          }
+        });
       } catch {
         // handled by mutation state
       }
