@@ -40,6 +40,7 @@ def test_cleanup_old_jobs() -> None:
     upload_storage.delete_upload.assert_called_once_with("job-1.xlsx")
     output_storage.delete_job_outputs.assert_called_once_with("job-1")
 
+
 def test_cleanup_handles_storage_errors() -> None:
     job_repo = Mock()
     upload_storage = Mock()
@@ -72,12 +73,12 @@ def test_cleanup_handles_storage_errors() -> None:
     )
 
     job_repo.get_terminal_jobs_older_than.return_value = [old_job1, old_job2]
-    
+
     # First deletion fails
     upload_storage.delete_upload.side_effect = [Exception("Storage error"), None]
 
     processed = service.cleanup_old_jobs()
 
-    assert processed == 1 # Second job should succeed
+    assert processed == 1  # Second job should succeed
     assert upload_storage.delete_upload.call_count == 2
-    assert output_storage.delete_job_outputs.call_count == 1 # Only called for job-2
+    assert output_storage.delete_job_outputs.call_count == 1  # Only called for job-2

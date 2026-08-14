@@ -40,12 +40,14 @@ class GoogleOAuthProvider(AuthenticationProvider):
     def generate_pkce() -> tuple[str, str]:
         """Generate PKCE verifier and challenge."""
         code_verifier = base64.urlsafe_b64encode(os.urandom(32)).decode("utf-8").rstrip("=")
-        code_challenge = base64.urlsafe_b64encode(
-            hashlib.sha256(code_verifier.encode("utf-8")).digest()
-        ).decode("utf-8").rstrip("=")
+        code_challenge = (
+            base64.urlsafe_b64encode(hashlib.sha256(code_verifier.encode("utf-8")).digest())
+            .decode("utf-8")
+            .rstrip("=")
+        )
         return code_verifier, code_challenge
 
-    async def get_authorization_url(self, state: str, code_challenge: str, nonce: str) -> str:
+    async def get_authorization_url(self, state: str, code_challenge: str, nonce: str = '') -> str:
         """Return the Google OAuth authorize URL."""
         params = {
             "client_id": self.client_id,
@@ -61,7 +63,9 @@ class GoogleOAuthProvider(AuthenticationProvider):
         query_string = "&".join(f"{k}={v}" for k, v in params.items())
         return f"{self.AUTHORIZE_URL}?{query_string}"
 
-    async def authenticate(self, code: str, code_verifier: str, expected_nonce: str) -> ExternalIdentity:
+    async def authenticate(
+        self, code: str, code_verifier: str, expected_nonce: str
+    ) -> ExternalIdentity:
         """Exchange code for tokens and verify the ID token."""
         data = {
             "client_id": self.client_id,
@@ -98,7 +102,7 @@ class GoogleOAuthProvider(AuthenticationProvider):
                 audience=self.client_id,
             )
         except jwt.PyJWTError as e:
-            raise ValueError(f"Invalid ID token: {e}")
+            raise ValueError(f"Invalid ID token: {e}") from e
 
         token_nonce = payload.get("nonce")
         if not token_nonce or not secrets.compare_digest(token_nonce, expected_nonce):

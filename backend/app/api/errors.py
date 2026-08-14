@@ -51,9 +51,11 @@ def register_exception_handlers(app: FastAPI) -> None:
         # Safe business/validation errors
         # Sanitize known sensitive keys just in case
         safe_details = {
-            k: v for k, v in exc.details.items() if "path" not in k.lower() and "file" not in k.lower()
+            k: v
+            for k, v in exc.details.items()
+            if "path" not in k.lower() and "file" not in k.lower()
         }
-        
+
         return JSONResponse(
             status_code=status_code,
             content={

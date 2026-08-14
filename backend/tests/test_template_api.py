@@ -1,4 +1,3 @@
-
 from tests.helpers.auth import create_authenticated_client
 
 

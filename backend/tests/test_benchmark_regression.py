@@ -164,7 +164,8 @@ def test_benchmark_semantic_detects_country_and_hs() -> None:
 
 
 def test_benchmark_full_pipeline() -> None:
-    """End-to-end test: upload, validate, build dataset, remove columns, normalize, reorder, output."""
+    """End-to-end test: upload, validate, build dataset, remove columns,
+    normalize, reorder, output."""
     import shutil
     import tempfile
     from uuid import uuid4

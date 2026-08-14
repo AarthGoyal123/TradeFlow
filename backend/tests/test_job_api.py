@@ -141,9 +141,9 @@ def _client_with_temp_job_service(
     )
     app = create_app()
     app.dependency_overrides[get_job_service] = lambda: job_service
-    
+
     # Override auth to simulate logged in user
     user = create_test_user()
     override_auth(app, user, tenant_id="test_tenant")
-    
+
     return TestClient(app, base_url="http://testserver/api/v1"), upload_dir

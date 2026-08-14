@@ -1,6 +1,7 @@
 """SQLAlchemy declarative models for persistence."""
 
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import JSON, Boolean, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -21,7 +22,9 @@ class JobModel(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), nullable=True, index=True)
-    tenant_id: Mapped[str] = mapped_column(String, ForeignKey("tenants.id"), nullable=True, index=True)
+    tenant_id: Mapped[str] = mapped_column(
+        String, ForeignKey("tenants.id"), nullable=True, index=True
+    )
 
 
 class TenantModel(Base):
@@ -55,7 +58,9 @@ class TenantMembershipModel(Base):
     __tablename__ = "tenant_memberships"
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
-    tenant_id: Mapped[str] = mapped_column(String, ForeignKey("tenants.id"), nullable=False, index=True)
+    tenant_id: Mapped[str] = mapped_column(
+        String, ForeignKey("tenants.id"), nullable=False, index=True
+    )
     user_id: Mapped[str] = mapped_column(String, ForeignKey("users.id"), nullable=False, index=True)
     role: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
@@ -72,8 +77,8 @@ class JobReportModel(Base):
     clean_rows: Mapped[int] = mapped_column(Integer, nullable=False)
     removed_rows: Mapped[int] = mapped_column(Integer, nullable=False)
     needs_review_rows: Mapped[int] = mapped_column(Integer, nullable=False)
-    rule_matches: Mapped[dict] = mapped_column(JSON, nullable=False)
-    validation_findings: Mapped[list] = mapped_column(JSON, nullable=False)
+    rule_matches: Mapped[dict[str, Any] | None] = mapped_column(JSON, nullable=True)
+    validation_findings: Mapped[list[Any] | None] = mapped_column(JSON, nullable=True)
 
     outputs: Mapped[list["OutputArtifactModel"]] = relationship(
         "OutputArtifactModel",
@@ -95,9 +100,7 @@ class OutputArtifactModel(Base):
     filename: Mapped[str] = mapped_column(Text, nullable=False)
     path: Mapped[str] = mapped_column(Text, nullable=False)
 
-    report: Mapped["JobReportModel"] = relationship(
-        "JobReportModel", back_populates="outputs"
-    )
+    report: Mapped["JobReportModel"] = relationship("JobReportModel", back_populates="outputs")
 
 
 class UserIdentityModel(Base):
@@ -114,5 +117,7 @@ class UserIdentityModel(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
     __table_args__ = (
-        UniqueConstraint("provider", "provider_subject", name="uq_user_identities_provider_subject"),
+        UniqueConstraint(
+            "provider", "provider_subject", name="uq_user_identities_provider_subject"
+        ),
     )

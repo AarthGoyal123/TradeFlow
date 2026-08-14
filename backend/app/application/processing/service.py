@@ -7,9 +7,9 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from app.domain.jobs.models import Job
     from app.domain.datasets.models import IntermediateDataset
-    from app.domain.templates.models import Template
+    from app.domain.jobs.models import Job
+    from app.domain.templates.models import Template  # type: ignore
 
 from app.application.processing.cleaning_service import DataCleaningService
 from app.application.processing.dataset_builder import IntermediateDatasetBuilder
@@ -226,7 +226,7 @@ class ProcessingService:
                 cleaning_config=cleaning_config,
             )
             self._record(progress, "cleaning", "completed", "Field values cleaned per template")
-            
+
         return dataset, rule_report
 
     def _select_validated_worksheet(

@@ -2,6 +2,7 @@
 
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
@@ -17,7 +18,7 @@ from app.infrastructure.database.models import JobModel, JobReportModel, OutputA
 class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
     """SQLAlchemy implementation of JobRepository and ProcessingReportRepository."""
 
-    def __init__(self, session_factory) -> None:
+    def __init__(self, session_factory: Any) -> None:
         """Initialize with a session factory."""
         self._session_factory = session_factory
 
@@ -69,26 +70,35 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
             with self._session_factory() as session:
                 stmt = select(JobModel).where(JobModel.job_id == job_id)
                 row = session.execute(stmt).scalar_one_or_none()
-                
+
                 if row is None:
                     raise JobNotFoundError("Job not found", details={"job_id": job_id})
-                
+
                 current_status = JobStatus(row.status)
                 # Ensure status transitions are valid
                 if status == JobStatus.QUEUED:
                     if current_status not in (JobStatus.UPLOADED, JobStatus.FAILED):
-                        raise StorageError("Invalid state transition", details={"from": current_status.value, "to": status.value})
+                        raise StorageError(
+                            "Invalid state transition",
+                            details={"from": current_status.value, "to": status.value},
+                        )
                 elif status == JobStatus.PROCESSING:
                     if current_status not in (JobStatus.UPLOADED, JobStatus.QUEUED):
-                        raise StorageError("Invalid state transition", details={"from": current_status.value, "to": status.value})
+                        raise StorageError(
+                            "Invalid state transition",
+                            details={"from": current_status.value, "to": status.value},
+                        )
                 elif status in (JobStatus.COMPLETED, JobStatus.FAILED):
                     if current_status not in (JobStatus.PROCESSING, JobStatus.QUEUED):
-                        raise StorageError("Invalid state transition", details={"from": current_status.value, "to": status.value})
+                        raise StorageError(
+                            "Invalid state transition",
+                            details={"from": current_status.value, "to": status.value},
+                        )
 
                 row.status = status.value
                 row.updated_at = now
                 session.commit()
-                
+
         except JobNotFoundError:
             raise
         except SQLAlchemyError as exc:
@@ -104,7 +114,7 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
             with self._session_factory() as session:
                 stmt = select(JobModel).where(
                     JobModel.status.in_([JobStatus.COMPLETED.value, JobStatus.FAILED.value]),
-                    JobModel.updated_at < threshold
+                    JobModel.updated_at < threshold,
                 )
                 rows = session.execute(stmt).scalars().all()
                 return [self._model_to_job(row) for row in rows]
@@ -121,7 +131,7 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
                 # Upsert processing report
                 stmt = select(JobReportModel).where(JobReportModel.job_id == summary.job_id)
                 report = session.execute(stmt).scalar_one_or_none()
-                
+
                 if report is None:
                     report = JobReportModel(
                         job_id=summary.job_id,
@@ -135,12 +145,13 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
                 report.needs_review_rows = summary.needs_review_rows
                 report.rule_matches = summary.rule_matches
                 report.validation_findings = summary.validation_findings
-                
-                # Delete existing outputs manually just in case, though cascade="all, delete-orphan" handles some
+
+                # Delete existing outputs manually just in case
+                # cascade="all, delete-orphan" handles some
                 for out in report.outputs:
                     session.delete(out)
                 report.outputs = []
-                
+
                 # Insert outputs
                 for artifact in summary.outputs:
                     out_model = OutputArtifactModel(
@@ -150,9 +161,9 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
                         path=str(artifact.path),
                     )
                     report.outputs.append(out_model)
-                
+
                 session.commit()
-                
+
         except SQLAlchemyError as exc:
             raise StorageError(
                 "Failed to save processing summary",
@@ -166,10 +177,10 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
             with self._session_factory() as session:
                 stmt = select(JobReportModel).where(JobReportModel.job_id == job_id)
                 report = session.execute(stmt).scalar_one_or_none()
-                
+
                 if report is None:
                     raise StorageError("Processing report not found", details={"job_id": job_id})
-                
+
                 outputs = tuple(
                     OutputArtifact(
                         output_type=OutputType(out.output_type),
@@ -178,7 +189,7 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
                     )
                     for out in report.outputs
                 )
-                
+
                 return ProcessingSummary(
                     job_id=report.job_id,
                     template_id=report.template_id,
@@ -190,7 +201,7 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
                     validation_findings=report.validation_findings,
                     outputs=outputs,
                 )
-                
+
         except StorageError:
             raise
         except SQLAlchemyError as exc:
@@ -201,9 +212,13 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
 
     def _model_to_job(self, row: JobModel) -> Job:
         # Pydantic models expect UTC datetime. If DB doesn't store tzinfo, attach it
-        created_at = row.created_at.replace(tzinfo=UTC) if row.created_at.tzinfo is None else row.created_at
-        updated_at = row.updated_at.replace(tzinfo=UTC) if row.updated_at.tzinfo is None else row.updated_at
-        
+        created_at = (
+            row.created_at.replace(tzinfo=UTC) if row.created_at.tzinfo is None else row.created_at
+        )
+        updated_at = (
+            row.updated_at.replace(tzinfo=UTC) if row.updated_at.tzinfo is None else row.updated_at
+        )
+
         return Job(
             job_id=row.job_id,
             template_id=row.template_id,

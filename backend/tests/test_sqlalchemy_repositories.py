@@ -36,13 +36,13 @@ def test_create_and_get_job(repository):
         stored_filename="stored_test.xlsx",
         status=JobStatus.UPLOADED,
     )
-    
+
     job = repository.create_job(job_cmd)
-    
+
     assert job.job_id == "job-123"
     assert job.template_id == "tpl-456"
     assert job.status == JobStatus.UPLOADED
-    
+
     # Retrieve
     fetched = repository.get_job("job-123")
     assert fetched.job_id == "job-123"
@@ -58,17 +58,17 @@ def test_update_status(repository):
         status=JobStatus.UPLOADED,
     )
     repository.create_job(job_cmd)
-    
+
     # Valid transition
     job = repository.update_status("job-2", JobStatus.QUEUED)
     assert job.status == JobStatus.QUEUED
-    
+
     job = repository.update_status("job-2", JobStatus.PROCESSING)
     assert job.status == JobStatus.PROCESSING
-    
+
     job = repository.update_status("job-2", JobStatus.COMPLETED)
     assert job.status == JobStatus.COMPLETED
-    
+
     # Invalid transition
     with pytest.raises(StorageError):
         repository.update_status("job-2", JobStatus.QUEUED)
@@ -89,15 +89,13 @@ def test_save_and_get_summary(repository):
         status=JobStatus.UPLOADED,
     )
     repository.create_job(job_cmd)
-    
+
     outputs = (
         OutputArtifact(
-            output_type=OutputType.CLEAN_DATA,
-            filename="clean.xlsx",
-            path=Path("/tmp/clean.xlsx")
+            output_type=OutputType.CLEAN_DATA, filename="clean.xlsx", path=Path("/tmp/clean.xlsx")
         ),
     )
-    
+
     summary = ProcessingSummary(
         job_id="job-3",
         template_id="tpl-3",
@@ -109,12 +107,12 @@ def test_save_and_get_summary(repository):
         validation_findings=[{"row": 1, "msg": "err"}],
         outputs=outputs,
     )
-    
+
     saved = repository.save_summary(summary)
     assert saved.job_id == "job-3"
     assert saved.total_rows == 10
     assert len(saved.outputs) == 1
-    
+
     # Retrieve
     fetched = repository.get_summary("job-3")
     assert fetched.clean_rows == 8

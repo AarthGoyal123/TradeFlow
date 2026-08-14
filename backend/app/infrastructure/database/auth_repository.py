@@ -55,15 +55,20 @@ class SQLAlchemyAuthRepository(AuthRepository):
 
     def get_membership(self, user_id: str, tenant_id: str) -> TenantMembership | None:
         stmt = select(TenantMembershipModel).where(
-            TenantMembershipModel.user_id == user_id,
-            TenantMembershipModel.tenant_id == tenant_id
+            TenantMembershipModel.user_id == user_id, TenantMembershipModel.tenant_id == tenant_id
         )
         model = self.session.scalars(stmt).first()
         if not model:
             return None
         return self._to_membership(model)
 
-    def create_account(self, user: User, tenant: Tenant, membership: TenantMembership, identity: UserIdentity | None = None) -> None:
+    def create_account(
+        self,
+        user: User,
+        tenant: Tenant,
+        membership: TenantMembership,
+        identity: UserIdentity | None = None,
+    ) -> None:
         """Atomically create a tenant, user, membership, and optionally an identity."""
         user_model = UserModel(
             id=user.id,
@@ -91,7 +96,7 @@ class SQLAlchemyAuthRepository(AuthRepository):
         self.session.add(user_model)
         self.session.add(tenant_model)
         self.session.add(membership_model)
-        
+
         if identity:
             identity_model = UserIdentityModel(
                 id=identity.id,
@@ -103,17 +108,17 @@ class SQLAlchemyAuthRepository(AuthRepository):
                 updated_at=identity.updated_at,
             )
             self.session.add(identity_model)
-            
+
         try:
             self.session.commit()
         except IntegrityError:
             self.session.rollback()
-            raise AccountAlreadyExistsError()
+            raise AccountAlreadyExistsError() from None
 
     def get_user_identity(self, provider: str, provider_subject: str) -> UserIdentity | None:
         stmt = select(UserIdentityModel).where(
             UserIdentityModel.provider == provider,
-            UserIdentityModel.provider_subject == provider_subject
+            UserIdentityModel.provider_subject == provider_subject,
         )
         model = self.session.scalars(stmt).first()
         if not model:
@@ -143,7 +148,7 @@ class SQLAlchemyAuthRepository(AuthRepository):
             self.session.commit()
         except IntegrityError:
             self.session.rollback()
-            raise IdentityAlreadyExistsError()
+            raise IdentityAlreadyExistsError() from None
 
     def _to_user(self, model: UserModel) -> User:
         return User(

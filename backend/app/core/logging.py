@@ -11,15 +11,15 @@ def configure_logging(log_level: str) -> None:
 
     log_dir = Path("logs")
     log_dir.mkdir(exist_ok=True)
-    
+
     file_handler = RotatingFileHandler(
         log_dir / "tradeflow.log",
         maxBytes=10 * 1024 * 1024,  # 10 MB
-        backupCount=5
+        backupCount=5,
     )
-    
+
     stream_handler = logging.StreamHandler(sys.stdout)
-    
+
     logging.basicConfig(
         level=log_level.upper(),
         format=(

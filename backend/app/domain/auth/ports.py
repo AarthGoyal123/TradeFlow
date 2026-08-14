@@ -40,7 +40,13 @@ class AuthRepository(Protocol):
         """Get a specific membership."""
         ...
 
-    def create_account(self, user: User, tenant: Tenant, membership: TenantMembership, identity: UserIdentity | None = None) -> None:
+    def create_account(
+        self,
+        user: User,
+        tenant: Tenant,
+        membership: TenantMembership,
+        identity: UserIdentity | None = None,
+    ) -> None:
         """Atomically create a tenant, user, membership, and optionally an identity."""
         ...
 

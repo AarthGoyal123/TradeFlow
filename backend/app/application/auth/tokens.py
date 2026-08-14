@@ -1,6 +1,7 @@
 """JWT Token service."""
 
 from datetime import UTC, datetime, timedelta
+from typing import Any
 
 import jwt
 
@@ -13,7 +14,7 @@ def create_access_token(user_id: str, tenant_id: str | None = None) -> str:
     now = datetime.now(UTC)
     expires = now + timedelta(minutes=settings.jwt_expire_minutes)
 
-    payload = {
+    payload: dict[str, Any] = {
         "sub": user_id,
         "exp": expires,
         "iat": now,

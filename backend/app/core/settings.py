@@ -20,10 +20,10 @@ class Settings(BaseSettings):
     max_upload_size_mb: int = Field(default=50, gt=0)
     allowed_extensions: tuple[str, ...] = (".xlsx", ".xls")
     upload_size_limit_mb: int = 50
-    
+
     # Persistence
     database_url: str = "sqlite:///./data/tradeflow.db"
-    
+
     # Storage Architecture
     storage_backend: Literal["local", "s3"] = "local"
     s3_endpoint_url: str | None = None
@@ -31,11 +31,11 @@ class Settings(BaseSettings):
     s3_secret_key: str | None = None
     s3_bucket_name: str | None = None
     s3_region: str | None = None
-    
+
     # Infrastructure
     log_level: str = "INFO"
     cors_origins: list[str] = Field(default_factory=lambda: ["*"])
-    
+
     # Background Processing Configuration
     job_executor: Literal["sync", "celery"] = "sync"
     celery_broker_url: str = "memory://"
@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     google_client_id: str | None = None
     google_client_secret: str | None = None
     google_redirect_uri: str | None = None
-    
+
     # Frontend config for callbacks
     frontend_url: str = "http://localhost:5173"
 
@@ -85,12 +85,11 @@ class Settings(BaseSettings):
         """Return SQLite database path for local file-backed URLs."""
         prefix = "sqlite:///"
         if not self.database_url.startswith(prefix):
-            return Path() # Return empty path for non-sqlite backends, let sqlalchemy handle them.
+            return Path()  # Return empty path for non-sqlite backends, let sqlalchemy handle them.
         database_path = Path(self.database_url.removeprefix(prefix))
         if database_path.is_absolute():
             return database_path
         return (Path.cwd() / database_path).resolve()
-
 
     @model_validator(mode="after")
     def validate_production_settings(self) -> "Settings":
@@ -105,9 +104,13 @@ class Settings(BaseSettings):
                 raise ValueError("TRADEFLOW_CORS_ORIGINS must not contain '*' in production")
             if self.google_client_id:
                 if not self.google_client_secret:
-                    raise ValueError("TRADEFLOW_GOOGLE_CLIENT_SECRET is required when using Google OAuth")
+                    raise ValueError(
+                        "TRADEFLOW_GOOGLE_CLIENT_SECRET is required when using Google OAuth"
+                    )
                 if not self.google_redirect_uri:
-                    raise ValueError("TRADEFLOW_GOOGLE_REDIRECT_URI is required when using Google OAuth")
+                    raise ValueError(
+                        "TRADEFLOW_GOOGLE_REDIRECT_URI is required when using Google OAuth"
+                    )
         return self
 
 

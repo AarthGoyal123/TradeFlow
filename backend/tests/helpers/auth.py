@@ -23,7 +23,9 @@ def create_test_tenant(tenant_id: str = "test_tenant", name: str = "Test Tenant"
     )
 
 
-def create_test_user(user_id: str = "test_user", email: str = "test@example.com", display_name: str = "Test User") -> User:
+def create_test_user(
+    user_id: str = "test_user", email: str = "test@example.com", display_name: str = "Test User"
+) -> User:
     return User(
         id=user_id,
         email=email,
@@ -43,7 +45,7 @@ def override_auth(
 ) -> None:
     """Override FastAPI dependency injection to simulate an authenticated user."""
     context = CurrentUserContext(user=user, tenant_id=tenant_id)
-    
+
     app.dependency_overrides[get_current_user_context] = lambda: context
     app.dependency_overrides[csrf_protect] = lambda: None
     # If the route also uses require_tenant_access explicitly

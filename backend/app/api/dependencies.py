@@ -60,13 +60,20 @@ def get_template_service() -> TemplateService:
 def _get_uploaded_file_storage() -> UploadedFileStorage:
     settings = get_settings()
     if settings.storage_backend == "s3":
-        if not all([settings.s3_endpoint_url, settings.s3_access_key, settings.s3_secret_key, settings.s3_bucket_name]):
+        if not all(
+            [
+                settings.s3_endpoint_url,
+                settings.s3_access_key,
+                settings.s3_secret_key,
+                settings.s3_bucket_name,
+            ]
+        ):
             raise ValueError("S3 storage requested but S3 configuration is incomplete.")
         return S3UploadedFileStorage(
-            endpoint_url=settings.s3_endpoint_url,
-            access_key=settings.s3_access_key,
-            secret_key=settings.s3_secret_key,
-            bucket_name=settings.s3_bucket_name,
+            endpoint_url=settings.s3_endpoint_url or '',
+            access_key=settings.s3_access_key or '',
+            secret_key=settings.s3_secret_key or '',
+            bucket_name=settings.s3_bucket_name or '',
             region=settings.s3_region or "us-east-1",
             max_size_mb=settings.max_upload_size_mb,
             allowed_extensions=settings.allowed_extensions,
@@ -80,13 +87,20 @@ def _get_uploaded_file_storage() -> UploadedFileStorage:
 def _get_output_storage() -> OutputStorage:
     settings = get_settings()
     if settings.storage_backend == "s3":
-        if not all([settings.s3_endpoint_url, settings.s3_access_key, settings.s3_secret_key, settings.s3_bucket_name]):
+        if not all(
+            [
+                settings.s3_endpoint_url,
+                settings.s3_access_key,
+                settings.s3_secret_key,
+                settings.s3_bucket_name,
+            ]
+        ):
             raise ValueError("S3 storage requested but S3 configuration is incomplete.")
         return S3OutputStorage(
-            endpoint_url=settings.s3_endpoint_url,
-            access_key=settings.s3_access_key,
-            secret_key=settings.s3_secret_key,
-            bucket_name=settings.s3_bucket_name,
+            endpoint_url=settings.s3_endpoint_url or '',
+            access_key=settings.s3_access_key or '',
+            secret_key=settings.s3_secret_key or '',
+            bucket_name=settings.s3_bucket_name or '',
             region=settings.s3_region or "us-east-1",
         )
     return LocalOutputStorage(settings.resolved_output_dir)
@@ -99,7 +113,7 @@ def get_auth_repository() -> AuthRepository:
 
 
 def get_auth_service(
-    auth_repository: AuthRepository = Depends(get_auth_repository),
+    auth_repository: AuthRepository = Depends(get_auth_repository),  # noqa: B008
 ) -> AuthService:
     """Dependency provider for AuthService."""
     return AuthService(auth_repository)
@@ -202,7 +216,6 @@ def get_rule_evaluation_service() -> RuleEvaluationService:
 
 
 def get_processing_report_repository() -> ProcessingReportRepository:
-    settings = get_settings()
     return SQLAlchemyJobRepository(get_session_factory())
 
 
@@ -226,14 +239,17 @@ def _build_rule_evaluation_service(
 
 
 def get_job_executor(
-    processing_service: "app.application.processing.service.ProcessingService" = Depends(get_processing_service)
+    processing_service: "app.application.processing.service.ProcessingService" = Depends(  # noqa: B008, F821
+        get_processing_service
+    ),
 ) -> JobExecutor:
     settings = get_settings()
-    
+
     if settings.job_executor == "celery":
         from app.infrastructure.jobs.celery_executor import CeleryJobExecutor
+
         return CeleryJobExecutor()
     else:
         from app.infrastructure.jobs.local_executor import SynchronousJobExecutor
-        return SynchronousJobExecutor(processing_service)
 
+        return SynchronousJobExecutor(processing_service)

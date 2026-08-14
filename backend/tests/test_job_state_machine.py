@@ -17,20 +17,21 @@ def test_job_valid_transitions():
         created_at=now,
         updated_at=now,
     )
-    
+
     # Valid: UPLOADED -> PROCESSING
     new_now = datetime.now(UTC)
     job2 = job.transition_to(JobStatus.PROCESSING, new_now)
     assert job2.status == JobStatus.PROCESSING
     assert job2.updated_at == new_now
-    
+
     # Valid: PROCESSING -> COMPLETED
     job3 = job2.transition_to(JobStatus.COMPLETED, new_now)
     assert job3.status == JobStatus.COMPLETED
-    
+
     # Valid: PROCESSING -> FAILED
     job4 = job2.transition_to(JobStatus.FAILED, new_now)
     assert job4.status == JobStatus.FAILED
+
 
 def test_job_invalid_transitions():
     now = datetime.now(UTC)
@@ -43,7 +44,7 @@ def test_job_invalid_transitions():
         created_at=now,
         updated_at=now,
     )
-    
+
     # Invalid: COMPLETED -> PROCESSING
     with pytest.raises(InvalidStateTransitionError):
         job.transition_to(JobStatus.PROCESSING, now)
@@ -60,7 +61,7 @@ def test_job_invalid_transitions():
     )
     with pytest.raises(InvalidStateTransitionError):
         failed_job.transition_to(JobStatus.COMPLETED, now)
-        
+
     # Valid: FAILED -> QUEUED (Retry)
     retried_job = failed_job.transition_to(JobStatus.QUEUED, now)
     assert retried_job.status == JobStatus.QUEUED

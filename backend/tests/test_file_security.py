@@ -20,16 +20,14 @@ def test_original_filename_sanitized(mocker) -> None:
         job_repository=job_repo,
         template_repository=template_repo,
         uploaded_file_storage=file_storage,
-        allowed_extensions=(".xlsx",)
+        allowed_extensions=(".xlsx",),
     )
 
     malicious_filename = "../../../etc/passwd.xlsx"
     service.create_uploaded_job(
-        template_id="t1",
-        original_filename=malicious_filename,
-        file=io.BytesIO(b"dummy")
+        template_id="t1", original_filename=malicious_filename, file=io.BytesIO(b"dummy")
     )
-    
+
     # Assert filename is sanitized
     file_storage.save.assert_called_once()
     assert file_storage.save.call_args[1]["original_filename"] == "passwd.xlsx"
@@ -37,7 +35,7 @@ def test_original_filename_sanitized(mocker) -> None:
 
 def test_local_output_storage_path_traversal(tmp_path: Path) -> None:
     storage = LocalOutputStorage(tmp_path)
-    
+
     # job_id with path traversal
     with pytest.raises(StorageError, match="Invalid output path"):
         storage.get_output(job_id="../../etc", output_type=OutputType.CLEAN_DATA)

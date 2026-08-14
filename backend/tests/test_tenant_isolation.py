@@ -15,7 +15,7 @@ def test_tenant_isolation_jobs_and_outputs(client: TestClient) -> None:
     # Setup Tenant A
     user_a = create_test_user(user_id="user_a", email="a@tenant.com")
     override_auth(client.app, user_a, tenant_id="tenant_a")
-    
+
     # Upload job A
     resp_a = client.post(
         "/jobs",
@@ -27,7 +27,7 @@ def test_tenant_isolation_jobs_and_outputs(client: TestClient) -> None:
 
     # Verify User A can access Job A
     assert client.get(f"/jobs/{job_a_id}").status_code == 200
-    
+
     # Setup Tenant B
     clear_auth_override(client.app)
     user_b = create_test_user(user_id="user_b", email="b@tenant.com")
@@ -44,27 +44,27 @@ def test_tenant_isolation_jobs_and_outputs(client: TestClient) -> None:
 
     # Verify User B can access Job B
     assert client.get(f"/jobs/{job_b_id}").status_code == 200
-    
+
     # Verify User B CANNOT access Job A
     resp_b_job_a = client.get(f"/jobs/{job_a_id}")
     assert resp_b_job_a.status_code == 404
     assert resp_b_job_a.json()["error"]["code"] == "job_not_found"
-    
+
     resp_b_proc_a = client.post(f"/jobs/{job_a_id}/process")
     assert resp_b_proc_a.status_code == 404
-    
+
     resp_b_intel_a = client.get(f"/jobs/{job_a_id}/intelligence")
     assert resp_b_intel_a.status_code == 404
-    
+
     resp_b_report_a = client.get(f"/jobs/{job_a_id}/report")
     assert resp_b_report_a.status_code == 404
 
     resp_b_out_a = client.get(f"/jobs/{job_a_id}/outputs/clean")
     assert resp_b_out_a.status_code == 404
-    
+
     # Re-authenticate as Tenant A
     clear_auth_override(client.app)
     override_auth(client.app, user_a, tenant_id="tenant_a")
-    
+
     # Verify User A CANNOT access Job B
     assert client.get(f"/jobs/{job_b_id}").status_code == 404

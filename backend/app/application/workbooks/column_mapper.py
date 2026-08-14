@@ -204,7 +204,7 @@ class TemplateColumnMapper:
         if required:
             code = "missing_required_column"
             if result.suggestions:
-                msg = f"Missing required field '{column.field}'. Closest match: {result.suggestions[0][0]} ({result.suggestions[0][1]:.0%})"
+                msg = f"Missing required field '{column.field}'. Closest match: {result.suggestions[0][0]} ({result.suggestions[0][1]:.0%})"  # noqa: E501
             else:
                 msg = f"Missing required field '{column.field}'"
         else:

@@ -15,14 +15,14 @@ class CeleryJobExecutor(JobExecutor):
         """Enqueue the job for asynchronous processing."""
         from app.api.dependencies import get_job_service
         from app.domain.jobs.models import JobStatus
-        
+
         logger.info(f"Submitting job {job_id} to celery")
-        
+
         # Enqueue the background task
         task = process_job_task.delay(job_id)
-        
+
         # Update job status to queued
         job_service = get_job_service()
-        job_service.job_repository.update_status(job_id, JobStatus.QUEUED)
-        
+        job_service._job_repository.update_status(job_id, JobStatus.QUEUED)
+
         logger.info(f"Job {job_id} successfully queued with task_id {task.id}")

@@ -24,17 +24,20 @@ from app.domain.auth.ports import (
 
 class AuthenticationError(TradeFlowError):
     """Exception raised for authentication failures."""
+
     pass
 
 
 class RegistrationError(TradeFlowError):
     """Exception raised for registration failures."""
+
     pass
 
 
 @dataclass
 class AuthResult:
     """Result of a successful authentication."""
+
     user: User
     token: str
 
@@ -45,7 +48,9 @@ class AuthService:
     def __init__(self, auth_repository: AuthRepository) -> None:
         self.auth_repo = auth_repository
 
-    def register(self, email: str, password: str, display_name: str, organization_name: str) -> AuthResult:
+    def register(
+        self, email: str, password: str, display_name: str, organization_name: str
+    ) -> AuthResult:
         """Register a new user and tenant atomically."""
         email = email.lower().strip()
         if not email or not password:
@@ -95,7 +100,7 @@ class AuthService:
         if not user or not user.is_active:
             raise AuthenticationError("Invalid email or password")
 
-        if not verify_password(password, user.password_hash):
+        if not verify_password(password, user.password_hash or ''):
             raise AuthenticationError("Invalid email or password")
 
         memberships = self.auth_repo.get_memberships_for_user(user.id)
@@ -112,7 +117,7 @@ class AuthService:
         if user_identity:
             user = self.auth_repo.get_user_by_id(user_identity.user_id)
             if not user or not user.is_active:
-                raise AuthenticationError("Account disabled or missing")
+                raise AuthenticationError("Account disabled or missing") from None
             return self._issue_token(user)
 
         # 2. Check if a user exists with this verified email
@@ -121,7 +126,7 @@ class AuthService:
 
         user = self.auth_repo.get_user_by_email(external.email)
         now = datetime.now(UTC)
-        
+
         if user:
             if not user.is_active:
                 raise AuthenticationError("Account disabled")
@@ -139,13 +144,15 @@ class AuthService:
                 self.auth_repo.create_user_identity(new_identity)
             except IdentityAlreadyExistsError:
                 # Concurrent request linked this identity. Re-query.
-                user_identity = self.auth_repo.get_user_identity(external.provider, external.subject)
+                user_identity = self.auth_repo.get_user_identity(
+                    external.provider, external.subject
+                )
                 if user_identity:
                     user = self.auth_repo.get_user_by_id(user_identity.user_id)
                     if not user or not user.is_active:
-                        raise AuthenticationError("Account disabled or missing")
+                        raise AuthenticationError("Account disabled or missing") from None
                     return self._issue_token(user)
-                raise AuthenticationError("Concurrent identity linking failed")
+                raise AuthenticationError("Concurrent identity linking failed") from None
             return self._issue_token(user)
 
         # 3. New user -> Auto register
@@ -192,10 +199,10 @@ class AuthService:
             if user_identity:
                 existing_user = self.auth_repo.get_user_by_id(user_identity.user_id)
                 if not existing_user or not existing_user.is_active:
-                    raise AuthenticationError("Account disabled or missing")
+                    raise AuthenticationError("Account disabled or missing") from None
                 return self._issue_token(existing_user)
-            raise RegistrationError("Concurrent registration failed")
-            
+            raise RegistrationError("Concurrent registration failed") from None
+
         return self._issue_token(user)
 
     def _issue_token(self, user: User) -> AuthResult:

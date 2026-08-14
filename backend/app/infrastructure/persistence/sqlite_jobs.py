@@ -106,10 +106,10 @@ class SQLiteJobRepository(JobRepository, ProcessingReportRepository):
                 row = connection.execute(
                     "SELECT * FROM jobs WHERE job_id = ?", (job_id,)
                 ).fetchone()
-                
+
                 if row is None:
                     raise JobNotFoundError("Job not found", details={"job_id": job_id})
-                    
+
                 job = self._row_to_job(row)
                 job = job.transition_to(status, now)
 
@@ -286,7 +286,7 @@ class SQLiteJobRepository(JobRepository, ProcessingReportRepository):
                     )
                     """
                 )
-                
+
                 # Non-destructive migration for existing tables
                 try:
                     connection.execute("ALTER TABLE jobs ADD COLUMN user_id TEXT")

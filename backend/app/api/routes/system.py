@@ -14,6 +14,6 @@ def health_check() -> dict[str, str]:
 @router.get("/ready")
 def readiness_check() -> dict[str, str]:
     """Return service readiness status."""
-    # A true readiness check might attempt a simple DB query or check 
+    # A true readiness check might attempt a simple DB query or check
     # if required directories exist, but keep it lightweight per constraints.
     return {"status": "ready"}

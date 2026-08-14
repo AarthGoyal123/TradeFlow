@@ -67,7 +67,12 @@ def create_job(
         tenant_id=context.tenant_id,
         user_id=context.user.id,
     )
-    logger.info("job_uploaded", extra=log_extra(job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id))
+    logger.info(
+        "job_uploaded",
+        extra=log_extra(
+            job_id=job.job_id, template_id=job.template_id, tenant_id=context.tenant_id
+        ),
+    )
     return JobUploadResponse(
         job_id=job.job_id,
         status=job.status,
@@ -107,12 +112,12 @@ def process_job(
             progress=[],
             errors=[],
         )
-        
+
     job_executor.submit_job(job_id)
-    
+
     # Reload job to get its updated status (could be QUEUED or PROCESSING)
     job = job_service.get_job(job_id, tenant_id=context.tenant_id)
-    
+
     return ProcessingResponse(
         job_id=job_id,
         template_id=job.template_id,

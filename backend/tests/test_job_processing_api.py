@@ -54,7 +54,7 @@ def test_processing_api_uploads_processes_downloads_and_reports(tmp_path) -> Non
     process_body = process_response.json()
     assert process_body["job_id"] == job_id
     assert process_body["status"] in ("queued", "processing", "completed")
-    
+
     get_response = client.get(f"/jobs/{job_id}")
     assert get_response.status_code == 200
     assert get_response.json()["status"] == "completed"
