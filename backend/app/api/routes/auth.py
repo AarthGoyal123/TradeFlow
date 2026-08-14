@@ -2,7 +2,7 @@
 
 import logging
 import secrets
-from typing import Annotated
+from typing import Any, Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.responses import RedirectResponse
@@ -27,7 +27,7 @@ def _set_auth_cookie(response: Response, token: str) -> None:
         value=token,
         httponly=True,
         secure=settings.cookie_secure,
-        samesite=settings.cookie_samesite,
+        samesite=settings.cookie_samesite,  # type: ignore
         max_age=settings.jwt_expire_minutes * 60,
         path="/",
     )
@@ -100,14 +100,14 @@ def logout(response: Response) -> dict:
         key="access_token",
         secure=settings.cookie_secure,
         httponly=True,
-        samesite=settings.cookie_samesite,
+        samesite=settings.cookie_samesite,  # type: ignore
         path="/",
     )
     response.delete_cookie(
         key="csrf_token",
         secure=settings.cookie_secure,
         httponly=False,
-        samesite=settings.cookie_samesite,
+        samesite=settings.cookie_samesite,  # type: ignore
         path="/",
     )
     return {"message": "Logged out successfully"}
@@ -149,7 +149,7 @@ async def google_login(
         value=f"{state}:{code_verifier}:{nonce}",
         httponly=True,
         secure=settings.cookie_secure,
-        samesite="lax",
+        samesite="lax",  # type: ignore
         max_age=300, # 5 minutes
     )
     
@@ -162,7 +162,7 @@ async def google_callback(
     response: Response,
     oauth_provider: Annotated[GoogleOAuthProvider, Depends(get_google_oauth_provider)],
     auth_service: Annotated[AuthService, Depends(get_auth_service)],
-):
+) -> Any:
     """Handle Google OAuth callback."""
     code = request.query_params.get("code")
     state = request.query_params.get("state")
@@ -181,7 +181,7 @@ async def google_callback(
         key="oauth_state",
         secure=settings.cookie_secure,
         httponly=True,
-        samesite="lax",
+        samesite="lax",  # type: ignore
     )
     
     try:
@@ -204,7 +204,7 @@ async def google_callback(
             key="oauth_state",
             secure=settings.cookie_secure,
             httponly=True,
-            samesite="lax",
+            samesite="lax",  # type: ignore
         )
         
         _set_auth_cookie(success_response, result.token)

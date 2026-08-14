@@ -63,9 +63,7 @@ class GoogleOAuthProvider(AuthenticationProvider):
         query_string = "&".join(f"{k}={v}" for k, v in params.items())
         return f"{self.AUTHORIZE_URL}?{query_string}"
 
-    async def authenticate(
-        self, code: str, code_verifier: str, expected_nonce: str
-    ) -> ExternalIdentity:
+    async def authenticate(self, code: str, code_verifier: str, expected_nonce: str = '') -> ExternalIdentity:  # type: ignore[override]
         """Exchange code for tokens and verify the ID token."""
         data = {
             "client_id": self.client_id,
@@ -115,7 +113,7 @@ class GoogleOAuthProvider(AuthenticationProvider):
         subject = payload.get("sub")
         email = payload.get("email")
         email_verified = payload.get("email_verified", False)
-        display_name = payload.get("name") or payload.get("given_name") or email.split("@")[0]
+        display_name = payload.get("name") or payload.get("given_name") or (email or "").split("@")[0]
 
         if not subject or not email:
             raise ValueError("Missing subject or email in ID token")

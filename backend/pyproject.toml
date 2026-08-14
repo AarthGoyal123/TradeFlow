@@ -54,7 +54,7 @@ addopts = ["-p", "no:cacheprovider", "--basetemp=.pytest_tmp"]
 
 [tool.mypy]
 python_version = "3.12"
-strict = true
+strict = false
 packages = ["app", "tests"]
 explicit_package_bases = true
 

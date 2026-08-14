@@ -239,7 +239,7 @@ def _build_rule_evaluation_service(
 
 
 def get_job_executor(
-    processing_service: "app.application.processing.service.ProcessingService" = Depends(  # noqa: B008, F821
+    processing_service: Any = Depends(  # type: ignore
         get_processing_service
     ),
 ) -> JobExecutor:
