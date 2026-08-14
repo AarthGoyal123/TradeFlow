@@ -157,14 +157,14 @@ export default function UploadPage() {
 
       {file && (
         <div className="flex justify-end gap-3">
-          <Button variant="outline" onClick={clearFile} disabled={isUploading}>
+          <Button variant="outline" onClick={clearFile} disabled={isUploading || processJob.isPending}>
             Cancel
           </Button>
-          <Button onClick={handleSubmit(onSubmit)} disabled={isUploading || !selectedTemplate}>
-            {isUploading ? (
+          <Button onClick={handleSubmit(onSubmit)} disabled={isUploading || processJob.isPending || !selectedTemplate}>
+            {isUploading || processJob.isPending ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Uploading...
+                Processing...
               </>
             ) : (
               "Process Workbook"

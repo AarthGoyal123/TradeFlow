@@ -16,7 +16,15 @@ export function useJob(id: string | undefined) {
     enabled: !!id,
     refetchInterval: (query) => {
       const status = query.state.data?.status;
-      if (status === "processing" || status === "queued") return 2000;
+      if (status === "processing" || status === "queued") {
+        const timeSinceUpdate = Date.now() - query.state.dataUpdatedAt;
+        
+        // Exponential backoff strategy: 2s, 4s, 8s, max 10s
+        if (timeSinceUpdate < 4000) return 2000;
+        if (timeSinceUpdate < 12000) return 4000;
+        if (timeSinceUpdate < 28000) return 8000;
+        return 10000;
+      }
       return false;
     },
   });

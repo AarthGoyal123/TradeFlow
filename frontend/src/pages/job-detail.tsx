@@ -52,7 +52,6 @@ export default function JobDetailPage() {
   const processMutation = useProcessJob();
 
   const canProcess = job?.status === "uploaded";
-  const isProcessing = job?.status === "processing" || job?.status === "queued";
 
   const {
     data: intelligence,
@@ -149,33 +148,59 @@ export default function JobDetailPage() {
         </Card>
       )}
 
-      {processMutation.isError && (
+      {(processMutation.isError || job?.status === "failed") && (
         <Card className="border-destructive/50">
           <CardHeader>
             <div className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-destructive" />
-              <CardTitle className="text-destructive">Processing Failed</CardTitle>
+              <CardTitle className="text-destructive">Processing failed</CardTitle>
             </div>
+            <CardDescription className="text-destructive/80">We couldn't process this workbook.</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <p className="text-sm text-destructive">
               {(processMutation.error as { message?: string })?.message ||
                 "An unexpected error occurred during processing."}
             </p>
+            <div className="flex items-center gap-2">
+              {canProcess && (
+                <Button variant="outline" size="sm" onClick={() => processMutation.mutate(job.job_id)}>
+                  Try Again
+                </Button>
+              )}
+              <Button variant="outline" size="sm" onClick={() => navigate("/jobs")}>
+                Back to Jobs
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
 
-      {isProcessing && (
+      {job?.status === "queued" && (
         <Card>
           <CardHeader>
-            <CardTitle>Processing</CardTitle>
-            <CardDescription>Your workbook is being processed</CardDescription>
+            <CardTitle>Queued</CardTitle>
+            <CardDescription>Your workbook is queued for processing.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <RefreshCw className="h-4 w-4 animate-spin" />
-              <span>Processing in progress &mdash; this page updates automatically</span>
+              <span>You can stay on this page while we process it.</span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {job?.status === "processing" && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Processing</CardTitle>
+            <CardDescription>Your workbook is currently being processed.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <RefreshCw className="h-4 w-4 animate-spin" />
+              <span>Please keep this page open or come back later.</span>
             </div>
           </CardContent>
         </Card>

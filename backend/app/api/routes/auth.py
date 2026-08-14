@@ -101,12 +101,14 @@ def logout(response: Response) -> dict:
         secure=settings.cookie_secure,
         httponly=True,
         samesite=settings.cookie_samesite,
+        path="/",
     )
     response.delete_cookie(
         key="csrf_token",
         secure=settings.cookie_secure,
         httponly=False,
         samesite=settings.cookie_samesite,
+        path="/",
     )
     return {"message": "Logged out successfully"}
 
