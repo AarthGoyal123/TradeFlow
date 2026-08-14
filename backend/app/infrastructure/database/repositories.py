@@ -98,6 +98,22 @@ class SQLAlchemyJobRepository(JobRepository, ProcessingReportRepository):
             ) from exc
         return self.get_job(job_id)
 
+    def get_terminal_jobs_older_than(self, threshold: datetime) -> list[Job]:
+        """Return jobs in terminal states (completed/failed) older than the threshold."""
+        try:
+            with self._session_factory() as session:
+                stmt = select(JobModel).where(
+                    JobModel.status.in_([JobStatus.COMPLETED.value, JobStatus.FAILED.value]),
+                    JobModel.updated_at < threshold
+                )
+                rows = session.execute(stmt).scalars().all()
+                return [self._model_to_job(row) for row in rows]
+        except SQLAlchemyError as exc:
+            raise StorageError(
+                "Failed to retrieve old jobs",
+                details={"threshold": threshold.isoformat()},
+            ) from exc
+
     def save_summary(self, summary: ProcessingSummary) -> ProcessingSummary:
         """Save a processing summary and link generated artifacts."""
         try:

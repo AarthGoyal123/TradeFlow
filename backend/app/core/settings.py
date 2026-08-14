@@ -4,7 +4,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -55,6 +55,10 @@ class Settings(BaseSettings):
     # Frontend config for callbacks
     frontend_url: str = "http://localhost:5173"
 
+    # Retention Policy
+    retention_enabled: bool = False
+    retention_days: int = 7
+
     @property
     def resolved_template_root(self) -> Path:
         """Return template root as an absolute path."""
@@ -81,11 +85,30 @@ class Settings(BaseSettings):
         """Return SQLite database path for local file-backed URLs."""
         prefix = "sqlite:///"
         if not self.database_url.startswith(prefix):
-            raise ValueError("Only sqlite:/// database URLs are supported")
+            return Path() # Return empty path for non-sqlite backends, let sqlalchemy handle them.
         database_path = Path(self.database_url.removeprefix(prefix))
         if database_path.is_absolute():
             return database_path
         return (Path.cwd() / database_path).resolve()
+
+
+    @model_validator(mode="after")
+    def validate_production_settings(self) -> "Settings":
+        if self.environment == "production":
+            if self.auth_secret == "super-secret-development-key-change-in-production":
+                raise ValueError("TRADEFLOW_AUTH_SECRET must be changed in production")
+            if len(self.auth_secret) < 32:
+                raise ValueError("TRADEFLOW_AUTH_SECRET must be at least 32 characters long")
+            if not self.cookie_secure:
+                raise ValueError("TRADEFLOW_COOKIE_SECURE must be true in production")
+            if "*" in self.cors_origins:
+                raise ValueError("TRADEFLOW_CORS_ORIGINS must not contain '*' in production")
+            if self.google_client_id:
+                if not self.google_client_secret:
+                    raise ValueError("TRADEFLOW_GOOGLE_CLIENT_SECRET is required when using Google OAuth")
+                if not self.google_redirect_uri:
+                    raise ValueError("TRADEFLOW_GOOGLE_REDIRECT_URI is required when using Google OAuth")
+        return self
 
 
 @lru_cache

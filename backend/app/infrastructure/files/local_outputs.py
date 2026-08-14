@@ -41,3 +41,12 @@ class LocalOutputStorage:
                 details={"job_id": job_id, "output_type": output_type.value},
             )
         return OutputArtifact(output_type=output_type, filename=path.name, path=path)
+
+    def delete_job_outputs(self, job_id: str) -> None:
+        """Delete all outputs for a given job if they exist."""
+        import shutil
+        job_dir = (self._output_dir / job_id).resolve()
+        if not str(job_dir).startswith(str(self._output_dir.resolve())):
+            return
+        if job_dir.exists() and job_dir.is_dir():
+            shutil.rmtree(job_dir, ignore_errors=True)

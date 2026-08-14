@@ -18,3 +18,14 @@ Phase 8 focuses on taking TradeFlow from a purely functional prototype to a poli
    - `queued` displays: "Your workbook is queued for processing. You can stay on this page while we process it."
    - `processing` displays: "Your workbook is currently being processed. Please keep this page open or come back later."
    - `failed` displays a safe error message with a "Try Again" fallback.
+
+## Phase 8 UX Bug: Synchronous Execution Timeout & Navigation
+During Phase 8 testing, a critical bug was identified where large files (e.g. the 19,967-row Golden Benchmark) would successfully process on the backend, but the frontend would fail to navigate to the job detail page, leaving the user stranded on the upload page.
+
+### Architectural Root Cause
+The `onSubmit` handler originally `await`ed the `processJob.mutateAsync(...)` call. Because TradeFlow is constrained to run locally without heavy background dependencies (like Celery or Redis), it relies on a local `SynchronousJobExecutor`. Consequently, the HTTP POST request to `/process` blocks the thread until the entire dataset is processed. For the Golden Benchmark, this took ~40-60 seconds, which exceeded the Axios 30-second timeout. Axios threw a timeout error, triggering a `catch` block that suppressed the error and prevented `navigate` from being called.
+
+### Resolution & Reasoning
+The fix involved abandoning `await processJob.mutateAsync(...)` in favor of a fire-and-forget `processJob.mutate(...)` pattern, combined with an immediate `navigate` (or navigating synchronously in `onSuccess`/`onError` callbacks if the request queued fast enough). The frontend must NOT wait for long-running processing to finish via HTTP response before navigating. 
+
+By navigating immediately, the frontend bypasses the Axios timeout and safely hands over responsibility to the `useJob` hook on the job detail page, which continuously polls the lightweight `GET /jobs/{id}` endpoint. This perfectly preserved the zero-heavy-dependency synchronous local executor constraint while delivering a robust UX.

@@ -45,3 +45,12 @@ class LocalUploadedFileStorage:
     def path_for(self, stored_filename: str) -> Path:
         """Return the absolute path for a stored file."""
         return (self._upload_dir / stored_filename).resolve()
+
+    def delete_upload(self, stored_filename: str) -> None:
+        """Delete an uploaded file if it exists."""
+        target_path = self.path_for(stored_filename)
+        if target_path.exists():
+            try:
+                target_path.unlink()
+            except OSError:
+                pass

@@ -426,3 +426,47 @@ A multi-tenant data isolation strategy uses a `CurrentUserContext` which ensures
 
 - **Frontend Complexity:** The frontend (Axios/TanStack) must be carefully configured to include credentials and extract the CSRF token from non-HttpOnly cookies for state-changing requests.
 - **Testing Complexity:** Integration tests must use specialized test clients (`create_authenticated_client`, `override_auth`) to interact with protected endpoints.
+
+## ADR-014 - Uncoupled Frontend Navigation for Long-Running Synchronous Endpoints
+
+Date: 2026-08-14
+
+Status: accepted.
+
+### Decision
+
+For long-running tasks like `POST /api/v1/jobs/{job_id}/process`, the frontend explicitly navigates the user *before* or *independent of* the HTTP response resolving, rather than using `await mutateAsync` or waiting inside the mutation's `onSuccess` callback. State synchronization is handed off to background polling of a separate lightweight read endpoint (`GET /jobs/{job_id}`).
+
+### Rationale
+
+- **Local Execution Constraints:** By default, TradeFlow executes jobs using `SynchronousJobExecutor` to eliminate the need for local Celery/Redis dependencies. This causes the `/process` HTTP endpoint to block until processing completes.
+- **Timeout Avoidance:** Large datasets (like the 19,967-row Golden Benchmark) take ~40-60 seconds, which exceeds the default Axios 30-second timeout. If the frontend awaits the HTTP response to navigate, the timeout error will swallow the navigation entirely.
+- **Polled State Machine:** Because the backend correctly persists the "Queued" or "Processing" state instantly, the `job-detail` page's polling hook accurately reflects the processing state even if the triggering POST request is still pending in the background.
+
+### Trade-offs
+
+- **Fire-and-Forget Semantics:** If the initial POST request fails (e.g., a 500 error before processing starts), the user is already on the job-detail page. However, the UI correctly falls back to showing an "Uploaded" state or failure state and allows retrying.
+- **React Query Cache Complexity:** We must ensure the polling hook forces network fetches for the current state rather than relying exclusively on the POST mutation's `onSuccess` cache invalidation.
+
+## ADR-015 - Minimal Self-Hosted Production Deployment Architecture
+
+Date: 2026-08-14
+
+Status: accepted.
+
+### Decision
+
+TradeFlow will use a minimal, single-node self-hosted architecture for its primary production deployment model, relying on SQLite in WAL mode, local filesystem storage, and Gunicorn/Uvicorn with a reverse proxy (e.g., Caddy/Nginx) instead of a complex distributed architecture (Kubernetes, Redis, PostgreSQL).
+
+### Rationale
+
+- **Zero Paid Services:** Enforces the absolute constraint that the system must run without external managed services or cloud vendor lock-in.
+- **Resource Constraints:** Running heavy infrastructure (Docker, Redis, PostgreSQL) is unnecessary for the current scale and violates constraints on environments with limited disk space and memory.
+- **SQLite Performance:** With WAL (Write-Ahead Logging) enabled and PRAGMA synchronous=NORMAL, SQLite can easily handle the expected concurrency of 100+ users for this application's read-heavy, low-write workload.
+- **Simplicity:** A single-server deployment reduces operational overhead, backup complexity (just copy the `.sqlite` file and `data/` directory), and configuration surface area.
+
+### Trade-offs
+
+- **Horizontal Scalability:** The application cannot be horizontally scaled across multiple machines. All traffic must be handled by the single node.
+- **Concurrency Limits:** While WAL mode helps, extreme write concurrency could lead to `database is locked` errors, especially if multiple Uvicorn workers are used. The recommended setup is a single worker with asynchronous I/O handling multiple concurrent requests.
+- **Storage Bottlenecks:** Storage is limited to the single disk. Path traversal protections must be strictly enforced since artifacts are stored locally instead of isolated in an S3 bucket (though S3 adapters are maintained for optional scale-up).

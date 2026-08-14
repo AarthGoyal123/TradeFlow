@@ -40,18 +40,31 @@ Processing Pipeline
 Download (Clean Data, Removed Rows, Needs Review, Report)
 ```
 
-## Current Status (Phase 7A Complete)
+## Current Status
 
-- ✅ **Authentication & Authorization**: Argon2id passwords, HttpOnly JWT cookies, Double-submit CSRF, Role-Based Access Control (RBAC).
-- ✅ **Tenant Isolation**: Secure multi-tenancy ensuring users can only access jobs, outputs, and artifacts belonging to their organization.
-- ✅ **Google OAuth (OIDC)**: Direct, Zero-Paid-Service integration with Google for Social Login, including automatic account creation and identity linking, hardened against open redirects and race conditions.
-- ✅ **Workbook Intelligence Engine**: Structure analysis, semantic detection, layered column matching, Global Trade Synonym Dictionary.
-- ✅ **Processing Pipeline**: Complex regex handling, dataset normalization, robust rule evaluation, and output generation.
-- ✅ **Golden Benchmark**: Full end-to-end regression test against realistic trade data (19k+ rows) properly segregating To Order/Bank consignees.
+- Phase 1 — Architecture Hardening — COMPLETE
+- Phase 2 — Async/Celery Architecture — COMPLETE
+- Phase 3 — SQLAlchemy/Alembic — COMPLETE
+- Phase 5 — Zero-Cost Object Storage Architecture — COMPLETE
+- Phase 6 — Authentication/Tenant Security — COMPLETE
+- Phase 6.5 — Auth Integration/Test Restoration — COMPLETE
+- Phase 7A — Google OAuth — COMPLETE
+- Phase 7B — Browser Authentication Forensic Fixes — COMPLETE
+- Phase 8 — Production UX — COMPLETE
+- Phase 9A — Production Hardening — COMPLETE
+- Phase 9B — NOT STARTED
+
+## Permanent Project Constraints
+
+1. **ZERO PAID SERVICES**: TradeFlow must remain entirely usable without paid APIs, Auth0, Clerk, Firebase, AWS, or paid DBs. Google OAuth is used strictly as an Identity Provider.
+2. **ZERO HEAVY LOCAL DEPS**: Do NOT introduce Docker, WSL, PostgreSQL, Redis, MinIO, or Playwright locally unless explicitly requested. Local storage uses standard disk; local execution is purely synchronous.
+3. **RESPECT DISK SPACE**: The `C:` drive has limited space. Prefer existing `D:` drive environments.
+4. **GOLDEN BENCHMARK PRESERVATION**: The exact benchmark row counts (19967/8701/10565/701) MUST NEVER change. Any refactor or feature must preserve this behavior.
+5. **NEVER BREAK BACKWARD COMPATIBILITY**: Keep existing tests green.
 
 ## Planned Stack
 
-- **Backend:** Python 3.12, FastAPI, OpenPyXL, RapidFuzz, SQLite
+- **Backend:** Python 3.12, FastAPI, SQLAlchemy, OpenPyXL, RapidFuzz
 - **Frontend:** React, Vite, TypeScript, Tailwind CSS, shadcn/ui
 
 ## Development Commands

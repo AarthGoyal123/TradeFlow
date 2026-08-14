@@ -6,23 +6,22 @@ A Workbook Intelligence Platform for global trade data. Process any trade Excel 
 
 ## Current Phase
 
-Phase 1 — Architecture Hardening (IN PROGRESS)
+Phase 9A — Production Hardening (COMPLETED)
+Next: Phase 9B
 
 ## Architecture
 
 Clean Architecture (api → application → domain ← infrastructure).
-
-The Intelligence Engine sits at the core. Job execution is currently synchronous but prepared for async. SQLite is used for persistence. Local filesystem for outputs.
+The Intelligence Engine sits at the core. Job execution uses a local `SynchronousJobExecutor` by default to avoid heavy dependencies (Celery/Redis are supported via configuration but NOT required locally).
 
 ## Key Files
 
 | File | Purpose |
 |---|---|
 | `docs/README.md` | Primary documentation index |
-| `domain/workbooks/intelligence.py` | All intelligence domain models |
-| `application/processing/service.py` | Processing pipeline orchestrator |
-| `domain/jobs/models.py` | Job state machine |
-| `templates/indian_rice_exports/columns.json` | Reference template (20 business fields) |
+| `ROADMAP.md` | Phase tracking |
+| `knowledge/architecture_decisions.md` | Architectural history |
+| `docs/product-ux.md` | Phase 8 UX flows and browser testing docs |
 
 ## Benchmark
 
@@ -36,20 +35,14 @@ The benchmark workbook is at `backend/samples/1006 ALL EXPORT JULY 25.xlsx`.
 
 ## Test Suite
 
-Run with: `python -m pytest`
-Ensure the golden regression test (`tests/test_benchmark_regression.py`) always passes.
+Run with: `.\.venv\Scripts\python.exe -m pytest`
+Ensure the golden regression test (`tests/test_benchmark_regression.py`) always passes exactly as shown above.
 
-## Rules
+## Permanent Project Constraints
 
-1. NEVER break backward compatibility.
-2. ALL existing tests must pass.
-3. Benchmark workbook must never be modified — fix the code instead.
-4. Golden benchmark row counts MUST remain strictly identical.
-5. All documentation MUST be kept up to date (`/docs/`).
-
-## What NOT To Build Yet
-
-- Multi-tenant architecture (planned Phase 6)
-- PostgreSQL migration (planned Phase 3)
-- Celery/Redis/async processing (planned Phase 4)
-- S3 integration (planned Phase 5)
+1. **ZERO PAID SERVICES**: TradeFlow must remain entirely usable without paid APIs, Auth0, Clerk, Firebase, AWS, or paid DBs. Google OAuth is used strictly as an Identity Provider.
+2. **ZERO HEAVY LOCAL DEPS**: Do NOT introduce Docker, WSL, PostgreSQL, Redis, MinIO, or Playwright locally unless explicitly requested.
+3. **RESPECT DISK SPACE**: The `C:` drive has limited space. Prefer existing `D:` drive environments. Avoid unnecessary local downloads/installations.
+4. **GOLDEN BENCHMARK PRESERVATION**: The exact benchmark row counts (19967/8701/10565/701) MUST NEVER change. Any refactor or feature must preserve this behavior.
+5. **NEVER BREAK BACKWARD COMPATIBILITY**: Keep existing tests green. 
+6. **DOCUMENTATION**: Maintain and update `docs/` and `knowledge/` diligently. Write the actual architectural reasoning so future agents understand WHY a solution was chosen.

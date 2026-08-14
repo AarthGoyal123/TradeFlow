@@ -1,0 +1,26 @@
+# Caddyfile Template for TradeFlow Production
+# Replace tradeflow.example.com with your actual domain
+
+tradeflow.example.com {
+    # Serve the static frontend (built via `npm run build`)
+    root * /var/www/tradeflow/frontend/dist
+    
+    # Try to serve static files directly, fallback to index.html for React Router
+    try_files {path} /index.html
+
+    # Proxy API requests to the Python backend
+    handle_path /api/* {
+        reverse_proxy 127.0.0.1:8000
+    }
+
+    # Enable gzip/zstd compression
+    encode gzip zstd
+
+    # Basic security headers
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "strict-origin-when-cross-origin"
+    }
+}

@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from app.domain.jobs.models import Job
-    from app.domain.processing.dataset import IntermediateDataset
+    from app.domain.datasets.models import IntermediateDataset
     from app.domain.templates.models import Template
 
 from app.application.processing.cleaning_service import DataCleaningService

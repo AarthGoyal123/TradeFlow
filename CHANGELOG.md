@@ -2,8 +2,30 @@
 
 All notable project changes will be documented here.
 
-## 2026-07-28
+## 2026-08-14
 
+- **Phase 9A Completed**: Production Hardening.
+  - Implemented `CleanupService` to securely purge old job artifacts from disk based on a configurable retention policy, preserving job metadata in the database.
+  - Implemented rigorous environment variable validation for production (`AUTH_SECRET` entropy, wildcard CORS block, secure cookies enforcement).
+  - Designed minimal self-hosted production deployment architecture via ADR-015 (SQLite WAL, Single Node, Caddy Reverse Proxy).
+
+- **Phase 8 Completed**: Production Hardening & Core Product UX.
+  - Fixed logout logic to correctly clear `access_token` and `csrf_token` cookies via `path="/"`.
+  - Implemented global session expiry handling, capturing `401 Unauthorized` via Axios interceptors and safely routing the user to `/login` without redirect loops.
+  - Upgraded polling to use an exponential backoff strategy for queued/processing jobs to protect backend load.
+  - Redesigned `job-detail.tsx` with discrete UI states for queued, processing, and failed.
+  - Redesigned `settings.tsx` to surface authentication provider and read-only profile data.
+  - Fixed a critical UI bug where the 30-second Axios timeout would suppress navigation for large files because the backend executes synchronously. The fix immediately routes users to the detail page, uncoupling navigation from processing time.
+  - Verified Golden Benchmark matches original constraints perfectly.
+
+- **Phase 7 Completed**: Authentication & Multi-Tenancy.
+  - Implemented Google OAuth / OIDC architecture.
+  - Built out secure `httpOnly`, `Secure`, `SameSite=lax` cookie-based sessions.
+  - Implemented Double Submit Cookie pattern for CSRF protection on mutation endpoints.
+  - Added Role-Based Access Control (RBAC) foundation.
+  - Migrated database architecture to SQLAlchemy to support tenant-isolation.
+
+## 2026-07-28
 - Created initial project knowledge base.
 - Created baseline project documentation.
 - Added monorepo scaffold with `backend/` and `frontend/` roots.

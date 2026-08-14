@@ -128,6 +128,25 @@ class SQLiteJobRepository(JobRepository, ProcessingReportRepository):
             ) from exc
         return job
 
+    def get_terminal_jobs_older_than(self, threshold: datetime) -> list[Job]:
+        """Return jobs in terminal states (completed/failed) older than the threshold."""
+        try:
+            with self._connect() as connection:
+                rows = connection.execute(
+                    """
+                    SELECT * FROM jobs
+                    WHERE status IN ('completed', 'failed')
+                    AND updated_at < ?
+                    """,
+                    (threshold.isoformat(),),
+                ).fetchall()
+                return [self._row_to_job(row) for row in rows]
+        except sqlite3.Error as exc:
+            raise StorageError(
+                "Failed to retrieve old jobs",
+                details={"threshold": threshold.isoformat()},
+            ) from exc
+
     def save_summary(self, summary: ProcessingSummary) -> ProcessingSummary:
         """Persist a processing summary and its outputs."""
         try:

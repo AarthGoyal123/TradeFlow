@@ -37,3 +37,5 @@ backend/.pytest_tmp/
 backend/data/
 backend/*.log
 scratch/
+.pytest_tmp/
+logs/

@@ -1,5 +1,6 @@
 """Ports for job persistence and file storage."""
 
+from datetime import datetime
 from pathlib import Path
 from typing import BinaryIO, Protocol
 
@@ -21,6 +22,10 @@ class JobRepository(Protocol):
         """Update job status and return the updated job."""
         ...
 
+    def get_terminal_jobs_older_than(self, threshold: datetime) -> list[Job]:
+        """Return jobs in terminal states (completed/failed) older than the threshold."""
+        ...
+
 
 class UploadedFileStorage(Protocol):
     """Store uploaded workbook files."""
@@ -31,6 +36,10 @@ class UploadedFileStorage(Protocol):
 
     def path_for(self, stored_filename: str) -> Path:
         """Return the absolute path for a stored file."""
+        ...
+
+    def delete_upload(self, stored_filename: str) -> None:
+        """Delete an uploaded file if it exists."""
         ...
 
 

@@ -83,6 +83,23 @@ class S3OutputStorage(OutputStorage):
                 details={"job_id": job_id, "output_type": output_type.value},
             ) from exc
 
+    def delete_job_outputs(self, job_id: str) -> None:
+        """Delete all outputs for a given job if they exist."""
+        prefix = f"outputs/{job_id}/"
+        try:
+            paginator = self._s3.get_paginator("list_objects_v2")
+            pages = paginator.paginate(Bucket=self._bucket_name, Prefix=prefix)
+            
+            for page in pages:
+                if "Contents" in page:
+                    objects = [{"Key": obj["Key"]} for obj in page["Contents"]]
+                    self._s3.delete_objects(
+                        Bucket=self._bucket_name,
+                        Delete={"Objects": objects, "Quiet": True}
+                    )
+        except ClientError:
+            pass
+
 
 class S3UploadedFileStorage(UploadedFileStorage):
     """S3-compatible implementation for uploaded workbook storage."""
@@ -163,3 +180,11 @@ class S3UploadedFileStorage(UploadedFileStorage):
                 "Failed to retrieve upload from S3",
                 details={"path": str(stored_path)},
             ) from exc
+
+    def delete_upload(self, stored_filename: str) -> None:
+        """Delete an uploaded file if it exists."""
+        object_key = f"uploads/{stored_filename.split('.')[0]}/{stored_filename}"
+        try:
+            self._s3.delete_object(Bucket=self._bucket_name, Key=object_key)
+        except ClientError:
+            pass

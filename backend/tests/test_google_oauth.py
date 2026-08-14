@@ -21,9 +21,9 @@ def client(monkeypatch, tmp_path):
     from app.core.settings import get_settings
     get_settings.cache_clear()
     
-    from app.infrastructure.database.session import get_engine
-    from app.infrastructure.database.base import Base
     import app.infrastructure.database.models
+    from app.infrastructure.database.base import Base
+    from app.infrastructure.database.session import get_engine
     
     engine = get_engine()
     Base.metadata.create_all(engine)

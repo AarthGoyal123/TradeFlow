@@ -55,4 +55,9 @@ addopts = ["-p", "no:cacheprovider", "--basetemp=.pytest_tmp"]
 [tool.mypy]
 python_version = "3.12"
 strict = true
-packages = ["app"]
+packages = ["app", "tests"]
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["boto3.*", "botocore.*", "celery.*"]
+ignore_missing_imports = true

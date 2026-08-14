@@ -30,7 +30,7 @@ Design for, and partially implement:
 - [ ] **Semantic detector improvements** — reduce false positives (FOB→HS code, etc.)
 - [ ] **Confidence threshold tuning** — calibrated against real-world data
 
-## Phase 3 — Async Processing & Performance
+## Phase 3 — Async Processing & Performance (Planned)
 
 Design for, but do not build yet (wait until user demand):
 
@@ -40,16 +40,14 @@ Design for, but do not build yet (wait until user demand):
 - [ ] Template caching for hot reload
 - [ ] Performance benchmarks against large workbooks
 
-## Phase 4 — Multi-Tenant Foundation
+## Phase 4 — Multi-Tenant Foundation (✅ Complete - Built as Phase 7)
 
-Design for, but do not build yet:
+- [x] Tenant isolation in storage and database
+- [x] SQLAlchemy migration
+- [x] User authentication (Google OAuth) + RBAC
+- [x] Cookie-based sessions with CSRF protection
 
-- [ ] Tenant isolation in storage and database
-- [ ] PostgreSQL migration
-- [ ] Tenant-scoped synonym dictionaries
-- [ ] User authentication + RBAC
-
-## Phase 5 — Plugin Architecture & AI
+## Phase 5 — Plugin Architecture & AI (Planned)
 
 Design for, but do not build yet:
 
@@ -57,9 +55,27 @@ Design for, but do not build yet:
 - [ ] LLM detector plugin (for ambiguous columns)
 - [ ] Plugin registry + configuration
 
-## Phase 6 — Frontend Tests
+## Phase 6 — Frontend Tests (Planned)
 
 - [ ] Vitest + React Testing Library setup
 - [ ] Component tests for 10+ UI components
 - [ ] Integration tests for API client hooks
 - [ ] E2E test for upload → analyze → process → download flow
+
+## Phase 7 — Authentication & Multi-Tenancy (✅ Complete)
+- [x] Google OAuth implementation
+- [x] Session cookie and CSRF security architecture
+- [x] Tenant-isolated SQLAlchemy Database architecture
+
+## Phase 8 — Production Hardening & Core UX (✅ Complete)
+- [x] Settings & Authentication info UI
+- [x] Logout mechanics and global 401 interceptors
+- [x] Bounded exponential backoff for UI polling
+- [x] Decoupled Job detail visual states
+- [x] UX Navigation logic refactored for synchronous local endpoints
+
+## Phase 9 — Production Hardening & Deployment (✅ Phase 9A Complete)
+- [x] Artifact retention/cleanup service
+- [x] Production settings validation
+- [x] Caddy reverse proxy template
+- [ ] Complete Phase 9B deployments

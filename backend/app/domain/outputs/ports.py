@@ -16,7 +16,11 @@ class OutputStorage(Protocol):
         ...
 
     def get_output(self, *, job_id: str, output_type: OutputType) -> OutputArtifact:
-        """Return persisted output metadata."""
+        """Return output metadata if the file exists."""
+        ...
+
+    def delete_job_outputs(self, job_id: str) -> None:
+        """Delete all outputs for a given job if they exist."""
         ...
 
 

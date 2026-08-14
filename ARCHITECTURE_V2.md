@@ -105,11 +105,10 @@ Templates are defined in the filesystem (e.g., `templates/indian_rice_exports/`)
 - **Phase 3:** PostgreSQL + Alembic migrations (Completed).
 - **Phase 4:** Expand Worker Architecture (Celery multi-worker deployment).
 - **Phase 5:** S3 Object Storage adapter (Zero-Cost MinIO Self-Hosted) (Completed).
-- **Phase 6:** Authentication & Authorization (JWT/OIDC).
-- **Phase 7:** Frontend UX overhaul (WebSockets/Polling for job status) - Polling implemented in Phase 2.
-- **Phase 8:** Observability (Prometheus, structured logging).
-- **Phase 9:** Docker + CI/CD.
-- **Phase 10:** Production Deployment.
+- **Phase 6:** Authentication & Authorization (JWT/OIDC) (Completed as Phase 6, 6.5, 7A, 7B).
+- **Phase 7:** Frontend UX overhaul (WebSockets/Polling for job status) - Polling implemented (Completed as Phase 8).
+- **Phase 8:** Observability (Prometheus, structured logging) (Re-scoped to Production Hardening).
+- **Phase 9:** Production Deployment (Phase 9A Completed, Phase 9B Not Started).
 
 ## 18. Risk Analysis
 - **Timeout Risks:** High if Phase 4 is delayed. Large files currently timeout the HTTP request.
