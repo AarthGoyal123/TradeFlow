@@ -2,7 +2,7 @@
 
 import logging
 import secrets
-from typing import Any, Annotated
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.responses import RedirectResponse
@@ -62,7 +62,7 @@ def register(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Registration failed. Email may already be in use.",
-        )
+        ) from None
 
 
 @router.post("/login", response_model=AuthResponse)
@@ -89,7 +89,7 @@ def login(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password",
-        )
+        ) from None
 
 
 @router.post("/logout")

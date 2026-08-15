@@ -1,5 +1,7 @@
 """FastAPI dependency providers."""
 
+from typing import Annotated
+
 from fastapi import Depends
 
 from app.application.auth.google import GoogleOAuthProvider
@@ -238,10 +240,10 @@ def _build_rule_evaluation_service(
     )
 
 
+ProcessingServiceDependency = Annotated[ProcessingService, Depends(get_processing_service)]
+
 def get_job_executor(
-    processing_service: Any = Depends(  # type: ignore
-        get_processing_service
-    ),
+    processing_service: ProcessingServiceDependency,
 ) -> JobExecutor:
     settings = get_settings()
 

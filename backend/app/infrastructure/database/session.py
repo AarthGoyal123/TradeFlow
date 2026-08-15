@@ -1,6 +1,7 @@
 """SQLAlchemy session management."""
 
 from typing import Any
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
