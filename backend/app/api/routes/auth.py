@@ -12,8 +12,8 @@ from app.api.schemas.auth import AuthResponse, AuthUserResponse, LoginRequest, R
 from app.api.security import CurrentUserContext, get_current_user_context, set_csrf_cookie
 from app.application.auth.google import GoogleOAuthProvider
 from app.application.auth.service import AuthenticationError, AuthService, RegistrationError
-from app.domain.auth.ports import AccountAlreadyExistsError
 from app.core.settings import get_settings
+from app.domain.auth.ports import AccountAlreadyExistsError
 
 logger = logging.getLogger(__name__)
 

@@ -9,9 +9,9 @@ os.environ.setdefault("TRADEFLOW_DATABASE_URL", "sqlite:///./tradeflow.sqlite")
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():
     """Create the test database schema before running any tests."""
+    import app.infrastructure.database.models  # noqa: F401  # ensure models are registered
     from app.infrastructure.database.base import Base
     from app.infrastructure.database.session import get_engine
-    import app.infrastructure.database.models  # ensure models are registered
 
     engine = get_engine()
     # Drop all and recreate to ensure clean state
