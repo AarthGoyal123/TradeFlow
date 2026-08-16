@@ -4,6 +4,7 @@ from fastapi.testclient import TestClient
 from openpyxl import Workbook
 
 from app.api.dependencies import (
+    get_job_executor,
     get_job_service,
     get_output_storage,
     get_processing_report_repository,
@@ -23,6 +24,7 @@ from app.infrastructure.excel.openpyxl_loader import OpenPyXLWorkbookLoader
 from app.infrastructure.excel.output_builder import OpenPyXLOutputWorkbookBuilder
 from app.infrastructure.files.local_outputs import LocalOutputStorage
 from app.infrastructure.files.local_uploads import LocalUploadedFileStorage
+from app.infrastructure.jobs.local_executor import SynchronousJobExecutor
 from app.infrastructure.persistence.sqlite_jobs import SQLiteJobRepository
 from app.infrastructure.template_store.filesystem import FileSystemTemplateRepository
 from app.main import create_app
@@ -169,6 +171,7 @@ def _build_client(tmp_path: Path):
     app.dependency_overrides[get_processing_service] = lambda: processing_service
     app.dependency_overrides[get_output_storage] = lambda: output_storage
     app.dependency_overrides[get_processing_report_repository] = lambda: job_repository
+    app.dependency_overrides[get_job_executor] = lambda: SynchronousJobExecutor(processing_service)
 
     # Override auth to simulate logged in user
     user = create_test_user()

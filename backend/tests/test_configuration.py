@@ -19,6 +19,7 @@ def test_settings_environment_override() -> None:
             "TRADEFLOW_AUTH_SECRET": "this-is-a-secure-secret-for-production-testing-123",
             "TRADEFLOW_COOKIE_SECURE": "true",
             "TRADEFLOW_FRONTEND_URL": "https://tradeflow.example.com",
+            "TRADEFLOW_CORS_ORIGINS": '["https://tradeflow.example.com"]',
         },
     ):
         settings = Settings()

@@ -1,8 +1,10 @@
 """FastAPI dependency providers."""
 
+from collections.abc import Generator
 from typing import Annotated
 
 from fastapi import Depends
+from sqlalchemy.orm import Session
 
 from app.application.auth.google import GoogleOAuthProvider
 from app.application.auth.service import AuthService
@@ -108,10 +110,18 @@ def _get_output_storage() -> OutputStorage:
     return LocalOutputStorage(settings.resolved_output_dir)
 
 
-def get_auth_repository() -> AuthRepository:
-    """Dependency provider for AuthRepository."""
+def get_db_session() -> Generator[Session, None, None]:
+    """Dependency provider for SQLAlchemy session."""
     session_factory = get_session_factory()
-    return SQLAlchemyAuthRepository(session_factory())
+    with session_factory() as session:
+        yield session
+
+
+def get_auth_repository(
+    session: Session = Depends(get_db_session),  # noqa: B008
+) -> AuthRepository:
+    """Dependency provider for AuthRepository."""
+    return SQLAlchemyAuthRepository(session)
 
 
 def get_auth_service(

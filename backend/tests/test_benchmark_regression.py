@@ -1,6 +1,8 @@
 """Regression tests for the benchmark workbook (1006 ALL EXPORT JULY 25.xlsx)."""
 
 import tempfile
+import uuid
+from typing import Generator
 from pathlib import Path
 
 import pytest
@@ -288,6 +290,7 @@ def test_benchmark_full_pipeline() -> None:
         assert s.removed_rows > 0
         assert s.clean_rows + s.removed_rows + s.needs_review_rows == s.total_rows
 
+        assert result.dataset is not None
         assert result.dataset.fields == (
             "exporter_name",
             "exporter_address",
@@ -331,7 +334,7 @@ def test_benchmark_validation_service_no_crash() -> None:
 
 
 @pytest.fixture
-def _tmp_dir() -> Path:
+def _tmp_dir() -> Generator[Path, None, None]:
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as d:
         yield Path(d)
 

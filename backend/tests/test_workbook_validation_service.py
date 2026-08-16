@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 
 from openpyxl import Workbook
 
@@ -19,7 +20,7 @@ from app.infrastructure.excel.openpyxl_loader import OpenPyXLWorkbookLoader
 
 def test_validation_service_maps_required_and_optional_columns(tmp_path) -> None:
     workbook_path = _create_workbook(tmp_path, headers=["Consignee", "POD", "Carrier"])
-    service = _validation_service(_template())
+    service = _validation_service(build_test_template())
 
     result = service.validate(template_id="indian_rice_exports", workbook_path=workbook_path)
 
@@ -39,7 +40,7 @@ def test_validation_service_maps_required_and_optional_columns(tmp_path) -> None
 
 def test_validation_service_reports_missing_required_columns(tmp_path) -> None:
     workbook_path = _create_workbook(tmp_path, headers=["Consignee", "Carrier"])
-    service = _validation_service(_template())
+    service = _validation_service(build_test_template())
 
     result = service.validate(template_id="indian_rice_exports", workbook_path=workbook_path)
 
@@ -50,7 +51,7 @@ def test_validation_service_reports_missing_required_columns(tmp_path) -> None:
 
 def test_validation_service_reports_missing_named_sheet(tmp_path) -> None:
     workbook_path = _create_workbook(tmp_path, headers=["Consignee", "POD"])
-    service = _validation_service(_template(sheet_strategy="named_sheet", sheet_name="Missing"))
+    service = _validation_service(build_test_template(sheet_strategy="named_sheet", sheet_name="Missing"))
 
     result = service.validate(template_id="indian_rice_exports", workbook_path=workbook_path)
 
@@ -63,7 +64,7 @@ def test_validation_service_reports_missing_named_sheet(tmp_path) -> None:
 def test_validation_service_returns_structured_issue_for_unreadable_workbook(tmp_path) -> None:
     workbook_path = tmp_path / "broken.xlsx"
     workbook_path.write_bytes(b"not a workbook")
-    service = _validation_service(_template())
+    service = _validation_service(build_test_template())
 
     result = service.validate(template_id="indian_rice_exports", workbook_path=workbook_path)
 
@@ -90,9 +91,8 @@ def _validation_service(template: TemplateDefinition) -> WorkbookValidationServi
     )
 
 
-def _template(
-    *,
-    sheet_strategy: str = "first_sheet",
+def build_test_template(
+    sheet_strategy: Literal["first_sheet", "named_sheet"] = "first_sheet",
     sheet_name: str | None = None,
 ) -> TemplateDefinition:
     return TemplateDefinition(
