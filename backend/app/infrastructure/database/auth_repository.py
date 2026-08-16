@@ -92,11 +92,16 @@ class SQLAlchemyAuthRepository(AuthRepository):
             role=membership.role,
             created_at=membership.created_at,
         )
-
         self.session.add(user_model)
+        self.session.flush()
+        
         self.session.add(tenant_model)
+        self.session.flush()
+        
+        # Ensure role is a string!
+        membership_model.role = str(membership_model.role.value if hasattr(membership_model.role, "value") else membership_model.role)
         self.session.add(membership_model)
-
+        self.session.flush()
         if identity:
             identity_model = UserIdentityModel(
                 id=identity.id,
