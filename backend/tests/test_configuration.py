@@ -18,6 +18,7 @@ def test_settings_environment_override() -> None:
             "TRADEFLOW_MAX_UPLOAD_SIZE_MB": "100",
             "TRADEFLOW_AUTH_SECRET": "this-is-a-secure-secret-for-production-testing-123",
             "TRADEFLOW_COOKIE_SECURE": "true",
+            "TRADEFLOW_COOKIE_SAMESITE": "none",
             "TRADEFLOW_FRONTEND_URL": "https://tradeflow.example.com",
             "TRADEFLOW_CORS_ORIGINS": '["https://tradeflow.example.com"]',
         },

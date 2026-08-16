@@ -19,6 +19,7 @@ def test_production_settings_reject_default_secret() -> None:
             environment="production",
             auth_secret="super-secret-development-key-change-in-production",
             cookie_secure=True,
+            cookie_samesite="none",
             cors_origins=["https://tradeflow.example.com"],
         )
 
@@ -31,6 +32,7 @@ def test_production_settings_reject_short_secret() -> None:
             environment="production",
             auth_secret="too-short",
             cookie_secure=True,
+            cookie_samesite="none",
             cors_origins=["https://tradeflow.example.com"],
         )
 
@@ -41,6 +43,7 @@ def test_production_settings_reject_insecure_cookies() -> None:
             environment="production",
             auth_secret="this-is-a-long-enough-secret-for-production",
             cookie_secure=False,
+            cookie_samesite="none",
             cors_origins=["https://tradeflow.example.com"],
         )
 
@@ -53,6 +56,7 @@ def test_production_settings_reject_wildcard_cors() -> None:
             environment="production",
             auth_secret="this-is-a-long-enough-secret-for-production",
             cookie_secure=True,
+            cookie_samesite="none",
             cors_origins=["*", "https://tradeflow.example.com"],
         )
 
@@ -65,6 +69,7 @@ def test_production_settings_google_oauth_requires_secret() -> None:
             environment="production",
             auth_secret="this-is-a-long-enough-secret-for-production",
             cookie_secure=True,
+            cookie_samesite="none",
             cors_origins=["https://tradeflow.example.com"],
             google_client_id="client-id",
             google_client_secret=None,
@@ -79,6 +84,7 @@ def test_production_settings_google_oauth_requires_redirect_uri() -> None:
             environment="production",
             auth_secret="this-is-a-long-enough-secret-for-production",
             cookie_secure=True,
+            cookie_samesite="none",
             cors_origins=["https://tradeflow.example.com"],
             google_client_id="client-id",
             google_client_secret="client-secret",
@@ -91,6 +97,7 @@ def test_production_settings_valid() -> None:
         environment="production",
         auth_secret="this-is-a-long-enough-secret-for-production",
         cookie_secure=True,
+        cookie_samesite="none",
         cors_origins=["https://tradeflow.example.com"],
         google_client_id="client-id",
         google_client_secret="client-secret",
