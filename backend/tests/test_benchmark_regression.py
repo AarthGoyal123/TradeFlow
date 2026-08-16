@@ -1,8 +1,7 @@
 """Regression tests for the benchmark workbook (1006 ALL EXPORT JULY 25.xlsx)."""
 
 import tempfile
-import uuid
-from typing import Generator
+from collections.abc import Generator
 from pathlib import Path
 
 import pytest

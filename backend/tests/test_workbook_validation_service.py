@@ -51,7 +51,9 @@ def test_validation_service_reports_missing_required_columns(tmp_path) -> None:
 
 def test_validation_service_reports_missing_named_sheet(tmp_path) -> None:
     workbook_path = _create_workbook(tmp_path, headers=["Consignee", "POD"])
-    service = _validation_service(build_test_template(sheet_strategy="named_sheet", sheet_name="Missing"))
+    service = _validation_service(
+        build_test_template(sheet_strategy="named_sheet", sheet_name="Missing")
+    )
 
     result = service.validate(template_id="indian_rice_exports", workbook_path=workbook_path)
 
