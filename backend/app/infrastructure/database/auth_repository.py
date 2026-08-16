@@ -99,7 +99,8 @@ class SQLAlchemyAuthRepository(AuthRepository):
         self.session.flush()
         
         # Ensure role is a string!
-        role_val = membership_model.role.value if hasattr(membership_model.role, "value") else membership_model.role
+        m_role = membership_model.role
+        role_val = m_role.value if hasattr(m_role, "value") else m_role
         membership_model.role = str(role_val)
         self.session.add(membership_model)
         self.session.flush()
