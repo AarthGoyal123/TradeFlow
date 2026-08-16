@@ -82,6 +82,15 @@ def _get_uploaded_file_storage() -> UploadedFileStorage:
             max_size_mb=settings.max_upload_size_mb,
             allowed_extensions=settings.allowed_extensions,
         )
+    elif settings.storage_backend == "supabase":
+        from app.infrastructure.files.supabase_storage import SupabaseUploadedFileStorage
+        if not settings.supabase_url or not settings.supabase_key:
+            raise ValueError("Supabase storage requested but configuration is incomplete.")
+        return SupabaseUploadedFileStorage(
+            supabase_url=settings.supabase_url,
+            supabase_key=settings.supabase_key,
+            bucket_name=settings.supabase_bucket_name,
+        )
     return LocalUploadedFileStorage(
         settings.resolved_upload_dir,
         settings.max_upload_size_mb,
@@ -106,6 +115,15 @@ def _get_output_storage() -> OutputStorage:
             secret_key=settings.s3_secret_key or '',
             bucket_name=settings.s3_bucket_name or '',
             region=settings.s3_region or "us-east-1",
+        )
+    elif settings.storage_backend == "supabase":
+        from app.infrastructure.files.supabase_storage import SupabaseOutputStorage
+        if not settings.supabase_url or not settings.supabase_key:
+            raise ValueError("Supabase storage requested but configuration is incomplete.")
+        return SupabaseOutputStorage(
+            supabase_url=settings.supabase_url,
+            supabase_key=settings.supabase_key,
+            bucket_name=settings.supabase_bucket_name,
         )
     return LocalOutputStorage(settings.resolved_output_dir)
 
@@ -232,8 +250,7 @@ def get_processing_report_repository() -> ProcessingReportRepository:
 
 
 def get_output_storage() -> OutputStorage:
-    settings = get_settings()
-    return LocalOutputStorage(settings.resolved_output_dir)
+    return _get_output_storage()
 
 
 def _build_rule_evaluation_service(

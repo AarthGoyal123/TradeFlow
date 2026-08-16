@@ -14,11 +14,17 @@ def get_engine(*args: Any, **kwargs: Any) -> Any:
 
     # Enable SQLite foreign keys by default for testing/local
     connect_args = {}
-    if settings.database_url.startswith("sqlite"):
+    url = settings.database_url
+    
+    if url.startswith("sqlite"):
         connect_args["check_same_thread"] = False
+    elif url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
 
     return create_engine(
-        settings.database_url,
+        url,
         connect_args=connect_args,
         echo=False,  # Set to True for debugging queries
     )

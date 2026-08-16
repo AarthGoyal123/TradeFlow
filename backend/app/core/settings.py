@@ -25,12 +25,17 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./data/tradeflow.db"
 
     # Storage Architecture
-    storage_backend: Literal["local", "s3"] = "local"
+    storage_backend: Literal["local", "s3", "supabase"] = "local"
     s3_endpoint_url: str | None = None
     s3_access_key: str | None = None
     s3_secret_key: str | None = None
     s3_bucket_name: str | None = None
     s3_region: str | None = None
+    
+    # Supabase Configuration
+    supabase_url: str | None = None
+    supabase_key: str | None = None
+    supabase_bucket_name: str = "tradeflow-artifacts"
 
     # Infrastructure
     log_level: str = "INFO"
@@ -100,6 +105,8 @@ class Settings(BaseSettings):
                 raise ValueError("TRADEFLOW_AUTH_SECRET must be at least 32 characters long")
             if not self.cookie_secure:
                 raise ValueError("TRADEFLOW_COOKIE_SECURE must be true in production")
+            if self.cookie_samesite.lower() != "none":
+                raise ValueError("TRADEFLOW_COOKIE_SAMESITE must be 'none' in production for cross-origin cookies")
             if "*" in self.cors_origins:
                 raise ValueError("TRADEFLOW_CORS_ORIGINS must not contain '*' in production")
             if self.google_client_id:
@@ -111,6 +118,21 @@ class Settings(BaseSettings):
                     raise ValueError(
                         "TRADEFLOW_GOOGLE_REDIRECT_URI is required when using Google OAuth"
                     )
+        
+        
+        if self.storage_backend == "supabase":
+            if not self.supabase_url or not self.supabase_key:
+                raise ValueError(
+                    "TRADEFLOW_SUPABASE_URL and TRADEFLOW_SUPABASE_KEY are required when using Supabase storage"
+                )
+        return self
+
+    @model_validator(mode="after")
+    def sync_cors_and_frontend(self) -> "Settings":
+        if self.environment == "production" and "*" in self.cors_origins:
+            self.cors_origins = [self.frontend_url]
+        elif self.frontend_url not in self.cors_origins and "*" not in self.cors_origins:
+            self.cors_origins.append(self.frontend_url)
         return self
 
 
