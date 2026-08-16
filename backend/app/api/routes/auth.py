@@ -12,6 +12,7 @@ from app.api.schemas.auth import AuthResponse, AuthUserResponse, LoginRequest, R
 from app.api.security import CurrentUserContext, get_current_user_context, set_csrf_cookie
 from app.application.auth.google import GoogleOAuthProvider
 from app.application.auth.service import AuthenticationError, AuthService, RegistrationError
+from app.domain.auth.ports import AccountAlreadyExistsError
 from app.core.settings import get_settings
 
 logger = logging.getLogger(__name__)
@@ -57,7 +58,7 @@ def register(
                 display_name=result.user.display_name,
             )
         )
-    except RegistrationError as e:
+    except (RegistrationError, AccountAlreadyExistsError) as e:
         logger.warning(f"Registration failed: {e}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

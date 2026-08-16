@@ -111,8 +111,11 @@ class SQLAlchemyAuthRepository(AuthRepository):
 
         try:
             self.session.commit()
-        except IntegrityError:
+        except IntegrityError as e:
             self.session.rollback()
+            print("INTEGRITY ERROR ENCOUNTERED:", e)
+            import traceback
+            traceback.print_exc()
             raise AccountAlreadyExistsError() from None
 
     def get_user_identity(self, provider: str, provider_subject: str) -> UserIdentity | None:
