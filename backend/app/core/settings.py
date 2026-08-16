@@ -106,7 +106,10 @@ class Settings(BaseSettings):
             if not self.cookie_secure:
                 raise ValueError("TRADEFLOW_COOKIE_SECURE must be true in production")
             if self.cookie_samesite.lower() != "none":
-                raise ValueError("TRADEFLOW_COOKIE_SAMESITE must be 'none' in production for cross-origin cookies")
+                raise ValueError(
+                    "TRADEFLOW_COOKIE_SAMESITE must be 'none' in production "
+                    "for cross-origin cookies"
+                )
             if "*" in self.cors_origins:
                 raise ValueError("TRADEFLOW_CORS_ORIGINS must not contain '*' in production")
             if self.google_client_id:
@@ -123,7 +126,8 @@ class Settings(BaseSettings):
         if self.storage_backend == "supabase":
             if not self.supabase_url or not self.supabase_key:
                 raise ValueError(
-                    "TRADEFLOW_SUPABASE_URL and TRADEFLOW_SUPABASE_KEY are required when using Supabase storage"
+                    "TRADEFLOW_SUPABASE_URL and TRADEFLOW_SUPABASE_KEY "
+                    "are required when using Supabase storage"
                 )
         return self
 

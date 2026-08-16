@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 from typing import Any, BinaryIO
 
-from botocore.exceptions import ClientError
 from supabase import Client, create_client
 
 from app.core.errors import StorageError
@@ -42,7 +41,11 @@ class SupabaseOutputStorage(OutputStorage):
             self._client.storage.from_(self._bucket_name).upload(
                 object_key,
                 content,
-                file_options={"content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+                file_options={
+                    "content-type": (
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                },
             )
         except Exception as exc:
             raise StorageError(
@@ -134,7 +137,11 @@ class SupabaseUploadedFileStorage(UploadedFileStorage):
             self._client.storage.from_(self._bucket_name).upload(
                 object_key,
                 content,
-                file_options={"content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+                file_options={
+                    "content-type": (
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                },
             )
         except Exception as exc:
             raise StorageError(
