@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/v1/:match*",
+      "destination": "https://tradeflow-backend-rpo1.onrender.com/api/v1/:match*"
+    }
+  ]
+}
