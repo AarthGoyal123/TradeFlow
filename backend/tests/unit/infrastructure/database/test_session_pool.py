@@ -1,4 +1,3 @@
-import pytest
 from app.api.dependencies import get_db_session
 
 
@@ -13,6 +12,7 @@ def test_sequential_sessions_use_null_pool():
         session = next(generator)
         # Execute a trivial query to ensure connection is opened
         from sqlalchemy import text
+
         session.execute(text("SELECT 1"))
 
         # Verify it uses NullPool
