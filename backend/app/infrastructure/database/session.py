@@ -4,6 +4,7 @@ from typing import Any
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 
 from app.core.settings import get_settings
 
@@ -26,6 +27,7 @@ def get_engine(*args: Any, **kwargs: Any) -> Any:
     return create_engine(
         url,
         connect_args=connect_args,
+        poolclass=NullPool,
         echo=False,  # Set to True for debugging queries
     )
 
