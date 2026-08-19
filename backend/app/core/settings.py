@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     s3_secret_key: str | None = None
     s3_bucket_name: str | None = None
     s3_region: str | None = None
-    
+
     # Supabase Configuration
     supabase_url: str | None = None
     supabase_key: str | None = None
@@ -121,8 +121,7 @@ class Settings(BaseSettings):
                     raise ValueError(
                         "TRADEFLOW_GOOGLE_REDIRECT_URI is required when using Google OAuth"
                     )
-        
-        
+
         if self.storage_backend == "supabase":
             if not self.supabase_url or not self.supabase_key:
                 raise ValueError(

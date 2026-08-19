@@ -47,7 +47,7 @@ class GoogleOAuthProvider(AuthenticationProvider):
         )
         return code_verifier, code_challenge
 
-    async def get_authorization_url(self, state: str, code_challenge: str, nonce: str = '') -> str:
+    async def get_authorization_url(self, state: str, code_challenge: str, nonce: str = "") -> str:
         """Return the Google OAuth authorize URL."""
         params = {
             "client_id": self.client_id,

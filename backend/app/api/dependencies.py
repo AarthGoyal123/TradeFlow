@@ -74,16 +74,17 @@ def _get_uploaded_file_storage() -> UploadedFileStorage:
         ):
             raise ValueError("S3 storage requested but S3 configuration is incomplete.")
         return S3UploadedFileStorage(
-            endpoint_url=settings.s3_endpoint_url or '',
-            access_key=settings.s3_access_key or '',
-            secret_key=settings.s3_secret_key or '',
-            bucket_name=settings.s3_bucket_name or '',
+            endpoint_url=settings.s3_endpoint_url or "",
+            access_key=settings.s3_access_key or "",
+            secret_key=settings.s3_secret_key or "",
+            bucket_name=settings.s3_bucket_name or "",
             region=settings.s3_region or "us-east-1",
             max_size_mb=settings.max_upload_size_mb,
             allowed_extensions=settings.allowed_extensions,
         )
     elif settings.storage_backend == "supabase":
         from app.infrastructure.files.supabase_storage import SupabaseUploadedFileStorage
+
         if not settings.supabase_url or not settings.supabase_key:
             raise ValueError("Supabase storage requested but configuration is incomplete.")
         return SupabaseUploadedFileStorage(
@@ -110,14 +111,15 @@ def _get_output_storage() -> OutputStorage:
         ):
             raise ValueError("S3 storage requested but S3 configuration is incomplete.")
         return S3OutputStorage(
-            endpoint_url=settings.s3_endpoint_url or '',
-            access_key=settings.s3_access_key or '',
-            secret_key=settings.s3_secret_key or '',
-            bucket_name=settings.s3_bucket_name or '',
+            endpoint_url=settings.s3_endpoint_url or "",
+            access_key=settings.s3_access_key or "",
+            secret_key=settings.s3_secret_key or "",
+            bucket_name=settings.s3_bucket_name or "",
             region=settings.s3_region or "us-east-1",
         )
     elif settings.storage_backend == "supabase":
         from app.infrastructure.files.supabase_storage import SupabaseOutputStorage
+
         if not settings.supabase_url or not settings.supabase_key:
             raise ValueError("Supabase storage requested but configuration is incomplete.")
         return SupabaseOutputStorage(
@@ -268,6 +270,7 @@ def _build_rule_evaluation_service(
 
 
 ProcessingServiceDependency = Annotated[ProcessingService, Depends(get_processing_service)]
+
 
 def get_job_executor(
     processing_service: ProcessingServiceDependency,

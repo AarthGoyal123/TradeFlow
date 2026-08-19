@@ -77,7 +77,6 @@ def upgrade() -> None:
         )
 
     with op.batch_alter_table("jobs", schema=None) as batch_op:
-
         batch_op.create_foreign_key(
             batch_op.f("fk_jobs_user_id_users"), "users", ["user_id"], ["id"]
         )

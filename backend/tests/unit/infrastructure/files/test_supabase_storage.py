@@ -1,8 +1,8 @@
-import uuid
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
+
 from app.core.errors import StorageError
 from app.infrastructure.files.supabase_storage import SupabaseUploadedFileStorage
 
@@ -33,13 +33,16 @@ def storage(mock_supabase_client):
     )
 
 
-def test_path_for_downloads_and_returns_xlsx(storage, mock_settings, mock_supabase_client, tmp_path):
+def test_path_for_downloads_and_returns_xlsx(
+    storage, mock_settings, mock_supabase_client, tmp_path
+):
     import openpyxl
-    
+
     # Create a real, valid excel file in memory to mock download bytes
     wb = openpyxl.Workbook()
     wb.active["A1"] = "Test"
     from io import BytesIO
+
     buf = BytesIO()
     wb.save(buf)
     mock_bytes = buf.getvalue()
@@ -58,13 +61,15 @@ def test_path_for_downloads_and_returns_xlsx(storage, mock_settings, mock_supaba
     assert local_path.name == "123.xlsx"
     assert local_path.read_bytes() == mock_bytes
     mock_supabase_client.storage.from_().download.assert_called_once_with("uploads/123/123.xlsx")
-    
+
     # Verify OpenPyXL can open the returned file
     opened_wb = openpyxl.load_workbook(local_path)
     assert opened_wb.active["A1"].value == "Test"
 
 
-def test_path_for_does_not_download_if_already_exists(storage, mock_settings, mock_supabase_client, tmp_path):
+def test_path_for_does_not_download_if_already_exists(
+    storage, mock_settings, mock_supabase_client, tmp_path
+):
     # Setup
     mock_settings.resolved_upload_dir = tmp_path
     stored_filename = "uploads/123/123.xlsx"
@@ -80,11 +85,13 @@ def test_path_for_does_not_download_if_already_exists(storage, mock_settings, mo
     mock_supabase_client.storage.from_().download.assert_not_called()
 
 
-def test_path_for_raises_storage_error_on_missing_file_and_cleans_tmp(storage, mock_settings, mock_supabase_client, tmp_path):
+def test_path_for_raises_storage_error_on_missing_file_and_cleans_tmp(
+    storage, mock_settings, mock_supabase_client, tmp_path
+):
     # Setup
     mock_settings.resolved_upload_dir = tmp_path
     stored_filename = "uploads/123/123.xlsx"
-    
+
     # Mock download to raise an exception
     mock_supabase_client.storage.from_().download.side_effect = Exception("Not found")
 
@@ -94,17 +101,19 @@ def test_path_for_raises_storage_error_on_missing_file_and_cleans_tmp(storage, m
 
     # Verification
     assert "Failed to download upload" in str(exc_info.value)
-    
+
     # Verify no tmp files remain
     files_in_dir = list(tmp_path.glob("*"))
     assert len(files_in_dir) == 0
 
 
-def test_delete_upload_removes_both_local_and_remote(storage, mock_settings, mock_supabase_client, tmp_path):
+def test_delete_upload_removes_both_local_and_remote(
+    storage, mock_settings, mock_supabase_client, tmp_path
+):
     # Setup
     mock_settings.resolved_upload_dir = tmp_path
     stored_filename = "uploads/123/123.xlsx"
-    
+
     # Create local cached file
     local_path = tmp_path / "123.xlsx"
     local_path.write_bytes(b"cached")
@@ -118,7 +127,9 @@ def test_delete_upload_removes_both_local_and_remote(storage, mock_settings, moc
     mock_supabase_client.storage.from_().remove.assert_called_once_with(["uploads/123/123.xlsx"])
 
 
-def test_delete_upload_succeeds_even_if_local_file_missing(storage, mock_settings, mock_supabase_client, tmp_path):
+def test_delete_upload_succeeds_even_if_local_file_missing(
+    storage, mock_settings, mock_supabase_client, tmp_path
+):
     # Setup
     mock_settings.resolved_upload_dir = tmp_path
     stored_filename = "uploads/123/123.xlsx"

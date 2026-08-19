@@ -15,7 +15,7 @@ def get_engine(*args: Any, **kwargs: Any) -> Any:
     # Enable SQLite foreign keys by default for testing/local
     connect_args = {}
     url = settings.database_url
-    
+
     if url.startswith("sqlite"):
         connect_args["check_same_thread"] = False
     elif url.startswith("postgres://"):

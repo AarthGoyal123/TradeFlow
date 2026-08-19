@@ -100,7 +100,7 @@ class AuthService:
         if not user or not user.is_active:
             raise AuthenticationError("Invalid email or password")
 
-        if not verify_password(password, user.password_hash or ''):
+        if not verify_password(password, user.password_hash or ""):
             raise AuthenticationError("Invalid email or password")
 
         memberships = self.auth_repo.get_memberships_for_user(user.id)

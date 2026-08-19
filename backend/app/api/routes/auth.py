@@ -133,17 +133,17 @@ def get_me(
 @router.get("/google/login")
 async def google_login(
     response: Response,
-    oauth_provider: Annotated[GoogleOAuthProvider, Depends(get_google_oauth_provider)]
+    oauth_provider: Annotated[GoogleOAuthProvider, Depends(get_google_oauth_provider)],
 ):
     """Initiate Google OAuth flow."""
     state = secrets.token_urlsafe(32)
     nonce = secrets.token_urlsafe(32)
     code_verifier, code_challenge = oauth_provider.generate_pkce()
-    
+
     settings = get_settings()
     url = await oauth_provider.get_authorization_url(state, code_challenge, nonce)
     redirect_response = RedirectResponse(url)
-    
+
     # Store OAuth state in a short-lived secure HttpOnly cookie
     redirect_response.set_cookie(
         key="oauth_state",
@@ -151,9 +151,9 @@ async def google_login(
         httponly=True,
         secure=settings.cookie_secure,
         samesite="lax",  # type: ignore
-        max_age=300, # 5 minutes
+        max_age=300,  # 5 minutes
     )
-    
+
     return redirect_response
 
 
@@ -167,16 +167,16 @@ async def google_callback(
     """Handle Google OAuth callback."""
     code = request.query_params.get("code")
     state = request.query_params.get("state")
-    
+
     settings = get_settings()
-    
+
     if not code or not state:
         return RedirectResponse(url=f"{settings.frontend_url}/login?error=invalid_request")
-        
+
     oauth_cookie = request.cookies.get("oauth_state")
     if not oauth_cookie:
         return RedirectResponse(url=f"{settings.frontend_url}/login?error=expired_session")
-        
+
     redirect_response = RedirectResponse(url=f"{settings.frontend_url}/login?error=invalid_state")
     redirect_response.delete_cookie(
         key="oauth_state",
@@ -184,22 +184,22 @@ async def google_callback(
         httponly=True,
         samesite="lax",  # type: ignore
     )
-    
+
     try:
         saved_state, code_verifier, expected_nonce = oauth_cookie.split(":", 2)
     except ValueError:
         return redirect_response
-        
+
     if not secrets.compare_digest(state, saved_state):
         return redirect_response
-        
+
     try:
         identity = await oauth_provider.authenticate(code, code_verifier, expected_nonce)
         result = auth_service.authenticate_with_external_identity(identity)
-        
+
         # Set normal TradeFlow session cookies on the redirect response itself
         success_response = RedirectResponse(url=f"{settings.frontend_url}/")
-        
+
         # Clear the oauth state cookie
         success_response.delete_cookie(
             key="oauth_state",
@@ -207,13 +207,12 @@ async def google_callback(
             httponly=True,
             samesite="lax",  # type: ignore
         )
-        
+
         _set_auth_cookie(success_response, result.token)
         set_csrf_cookie(success_response)
         logger.info(f"User {result.user.id} logged in via Google OAuth")
         return success_response
-        
+
     except (ValueError, AuthenticationError) as e:
         logger.warning(f"Google OAuth failed: {e}")
         return RedirectResponse(url=f"{settings.frontend_url}/login?error=auth_failed")
-

@@ -94,10 +94,10 @@ class SQLAlchemyAuthRepository(AuthRepository):
         )
         self.session.add(user_model)
         self.session.flush()
-        
+
         self.session.add(tenant_model)
         self.session.flush()
-        
+
         # Ensure role is a string!
         m_role = membership_model.role
         role_val = m_role.value if hasattr(m_role, "value") else m_role
@@ -122,6 +122,7 @@ class SQLAlchemyAuthRepository(AuthRepository):
             self.session.rollback()
             print("INTEGRITY ERROR ENCOUNTERED:", e)
             import traceback
+
             traceback.print_exc()
             raise AccountAlreadyExistsError() from None
 

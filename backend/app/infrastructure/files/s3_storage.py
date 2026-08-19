@@ -14,9 +14,9 @@ from app.domain.outputs.ports import OutputStorage
 
 
 class S3OutputStorage(OutputStorage):
-
     def output_path(self, *, job_id: str, output_type: OutputType, filename: str) -> Path:
         return Path()
+
     """S3-compatible implementation for output artifact storage."""
 
     def __init__(
@@ -108,12 +108,12 @@ class S3OutputStorage(OutputStorage):
 
 
 class S3UploadedFileStorage(UploadedFileStorage):
-
     def path_for(self, stored_filename: str) -> Path:
         return Path()
 
     def save(self, *, file: BinaryIO, original_filename: str, job_id: str) -> str:
         return str(self.save_upload(job_id, original_filename, file))
+
     """S3-compatible implementation for uploaded workbook storage."""
 
     def __init__(

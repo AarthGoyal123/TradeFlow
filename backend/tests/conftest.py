@@ -24,7 +24,7 @@ def clear_database():
     """Clear all data from all tables before each test."""
     from app.infrastructure.database.base import Base
     from app.infrastructure.database.session import get_engine
-    
+
     engine = get_engine()
     with engine.begin() as conn:
         for table in reversed(Base.metadata.sorted_tables):

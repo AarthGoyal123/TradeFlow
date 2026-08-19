@@ -86,7 +86,7 @@ class SupabaseOutputStorage(OutputStorage):
             # List files with prefix
             files = self._client.storage.from_(self._bucket_name).list(prefix)
             if files:
-                file_paths = [f"{prefix}{f['name']}" for f in files if f.get('name')]
+                file_paths = [f"{prefix}{f['name']}" for f in files if f.get("name")]
                 if file_paths:
                     self._client.storage.from_(self._bucket_name).remove(file_paths)
         except Exception:
@@ -112,17 +112,18 @@ class SupabaseUploadedFileStorage(UploadedFileStorage):
 
     def path_for(self, stored_filename: str) -> Path:
         import uuid
+
         from app.core.settings import get_settings
-        
+
         object_key = stored_filename.replace("\\", "/")
         local_path = get_settings().resolved_upload_dir / Path(object_key).name
-        
+
         if local_path.exists():
             return local_path
-            
+
         local_path.parent.mkdir(parents=True, exist_ok=True)
         tmp_path = local_path.with_name(f"{local_path.name}.{uuid.uuid4().hex}.tmp")
-        
+
         try:
             res = self._client.storage.from_(self._bucket_name).download(object_key)
             tmp_path.write_bytes(res)
@@ -134,11 +135,12 @@ class SupabaseUploadedFileStorage(UploadedFileStorage):
                 except OSError:
                     pass
             from app.core.errors import StorageError
+
             raise StorageError(
                 "Failed to download upload from Supabase",
                 details={"path": object_key},
             ) from exc
-            
+
         return local_path
 
     def save(self, *, file: BinaryIO, original_filename: str, job_id: str) -> str:
@@ -201,8 +203,9 @@ class SupabaseUploadedFileStorage(UploadedFileStorage):
     def delete_upload(self, stored_filename: str) -> None:
         """Delete an uploaded file if it exists."""
         object_key = stored_filename.replace("\\", "/")
-        
+
         from app.core.settings import get_settings
+
         local_path = get_settings().resolved_upload_dir / Path(object_key).name
         try:
             if local_path.exists():
