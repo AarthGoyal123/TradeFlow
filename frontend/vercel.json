@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/v1/(.*)",
-      "destination": "https://tradeflow-backend-rpo1.onrender.com/api/v1/$1"
+      "destination": "https://tradeflow-backend-rpol.onrender.com/api/v1/$1"
     },
     {
       "source": "/(.*)",
