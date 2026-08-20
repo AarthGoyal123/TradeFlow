@@ -108,9 +108,12 @@ class OpenPyXLOutputWorkbookBuilder:
                 )
             else:
                 worksheet.append(tuple(cell.value for cell in row.cells))
-        path = output_storage.output_path(job_id=job_id, output_type=output_type, filename=filename)
-        workbook.save(path)
-        return OutputArtifact(output_type=output_type, filename=filename, path=path)
+        import io
+
+        with io.BytesIO() as buffer:
+            workbook.save(buffer)
+            buffer.seek(0)
+            return output_storage.save_output(job_id, output_type, buffer)
 
     def _write_report(
         self,
@@ -147,17 +150,12 @@ class OpenPyXLOutputWorkbookBuilder:
                     match.message,
                 )
             )
-        path = output_storage.output_path(
-            job_id=job_id,
-            output_type=OutputType.PROCESSING_REPORT,
-            filename="Processing_Report.xlsx",
-        )
-        workbook.save(path)
-        return OutputArtifact(
-            output_type=OutputType.PROCESSING_REPORT,
-            filename="Processing_Report.xlsx",
-            path=path,
-        )
+        import io
+
+        with io.BytesIO() as buffer:
+            workbook.save(buffer)
+            buffer.seek(0)
+            return output_storage.save_output(job_id, OutputType.PROCESSING_REPORT, buffer)
 
 
 def _cell_value(value: CellValue) -> CellValue:

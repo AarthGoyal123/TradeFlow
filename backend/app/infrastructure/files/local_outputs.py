@@ -1,6 +1,7 @@
 """Local filesystem storage for generated output workbooks."""
 
 from pathlib import Path
+from typing import BinaryIO
 
 from app.core.errors import StorageError
 from app.domain.outputs.models import OutputArtifact, OutputType
@@ -12,14 +13,26 @@ class LocalOutputStorage:
     def __init__(self, output_dir: Path) -> None:
         self._output_dir = output_dir
 
-    def output_path(self, *, job_id: str, output_type: OutputType, filename: str) -> Path:
-        """Return a safe output path for one job output."""
+    def save_output(
+        self, job_id: str, output_type: OutputType, file_obj: "BinaryIO"
+    ) -> OutputArtifact:
+        """Save a generated output file from a file-like object."""
+        filenames = {
+            OutputType.CLEAN_DATA: "Clean_Data.xlsx",
+            OutputType.REMOVED_ROWS: "Removed_Rows.xlsx",
+            OutputType.NEEDS_REVIEW: "Needs_Review.xlsx",
+            OutputType.PROCESSING_REPORT: "Processing_Report.xlsx",
+        }
+        filename = filenames[output_type]
+
         job_dir = self._output_dir / job_id
         job_dir.mkdir(parents=True, exist_ok=True)
         path = (job_dir / filename).resolve()
         if not str(path).startswith(str(job_dir.resolve())):
             raise StorageError("Output path escaped job output directory")
-        return path
+
+        path.write_bytes(file_obj.read())
+        return OutputArtifact(output_type=output_type, filename=filename, path=path)
 
     def get_output(self, *, job_id: str, output_type: OutputType) -> OutputArtifact:
         """Return output metadata if the file exists."""

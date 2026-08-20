@@ -14,9 +14,6 @@ from app.domain.outputs.ports import OutputStorage
 
 
 class S3OutputStorage(OutputStorage):
-    def output_path(self, *, job_id: str, output_type: OutputType, filename: str) -> Path:
-        return Path()
-
     """S3-compatible implementation for output artifact storage."""
 
     def __init__(

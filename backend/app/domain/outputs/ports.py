@@ -1,7 +1,6 @@
 """Ports for output generation and persistence."""
 
-from pathlib import Path
-from typing import Protocol
+from typing import BinaryIO, Protocol
 
 from app.domain.datasets.models import IntermediateDataset
 from app.domain.outputs.models import OutputArtifact, OutputType, ProcessingSummary
@@ -11,8 +10,10 @@ from app.domain.rules.models import RuleExecutionReport
 class OutputStorage(Protocol):
     """Store generated output files."""
 
-    def output_path(self, *, job_id: str, output_type: OutputType, filename: str) -> Path:
-        """Return a safe output path for one job output."""
+    def save_output(
+        self, job_id: str, output_type: OutputType, file_obj: "BinaryIO"
+    ) -> OutputArtifact:
+        """Save a generated output file from a file-like object."""
         ...
 
     def get_output(self, *, job_id: str, output_type: OutputType) -> OutputArtifact:

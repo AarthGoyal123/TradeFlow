@@ -25,9 +25,6 @@ class SupabaseOutputStorage(OutputStorage):
         self._bucket_name = bucket_name
         self._client: Client = create_client(supabase_url, supabase_key)
 
-    def output_path(self, *, job_id: str, output_type: OutputType, filename: str) -> Path:
-        return Path()
-
     def save_output(
         self, job_id: str, output_type: OutputType, file_obj: BinaryIO
     ) -> OutputArtifact:
