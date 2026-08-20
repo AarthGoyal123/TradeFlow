@@ -47,8 +47,7 @@ export async function uploadJob(
 }
 
 export async function downloadOutput(jobId: string, outputType: string, filename: string) {
-  const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
-  const response = await apiClient.get(`${baseUrl}/jobs/${jobId}/outputs/${outputType}`, {
+  const response = await apiClient.get(`/jobs/${jobId}/outputs/${outputType}`, {
     responseType: "blob",
   });
   const url = URL.createObjectURL(response.data);
