@@ -23,7 +23,7 @@ export function fetchJobIntelligence(jobId: string): Promise<IntelligenceReport>
 }
 
 export function triggerProcessing(id: string) {
-  return apiPost<ProcessingResponse>(`/jobs/${id}/process`);
+  return apiPost<ProcessingResponse>(`/jobs/${id}/process`, {});
 }
 
 export async function uploadJob(
