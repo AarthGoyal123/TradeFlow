@@ -66,8 +66,9 @@ def test_s3_output_storage_get(mock_s3_client, mocker):
 
     mock_s3_client.download_fileobj.side_effect = mock_download
 
-    result = storage.get_output(job_id="job-123", output_type=OutputType.NEEDS_REVIEW)
-    assert result.read() == b"retrieved data"
+    artifact, stream = storage.get_output(job_id="job-123", output_type=OutputType.NEEDS_REVIEW)
+    assert artifact.filename == "Needs_review.xlsx"
+    assert stream.read() == b"retrieved data"
 
     mock_s3_client.download_fileobj.assert_called_once()
     args, _ = mock_s3_client.download_fileobj.call_args

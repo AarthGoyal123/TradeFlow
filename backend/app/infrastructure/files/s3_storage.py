@@ -62,7 +62,9 @@ class S3OutputStorage(OutputStorage):
             path=Path(object_key),  # The abstract path is the object key
         )
 
-    def get_output(self, *, job_id: str, output_type: OutputType) -> BinaryIO:  # type: ignore
+    def get_output(
+        self, *, job_id: str, output_type: OutputType
+    ) -> tuple[OutputArtifact, BinaryIO]:
         """Retrieve an output file from S3."""
         import tempfile
 
@@ -74,7 +76,12 @@ class S3OutputStorage(OutputStorage):
             tmp: Any = tempfile.SpooledTemporaryFile(max_size=10_000_000, mode="w+b")
             self._s3.download_fileobj(self._bucket_name, object_key, tmp)
             tmp.seek(0)
-            return tmp  # type: ignore
+            artifact = OutputArtifact(
+                output_type=output_type,
+                filename=filename,
+                path=Path(object_key),
+            )
+            return artifact, tmp  # type: ignore
         except ClientError as exc:
             error_code = exc.response.get("Error", {}).get("Code", "")
             if error_code == "404" or error_code == "NoSuchKey":

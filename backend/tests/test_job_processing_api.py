@@ -67,6 +67,7 @@ def test_processing_api_uploads_processes_downloads_and_reports(tmp_path) -> Non
         assert download_response.headers["content-type"] == (
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+        assert "attachment; filename=" in download_response.headers["content-disposition"]
 
     report_response = client.get(f"/jobs/{job_id}/report")
     assert report_response.status_code == 200

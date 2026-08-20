@@ -56,7 +56,9 @@ class SupabaseOutputStorage(OutputStorage):
             path=Path(object_key),  # The abstract path is the object key
         )
 
-    def get_output(self, *, job_id: str, output_type: OutputType) -> BinaryIO:  # type: ignore
+    def get_output(
+        self, *, job_id: str, output_type: OutputType
+    ) -> tuple[OutputArtifact, BinaryIO]:
         """Retrieve an output file from Supabase."""
         import tempfile
 
@@ -69,7 +71,12 @@ class SupabaseOutputStorage(OutputStorage):
             tmp: Any = tempfile.SpooledTemporaryFile(max_size=10_000_000, mode="w+b")
             tmp.write(res)
             tmp.seek(0)
-            return tmp  # type: ignore
+            artifact = OutputArtifact(
+                output_type=output_type,
+                filename=filename,
+                path=Path(object_key),
+            )
+            return artifact, tmp  # type: ignore
         except Exception as exc:
             raise StorageError(
                 "Failed to retrieve output from Supabase",

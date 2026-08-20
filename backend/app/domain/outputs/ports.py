@@ -16,8 +16,10 @@ class OutputStorage(Protocol):
         """Save a generated output file from a file-like object."""
         ...
 
-    def get_output(self, *, job_id: str, output_type: OutputType) -> OutputArtifact:
-        """Return output metadata if the file exists."""
+    def get_output(
+        self, *, job_id: str, output_type: OutputType
+    ) -> tuple[OutputArtifact, "BinaryIO"]:
+        """Return output metadata and a readable binary stream."""
         ...
 
     def delete_job_outputs(self, job_id: str) -> None:

@@ -4,7 +4,7 @@ import logging
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse
 
 from app.api.dependencies import (
     get_intelligence_service,
@@ -134,7 +134,7 @@ def get_output(
     job_service: Annotated[JobService, Depends(get_job_service)],
     output_storage: Annotated[OutputStorage, Depends(get_output_storage)],
     context: Annotated[CurrentUserContext, Depends(require_tenant_access)],
-) -> FileResponse:
+) -> StreamingResponse:
     """Stream a generated output workbook."""
     job = job_service.get_job(job_id, tenant_id=context.tenant_id)
     if output_type not in _OUTPUT_TYPE_MAP:
@@ -160,15 +160,17 @@ def get_output(
             },
         )
     out_type = _OUTPUT_TYPE_MAP[output_type]
-    artifact = output_storage.get_output(job_id=job_id, output_type=out_type)
+    artifact, stream = output_storage.get_output(job_id=job_id, output_type=out_type)
     logger.info(
         "output_downloaded",
         extra=log_extra(job_id=job_id, stage=f"outputs/{output_type}"),
     )
-    return FileResponse(
-        path=artifact.path,
+
+    stream.seek(0)
+    return StreamingResponse(
+        stream,
         media_type=_XLSX_MEDIA_TYPE,
-        filename=artifact.filename,
+        headers={"Content-Disposition": f'attachment; filename="{artifact.filename}"'},
     )
 
 

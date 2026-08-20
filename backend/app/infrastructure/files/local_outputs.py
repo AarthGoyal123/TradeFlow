@@ -34,15 +34,18 @@ class LocalOutputStorage:
         path.write_bytes(file_obj.read())
         return OutputArtifact(output_type=output_type, filename=filename, path=path)
 
-    def get_output(self, *, job_id: str, output_type: OutputType) -> OutputArtifact:
-        """Return output metadata if the file exists."""
+    def get_output(
+        self, *, job_id: str, output_type: OutputType
+    ) -> tuple[OutputArtifact, BinaryIO]:
+        """Return output metadata and a readable binary stream."""
         filenames = {
             OutputType.CLEAN_DATA: "Clean_Data.xlsx",
             OutputType.REMOVED_ROWS: "Removed_Rows.xlsx",
             OutputType.NEEDS_REVIEW: "Needs_Review.xlsx",
             OutputType.PROCESSING_REPORT: "Processing_Report.xlsx",
         }
-        path = (self._output_dir / job_id / filenames[output_type]).resolve()
+        filename = filenames[output_type]
+        path = (self._output_dir / job_id / filename).resolve()
 
         # Prevent path traversal via job_id
         if not str(path).startswith(str(self._output_dir.resolve())):
@@ -53,7 +56,9 @@ class LocalOutputStorage:
                 "Output file not found",
                 details={"job_id": job_id, "output_type": output_type.value},
             )
-        return OutputArtifact(output_type=output_type, filename=path.name, path=path)
+
+        artifact = OutputArtifact(output_type=output_type, filename=filename, path=path)
+        return artifact, path.open("rb")
 
     def delete_job_outputs(self, job_id: str) -> None:
         """Delete all outputs for a given job if they exist."""
