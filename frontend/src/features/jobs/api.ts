@@ -28,6 +28,8 @@ export function triggerProcessing(id: string) {
 export async function uploadJob(
   templateId: string,
   file: File,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onProgress?: (progress: number) => void,
 ): Promise<JobUploadResponse> {
   const formData = new FormData();
   formData.append("template_id", templateId);
