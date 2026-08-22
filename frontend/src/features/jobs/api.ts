@@ -1,4 +1,3 @@
-import type { AxiosProgressEvent } from "axios";
 
 import { apiClient } from "@/api/client";
 import { apiGet, apiPost } from "@/api/helpers";
@@ -29,8 +28,7 @@ export function triggerProcessing(id: string) {
 export async function uploadJob(
   templateId: string,
   file: File,
-  onProgress?: (progress: number) => void,
-) {
+): Promise<JobUploadResponse> {
   const formData = new FormData();
   formData.append("template_id", templateId);
   formData.append("file", file);
