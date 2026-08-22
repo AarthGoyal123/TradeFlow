@@ -33,7 +33,9 @@ export async function uploadJob(
   const formData = new FormData();
   formData.append("template_id", templateId);
   formData.append("file", file);
-  if (_onProgress) {}
+  if (_onProgress) {
+    void _onProgress;
+  }
 
   const response = await apiClient.post<JobUploadResponse>("/jobs", formData);
   return response.data;
