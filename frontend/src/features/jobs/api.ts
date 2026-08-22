@@ -30,14 +30,31 @@ export async function uploadJob(
   file: File,
   _onProgress?: (progress: number) => void,
 ): Promise<JobUploadResponse> {
+  console.log("1. File:", {
+    name: file.name,
+    size: file.size,
+    type: file.type,
+  });
+
+  console.log("2. Reading file...");
+  const buffer = await file.arrayBuffer();
+  console.log("3. Read succeeded:", buffer.byteLength);
+
+  const blob = new Blob([buffer], { type: file.type });
+  console.log("4. Blob created:", blob.size);
+
   const formData = new FormData();
   formData.append("template_id", templateId);
-  formData.append("file", file);
+  formData.append("file", blob, file.name);
+
   if (_onProgress) {
     void _onProgress;
   }
 
+  console.log("5. Starting POST...");
   const response = await apiClient.post<JobUploadResponse>("/jobs", formData);
+  console.log("6. POST succeeded:", response.status);
+
   return response.data;
 }
 
