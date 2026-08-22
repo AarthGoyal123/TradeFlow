@@ -28,12 +28,12 @@ export function triggerProcessing(id: string) {
 export async function uploadJob(
   templateId: string,
   file: File,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onProgress?: (progress: number) => void,
+  _onProgress?: (progress: number) => void,
 ): Promise<JobUploadResponse> {
   const formData = new FormData();
   formData.append("template_id", templateId);
   formData.append("file", file);
+  if (_onProgress) {}
 
   const response = await apiClient.post<JobUploadResponse>("/jobs", formData);
   return response.data;
