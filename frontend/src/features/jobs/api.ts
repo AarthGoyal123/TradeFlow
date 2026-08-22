@@ -36,6 +36,9 @@ export async function uploadJob(
   formData.append("file", file);
 
   const response = await apiClient.post<JobUploadResponse>("/jobs", formData, {
+    headers: {
+      "Content-Type": undefined,
+    },
     onUploadProgress: (event: AxiosProgressEvent) => {
       if (onProgress && event.total) {
         onProgress(Math.round((event.loaded * 100) / event.total));
